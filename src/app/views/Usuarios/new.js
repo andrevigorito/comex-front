@@ -7,9 +7,11 @@ import { NewUsuario, BtnMostrar } from './styles';
 import getCroppedImg from './cropImage';
 import api from '../../services/api';
 
+import iconBack from '../../img/icons/back.png';
+
 // eslint-disable-next-line react/prefer-stateless-function
 
-export default function NovoUsuario({history }) {
+export default function NovoUsuario({ history }) {
   const [name, setName] = useState('');
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
@@ -77,6 +79,12 @@ export default function NovoUsuario({history }) {
     <div className="center">
       <div className="page-header">
         <h1>Novo Usuário</h1>
+        <div className="last-wrap">
+          <div className="btnvoltar" onClick={() => history.goBack()}>
+            <img src={iconBack} alt="" />
+            <p>Voltar</p>
+          </div>
+        </div>
       </div>
       <NewUsuario>
         <form>

@@ -10,12 +10,40 @@ class justifieContainer extends Component {
   state = {
     modalJust: false,
     modalAddJust: true,
+    isLoading: true,
+    justifies: {},
   };
 
-  async componentDidMount() {}
+  async componentDidMount() {
+    
+    this.getJustifies(this.props.uuid)
+    
+  }
+  
+  async getJustifies(uuid) {
+    this.setState({
+        isLoading: true
+      });
+    API.get(`justifies/${uuid}`).then(res => {
+      const justifies = res.data;
+      this.setState({
+        justifies,
+        isLoading: false
+      });
+    });
+  }
+  
+  handleJustifieDelete = async uuid => {
+    
+    API.delete(`justifies/${uuid}`).then(res => {
+      
+      this.getJustifies(this.props.uuid)
+      
+    });
+  }
+  
 
   handleJustifieCreation = async justifie => {
-    alert(this.props.uuid);
 
     try {
       const rawResponse = await API.post(
@@ -34,9 +62,15 @@ class justifieContainer extends Component {
       });
 
       const content = await rawResponse;
+      
+      this.getJustifies(this.props.uuid)
+      
+      this.setState({ modalJust: true, modalAddJust: false })
+      
     } catch (err) {
       alert(err);
     }
+    
   };
 
   render() {
@@ -46,10 +80,22 @@ class justifieContainer extends Component {
         <div className="content">
           <h2>Justificativa</h2>
           {this.state.modalAddJust && (
-            <JustifieForm onJustifieCreation={this.handleJustifieCreation} />
+          
+            <JustifieForm 
+              onJustifieCreation={this.handleJustifieCreation} 
+            />
+            
           )}
 
-          {this.state.modalJust && <JustifieList />}
+          {this.state.modalJust && (
+          
+            <JustifieList 
+              isLoading={this.state.isLoading}
+              onJustifieDelete={this.handleJustifieDelete}
+              justifies={this.state.justifies}
+            />
+          
+          )}
 
         </div>
         <div className="wrap-btns">

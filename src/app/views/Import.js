@@ -18,7 +18,7 @@ class Import extends Component {
     isConverting: false,
     isSending: false,
     isWaiting: false,
-    importType: "PLANILHA",
+    importType: "",
   };
 
   componentDidMount() {
@@ -32,28 +32,27 @@ class Import extends Component {
   handleImportAtl = async file => {
     let name = file[0].name.split('.');
     if(name[1] === 'xlsx' || name[1] === 'xls' || name[1] === 'XLSX' || name[1] === 'XLS'){
-      
+
       this.setState({ isConverting: true });
       const workbook = await this.getWorkbookFromFile(file[0]);
       const first_worksheet = workbook.Sheets[workbook.SheetNames[0]];
-      let firstColumn = first_worksheet.A1.v;
+      let firstColumn = first_worksheet.A1 ? first_worksheet.A1.v : null;
       const data = await XLSX.utils.sheet_to_json(first_worksheet, { header: 0 });
       this.setState({ isConverting: false });
       
-      console.log(firstColumn)
-      
       if(firstColumn === "Group name"){
         this.setState({ importType: "PLANILHA ATL" });
-        this.sendImportATL(data);
+        await this.sendImportATL(data);
       }else if (firstColumn === "Product Number"){
         this.setState({ importType: "PLANILHA SAP - DOW" }); 
+        await this.sendImportSAPDow(data);
       }else if (firstColumn === "Opening Date"){
         this.setState({ importType: "PLANILHA SAP - DUPONT" });
+        await this.sendImportSAPDupont(data);
       }else{
         this.notifyError('A PLANILHA EXCEL NÃO TEM UM FORMATO VÁLIDO!');
       }
-      
-      
+
     }else{
       this.notifyError('NÃO É UM ARQUIVO VÁLIDO!');
     }
@@ -67,6 +66,26 @@ class Import extends Component {
     }).then(res => {
       this.setState({ isSending: false, isWaiting: true });
       this.notifyWarn('IMPORTAÇÃO ATL ENVIADA! AGUARDANDO CONCLUSÃO!');
+    });
+  }
+  
+  sendImportSAPDow(data) {
+    this.setState({ isSending: true });
+    API.post(`products/importSapDow`, data, {
+      headers: { 'Content-Type': 'application/json' },
+    }).then(res => {
+      this.setState({ isSending: false, isWaiting: true });
+      this.notifyWarn('IMPORTAÇÃO SAP DOW ENVIADA! AGUARDANDO CONCLUSÃO!');
+    });
+  }
+  
+  sendImportSAPDupont(data) {
+    this.setState({ isSending: true });
+    API.post(`products/importSapDupont`, data, {
+      headers: { 'Content-Type': 'application/json' },
+    }).then(res => {
+      this.setState({ isSending: false, isWaiting: true });
+      this.notifyWarn('IMPORTAÇÃO SAP DUPONT ENVIADA! AGUARDANDO CONCLUSÃO!');
     });
   }
 
@@ -86,10 +105,18 @@ class Import extends Component {
     socket.on('productsImport', () => {
       this.setState({ isWaiting: false });
     });
+    socket.on('SapDowImport', () => {
+      this.setState({ isWaiting: false });
+    });
+    socket.on('SapDupontImport', () => {
+      this.setState({ isWaiting: false });
+    });
   };
 
   unregisterToSocket = () => {
     socket.removeListener('productsImport');
+    socket.removeListener('SapDowImport');
+    socket.removeListener('SapDupontImport');
   };
 
   notifySucess = msg => {
@@ -121,7 +148,7 @@ class Import extends Component {
             </h1>
           </div>
           <div className='list-planilhas'>
-            <div className='item active'>Planilha ATL</div>
+            <div className='item'>Planilha ATL</div>
             <div className='item'>Planilha SAP DOW</div>
             <div className='item'>Planilha SAP DUPONT</div>
           </div>
@@ -130,19 +157,19 @@ class Import extends Component {
               <Fragment>
                 <h2>{this.state.importType}</h2>
                 <Loading />
-                <h2>CONVERTENDO PLANILHA EXCEL...</h2>
+                <h2>CONVERTENDO... {this.state.importType}</h2>
               </Fragment>
             ) : this.state.isSending ? (
               <Fragment>
                 <h2>{this.state.importType}</h2>
                 <Loading />
-                <h2>ENVIANDO DADOS PARA O SERVIDOR...</h2>
+                <h2>{this.state.importType}... ENVIANDO DADOS PARA O SERVIDOR...</h2>
               </Fragment>
             ) : this.state.isWaiting ? (
               <Fragment>
                 <h2>{this.state.importType}</h2>
                 <Loading />
-                <h2>ENVIADO COM SUCESSO! AGUARDANDO RESPOSTA DO SERVIDOR...</h2>
+                <h2>{this.state.importType}... ENVIADA COM SUCESSO! AGUARDANDO RESPOSTA DO SERVIDOR... </h2>
               </Fragment>
             ) : (
               <Fragment>

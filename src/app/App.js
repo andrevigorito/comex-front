@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
-import { BrowserRouter, Route, Switch } from 'react-router-dom';
+import { Router, Route, Switch } from 'react-router-dom';
 import { ToastContainer, toast } from 'react-toastify';
 import io from 'socket.io-client';
 import API from './services/api';
+import history from './services/history';
 
 import 'react-toastify/dist/ReactToastify.css';
 
@@ -24,6 +25,8 @@ import TransitTimeList from './views/TransitTimeList';
 // Components
 import Menu from './views/components/Menu/index';
 import Header from './views/components/Header/index';
+
+
 
 // Images
 
@@ -63,18 +66,28 @@ class App extends Component {
   }
 
   registerToSocket = () => {
-    socket.on('poItemAlert', newAlert => {
+    //socket.on('poItemAlert', newAlert => {
       // console.log('poItemAlert do WebSocket...', newAlert);
-      this.notifySucess(newAlert);
-    });
+      //this.notifySucess(newAlert);
+    //});
 
     socket.on('productsImport', () => {
       // console.log('poItemAlert do WebSocket...', newAlert);
       this.notifySucessText('Importação ATL concluída!');
     });
+    
+    socket.on('SapDowImport', () => {
+      // console.log('poItemAlert do WebSocket...', newAlert);
+      this.notifySucessText('Importação SAP DOW concluída!');
+    });
+    
+    socket.on('SapDupontImport', () => {
+      // console.log('poItemAlert do WebSocket...', newAlert);
+      this.notifySucessText('Importação SAP Dupont concluída!');
+    });
 
-    socket.on('newAlert', newAlert => {
-      const useruuid = this.getUserUuidFromState();
+    //socket.on('newAlert', newAlert => {
+      //const useruuid = this.getUserUuidFromState();
 
       // console.log('newAlert do WebSocket...', newAlert);
       // console.log('socket NewAlert: ');
@@ -83,10 +96,10 @@ class App extends Component {
       // console.log(typeof newAlert.userUuid);
       // console.log(newAlert.userUuid, '//', useruuid);
 
-      if (newAlert.toAllUsers || newAlert.userUuid === useruuid) {
-        this.notifySucess(newAlert);
-      }
-    });
+      //if (newAlert.toAllUsers || newAlert.userUuid === useruuid) {
+        //this.notifySucess(newAlert);
+      //}
+    //});
   };
 
   unregisterToSocket = () => {
@@ -95,13 +108,13 @@ class App extends Component {
     socket.removeListener('productsImport');
   };
 
-  notifySucess = alertObj => {
-    toast.success(alertObj.message, {
-      position: toast.POSITION.BOTTOM_RIGHT,
-      // alterar
-      onClick: () => this.markAlertAsRead(alertObj),
-    });
-  };
+  //notifySucess = alertObj => {
+  //  toast.success(alertObj.message, {
+  //    position: toast.POSITION.BOTTOM_RIGHT,
+  //    // alterar
+  //    onClick: () => this.markAlertAsRead(alertObj),
+  //  });
+  //};
 
   notifySucessText = message => {
     toast.success(message, {
@@ -129,12 +142,12 @@ class App extends Component {
       console.log(logado);
 
       if (lembrar) {
-        this.saveLocalStorage(email, logado.data.uuid, logado.data.photo);
+        this.saveLocalStorage(logado.data.name, logado.data.uuid, logado.data.photo);
       }
 
       this.setState({
         isAuth: true,
-        username: email,
+        username: logado.data.name,
         useruuid: logado.data.uuid,
         photo: logado.data.photo,
       });
@@ -146,10 +159,13 @@ class App extends Component {
     return true;
   };
 
-  handleLogout = () => {
+  handleLogout = () => {   
+    history.push('/');
+
     this.setState({
       isAuth: false,
     });
+
     localStorage.removeItem('USER_USERNAME');
     localStorage.removeItem('USER_UUID');
     localStorage.removeItem('USER_PHOTO');
@@ -181,7 +197,7 @@ class App extends Component {
 
     return (
       <div className="App">
-        <BrowserRouter>
+        <Router history={history}>
           {!isAuth && (
             <Route
               path="*"
@@ -253,7 +269,7 @@ class App extends Component {
 
             {isAuth && <Route path="/" exact component={ProductContainer} />}
           </Switch>
-        </BrowserRouter>
+        </Router>
       </div>
     );
   }

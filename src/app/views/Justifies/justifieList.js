@@ -1,30 +1,29 @@
-import React,  { useState, useEffect } from 'react';
-import API from '../services/api';
+import React, { Fragment } from 'react';
+import Loading from '../components/Loading';
 
-function JustifieList() {
-  const [justifies, setData] = useState({ hits: [] });
-
-  useEffect(async () => {
-    const result = await API.get(
-      'justifies',
-    );
-
-    setData(result.data);
-  });
-
+function JustifieList(props) {
   return (
-    <div className="list-justificativas">
-      {justifies.hits.map(just => (
-        <div className="item">
-          <p>{just.description}</p>
-          <div className="user">
-            <p>{just.description}</p>
-            <p>{just.createdAt}</p>
-            <p>{just.tye}</p>
+    <>
+      {!props.isLoading ? (
+        props.justifies.map(justifie => (
+          <div className="list-justificativas">
+            <div className="item">
+              <p>{justifie.description}</p>
+              <button onClick={() => props.onJustifieDelete(justifie.uuid)}>
+                Del
+              </button>
+              <div className="user">
+                <p>{justifie.tye}</p>
+                <p>{new Date(justifie.createdAt).toLocaleDateString()}</p>
+                <p>{justifie.email}</p>
+              </div>
+            </div>
           </div>
-        </div>
-      ))}
-    </div>
+        ))
+      ) : (
+        <Loading />
+      )}
+    </>
   );
 }
 
