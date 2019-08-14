@@ -8,7 +8,7 @@ const Loadingbtn = styled.div`
   height: 44px;
   background: url(${imgloading}) no-repeat center;
   display: none;
-`
+`;
 
 const handleValidate = ({ type, email, description }) => {
   const errors = {};
@@ -41,9 +41,9 @@ const JustifieForm = props => {
       onSubmit={handleSubmit(props)}
     >
       {props => (
-        <Form className='form-just'>
-          <div className='row c2'>
-            <div className='item'>
+        <Form className="form-just">
+          <div className="row c2">
+            <div className="item">
               <label htmlFor="type">Tipo</label>
               <Field
                 id="type"
@@ -57,15 +57,23 @@ const JustifieForm = props => {
                 }}
               >
                 <option value="">Selecione um tipo</option>
-                <option value="ERRO HUMANO">ERRO HUMANO</option>
-                <option value="SEM CULPADO">SEM CULPADO</option>
+                <option value="Atraso Embarque Origem">
+                  Atraso Embarque Origem
+                </option>
+                <option value="Canal Vermelho">Canal Vermelho</option>
+                <option value="Atraso Liberação LI">Atraso Liberação LI</option>
+                <option value="Atraso Operador Logístico">
+                  Atraso Operador Logístico
+                </option>
+                <option value="Atraso Despachante">Atraso Despachante</option>
+                <option value="Atraso Produção">Atraso Produção</option>
               </Field>
               {props.errors.type && props.touched.type && (
-                <div className='erro'>{props.errors.type}</div>
+                <div className="erro">{props.errors.type}</div>
               )}
             </div>
 
-            <div className='item'>
+            <div className="item">
               <label htmlFor="email">E-mail</label>
               <input
                 id="email"
@@ -76,18 +84,17 @@ const JustifieForm = props => {
                 onChange={props.handleChange}
                 onBlur={props.handleBlur}
                 style={{
-                  borderColor: props.errors.email && props.touched.email && 'red',
+                  borderColor:
+                    props.errors.email && props.touched.email && 'red',
                 }}
               />
               {props.errors.email && props.touched.email && (
-                <div className='erro'>{props.errors.email}</div>
+                <div className="erro">{props.errors.email}</div>
               )}
             </div>
-
           </div>
-          <div className='row'>
-
-            <div className='item'>
+          <div className="row">
+            <div className="item">
               <label htmlFor="description">Descrição</label>
               <textarea
                 id="description"
@@ -104,7 +111,7 @@ const JustifieForm = props => {
                 }}
               />
               {props.errors.description && props.touched.description && (
-                <div className='erro'>{props.errors.description}</div>
+                <div className="erro">{props.errors.description}</div>
               )}
             </div>
           </div>
@@ -115,7 +122,7 @@ const JustifieForm = props => {
             disabled={props.isSubmitting}
             className={props.isSubmitting ? 'btn loading' : 'btn'}
           >
-            <Loadingbtn className='loadingbtn' />
+            <Loadingbtn className="loadingbtn" />
             Salvar
           </button>
           <button
@@ -123,7 +130,7 @@ const JustifieForm = props => {
             type="reset"
             onClick={props.handleReset}
             disabled={!props.dirty || props.isSubmitting}
-            className='btn cancel'
+            className="btn cancel"
           >
             Cancelar
           </button>
