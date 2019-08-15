@@ -7,7 +7,7 @@ function JustifieList(props) {
       <div className="list-justificativas">
         {!props.isLoading ? (
           props.justifies.map(justifie => (
-            <div className="item">
+            <div className="item" key={justifie.uuid}>
               <p>{justifie.description}</p>
 
               <div className="user">
