@@ -111,10 +111,10 @@ export default function NovoUsuario({ history }) {
                   <label>Nome:</label>
                   <input
                     type="text"
+                    autoComplete="off"
                     value={name}
                     onChange={e => setName(e.target.value)}
                     placeholder="Digite o seu nome"
-                    id="nu-name"
                   />
                 </div>
               </Col>
@@ -137,10 +137,10 @@ export default function NovoUsuario({ history }) {
                   <label>E-mail:</label>
                   <input
                     type="email"
+                    autoComplete="off"
                     value={username}
                     onChange={e => setUsername(e.target.value)}
                     placeholder="Digite o e-mail"
-                    id="txtemail"
                   />
                 </div>
               </Col>
@@ -149,10 +149,10 @@ export default function NovoUsuario({ history }) {
                   <label>Senha:</label>
                   <input
                     type={type}
+                    autoComplete="off"
                     value={password}
                     onChange={e => setPassword(e.target.value)}
                     placeholder="Digite a senha"
-                    id="txtpassword"
                   />
                   <BtnMostrar
                     type="button"

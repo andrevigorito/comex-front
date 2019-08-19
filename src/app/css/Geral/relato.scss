@@ -544,6 +544,7 @@
             .line-status{
               position: relative;
               width: 100%;
+              margin-bottom: 80px;
               &:before{
                   content: '';
                   position: absolute;
@@ -557,7 +558,7 @@
                   background: #C8CFD4;
               }
               .position{
-                  width: 88%;
+                  width: 91%;
                   margin: auto;
                   display: flex;
                   align-items: center;
@@ -567,10 +568,17 @@
                   .boll{
                       width: 20px;
                       height: 20px;
-                      background: #ff9a27;
                       border-radius: 50%;
                       position: relative;
                       transition: all ease .3s;
+                      span{
+                        width: 20px;
+                        height: 20px;
+                        background: $verde;
+                        border-radius: 50%;
+                        position: absolute;
+                        z-index: 2;
+                      }
                       &:before{
                           content: '';
                           position: absolute;
@@ -580,7 +588,7 @@
                           margin: auto;
                           width: 500px;
                           height: 2px;
-                          background: #ff9a27;
+                          background: $verde;
                       }
                       &:after{
                           content: '';
@@ -597,8 +605,24 @@
                           z-index: 2;
                       }
                       &.atual{
+                        width: 30px;
+                        height: 30px;
+                        span{
                           width: 30px;
                           height: 30px;
+                        }
+                      }
+                      &.ok{
+                        span{
+                          background: $verde;
+                        }
+
+                      }
+                      &.not{
+                        span{
+                          background: $vermelho;
+                        }
+
                       }
 
                       &.atual ~ .boll{
@@ -607,6 +631,11 @@
                           height: 20px;
                           &:before{
                               display: none;
+                          }
+                          span{
+                            background: #C8CFD4;
+                            width: 20px;
+                            height: 20px;
                           }
 
                       }
@@ -619,18 +648,66 @@
               }
               .legenda{
                 position: absolute;
-                display: flex;
+                display: grid;
+                grid-template-columns: repeat(9, 1fr);
                 align-items: center;
                 width: 100%;
                 justify-content: space-between;
                 p{
-                  font-size: 12px;
+                  font-size: 10px;
+                  padding: 0 10px;
                   color: #8B8D97;
-                  width: 14%;
                   text-align: center;
+                  line-height: 14px;
 
                 }
               }
+
+          }
+          .aguardando{
+            display: flex;
+            justify-content: center;
+            .it{
+              display: flex;
+              align-items: center;
+              margin-right: 1px;
+              background: #f7f7f7;
+              padding: 10px 20px;
+              p{
+                font-size: 12px;
+                line-height: 16px;
+                &:last-child{
+                  color: #999;
+                }
+              }
+              img{
+                margin-right: 10px;
+              }
+              &:first-child{
+                border-radius: 40px 0 0 40px;
+                padding-left: 40px;
+              }
+              &:last-child{
+                border-radius: 0 40px 40px 0;
+                padding-right: 40px;
+              }
+              &.not{
+                p{
+                  &:last-child{
+                    color: $vermelho;
+                    font-weight: 600;
+                  }
+                }
+              }
+              &.ok{
+                p{
+                  &:last-child{
+                    color: $verde;
+                    font-weight: 600;
+                  }
+                }
+              }
+            }
           }
             @media (max-width: 640px){
                 header{

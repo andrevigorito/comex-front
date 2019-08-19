@@ -14,6 +14,9 @@ import iconMap from '../img/icons/icon-nf-map.png';
 import iconBarco from '../img/icons/icon-barco.png';
 import iconAir from '../img/icons/icon-air.png';
 import iconBack from '../img/icons/back.png';
+import checkNot from '../img/icons/check-not.png';
+import checkOk from '../img/icons/check-ok.png';
+import checkNull from '../img/icons/check-null.png';
 
 // Components
 
@@ -35,12 +38,12 @@ class DetalheOperacional extends Component {
     this.setState({
       deop,
       isLoading: false,
-      uuid
+      uuid,
     });
   }
 
   render() {
-    const { deop,uuid } = this.state;
+    const { deop, uuid } = this.state;
     return (
       <div>
         <div className="center">
@@ -193,7 +196,7 @@ class DetalheOperacional extends Component {
                       </p>
                       <div className="line-status">
                         <div className="position">
-                          <div
+                          {/* <div
                             className={
                               !deop.ata_date && !deop.gr_actual
                                 ? 'boll atual'
@@ -209,12 +212,72 @@ class DetalheOperacional extends Component {
                           />
                           <div
                             className={deop.gr_actual ? 'boll atual' : 'boll'}
-                          />
+                          /> */}
+                          <div className="boll ">
+                            <span />
+                          </div>
+                          <div className="boll not">
+                            <span />
+                          </div>
+                          <div className="boll">
+                            <span />
+                          </div>
+                          <div className="boll">
+                            <span />
+                          </div>
+                          <div className="boll">
+                            <span />
+                          </div>
+                          <div className="boll atual not">
+                            <span />
+                          </div>
+                          <div className="boll">
+                            <span />
+                          </div>
+                          <div className="boll">
+                            <span />
+                          </div>
+                          <div className="boll">
+                            <span />
+                          </div>
                         </div>
                         <div className="legenda">
-                          <p>Embarque</p>
-                          <p>Chegada Porto/Aeroporto</p>
-                          <p>Chegada na Planta</p>
+                          <p>Aguardando Confirmação Booking</p>
+                          <p>Aguardando ATD</p>
+                          <p>Aguardando ATA</p>
+                          <p>Aguardando Porty Entry</p>
+                          <p>Aguardando Registro DI</p>
+                          <p>Aguardando NF</p>
+                          <p>
+                            Transito
+                            <br />
+                            (Loading terminal)
+                          </p>
+                          <p>Aguardando chegada planta</p>
+                          <p>GR efetivo</p>
+                        </div>
+                      </div>
+                      <div className="aguardando">
+                        <div className="it not">
+                          <img src={checkNot} alt="" />
+                          <span>
+                            <p>Aguardando DOCS</p>
+                            <p>02/07/2019</p>
+                          </span>
+                        </div>
+                        <div className="it ok">
+                          <img src={checkOk} alt="" />
+                          <span>
+                            <p>Aguardando Protocolo LI</p>
+                            <p>04/07/2019</p>
+                          </span>
+                        </div>
+                        <div className="it">
+                          <img src={checkNull} alt="" />
+                          <span>
+                            <p>Aguardando Defrimento LI</p>
+                            <p>15/07/2019</p>
+                          </span>
                         </div>
                       </div>
                     </div>
