@@ -11,6 +11,7 @@ function JustifieList(props) {
               <p>{justifie.description}</p>
 
               <div className="user">
+                <input type='checkbox' />
                 <p>{justifie.tye}</p>
                 <p>{new Date(justifie.createdAt).toLocaleDateString()}</p>
                 <p>{justifie.email}</p>
