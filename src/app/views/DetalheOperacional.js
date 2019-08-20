@@ -34,7 +34,7 @@ class DetalheOperacional extends Component {
     const { uuid } = this.props.match.params;
     const res = await API.get(`poItems/${uuid}`);
     const deop = res.data;
-    console.log(deop);
+    console.log(deop.timeline);
     this.setState({
       deop,
       isLoading: false,
@@ -196,50 +196,11 @@ class DetalheOperacional extends Component {
                       </p>
                       <div className="line-status">
                         <div className="position">
-                          {/* <div
-                            className={
-                              !deop.ata_date && !deop.gr_actual
-                                ? 'boll atual'
-                                : 'boll'
-                            }
-                          />
-                          <div
-                            className={
-                              deop.ata_date && !deop.gr_actual
-                                ? 'boll atual'
-                                : 'boll'
-                            }
-                          />
-                          <div
-                            className={deop.gr_actual ? 'boll atual' : 'boll'}
-                          /> */}
-                          <div className="boll ">
-                            <span />
-                          </div>
-                          <div className="boll not">
-                            <span />
-                          </div>
-                          <div className="boll">
-                            <span />
-                          </div>
-                          <div className="boll">
-                            <span />
-                          </div>
-                          <div className="boll">
-                            <span />
-                          </div>
-                          <div className="boll atual not">
-                            <span />
-                          </div>
-                          <div className="boll">
-                            <span />
-                          </div>
-                          <div className="boll">
-                            <span />
-                          </div>
-                          <div className="boll">
-                            <span />
-                          </div>
+                          {/* {deop.timeline.map(posit => (
+                            <div className="teste" key={posit.step}>
+                              {posit.step}
+                            </div>
+                          ))} */}
                         </div>
                         <div className="legenda">
                           <p>Aguardando Confirmação Booking</p>
