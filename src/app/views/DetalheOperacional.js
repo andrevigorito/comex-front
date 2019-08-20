@@ -196,11 +196,18 @@ class DetalheOperacional extends Component {
                       </p>
                       <div className="line-status">
                         <div className="position">
-                          {/* {deop.timeline.map(posit => (
-                            <div className="teste" key={posit.step}>
-                              {posit.step}
-                            </div>
-                          ))} */}
+                          {deop.timeline
+                            ? deop.timeline.map(posit => (
+                                <div
+                                  className={
+                                   ` ${ posit.actual ? 'boll atual' : 'boll'} ${ posit.red ? 'not' : ''} `
+                                  }
+                                  key={posit.step}
+                                >
+                                  <span />
+                                </div>
+                              ))
+                            : null}
                         </div>
                         <div className="legenda">
                           <p>Aguardando Confirmação Booking</p>
