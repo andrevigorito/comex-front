@@ -34,7 +34,7 @@ class DetalheOperacional extends Component {
     const { uuid } = this.props.match.params;
     const res = await API.get(`poItems/${uuid}`);
     const deop = res.data;
-    console.log(deop.timeline);
+    console.log(deop);
     this.setState({
       deop,
       isLoading: false,
@@ -182,9 +182,11 @@ class DetalheOperacional extends Component {
                           <div className="row">
                             <p>GR - Prev. Entrega:</p>
                             <p>
-                              {new Date(
-                                deop.gr_requested_date
-                              ).toLocaleDateString()}
+                              {deop.gr_requested_date
+                                ? new Date(
+                                    deop.gr_requested_date
+                                  ).toLocaleDateString()
+                                : '-'}
                             </p>
                           </div>
                         </div>
@@ -199,9 +201,9 @@ class DetalheOperacional extends Component {
                           {deop.timeline
                             ? deop.timeline.map(posit => (
                                 <div
-                                  className={
-                                   ` ${ posit.actual ? 'boll atual' : 'boll'} ${ posit.red ? 'not' : ''} `
-                                  }
+                                  className={` ${
+                                    posit.actual ? 'boll atual' : 'boll'
+                                  } ${posit.red ? 'not' : ''} `}
                                   key={posit.step}
                                 >
                                   <span />
@@ -230,21 +232,39 @@ class DetalheOperacional extends Component {
                           <img src={checkNot} alt="" />
                           <span>
                             <p>Aguardando DOCS</p>
-                            <p>02/07/2019</p>
+                            <p>
+                              {deop.docs_received_date
+                                ? new Date(
+                                    deop.docs_received_date
+                                  ).toLocaleDateString()
+                                : '-'}
+                            </p>
                           </span>
                         </div>
                         <div className="it ok">
                           <img src={checkOk} alt="" />
                           <span>
                             <p>Aguardando Protocolo LI</p>
-                            <p>04/07/2019</p>
+                            <p>
+                              {deop.protocol_mapa_in26_date
+                                ? new Date(
+                                    deop.protocol_mapa_in26_date
+                                  ).toLocaleDateString()
+                                : '-'}
+                            </p>
                           </span>
                         </div>
                         <div className="it">
                           <img src={checkNull} alt="" />
                           <span>
                             <p>Aguardando Defrimento LI</p>
-                            <p>15/07/2019</p>
+                            <p>
+                              {deop.post_import_license_release_date
+                                ? new Date(
+                                    deop.post_import_license_release_date
+                                  ).toLocaleDateString()
+                                : '-'}
+                            </p>
                           </span>
                         </div>
                       </div>
