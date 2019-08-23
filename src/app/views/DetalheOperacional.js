@@ -254,6 +254,8 @@ class DetalheOperacional extends Component {
                             </p>
                           </span>
                         </div>
+                        <div
+                          className={` ${
                             deop.protocol_mapa_in26_date_alert
                               ? 'it not'
                               : 'it ok'
