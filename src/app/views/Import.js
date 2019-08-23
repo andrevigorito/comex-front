@@ -18,7 +18,7 @@ class Import extends Component {
     isConverting: false,
     isSending: false,
     isWaiting: false,
-    importType: "",
+    importType: '',
   };
 
   componentDidMount() {
@@ -30,36 +30,40 @@ class Import extends Component {
   }
 
   handleImportAtl = async file => {
-    let name = file[0].name.split('.');
-    if(name[1] === 'xlsx' || name[1] === 'xls' || name[1] === 'XLSX' || name[1] === 'XLS'){
-
+    const name = file[0].name.split('.');
+    if (
+      name[1] === 'xlsx' ||
+      name[1] === 'xls' ||
+      name[1] === 'XLSX' ||
+      name[1] === 'XLS'
+    ) {
       this.setState({ isConverting: true });
       const workbook = await this.getWorkbookFromFile(file[0]);
       const first_worksheet = workbook.Sheets[workbook.SheetNames[0]];
-      let firstColumn = first_worksheet.A1 ? first_worksheet.A1.v : null;
-      const data = await XLSX.utils.sheet_to_json(first_worksheet, { header: 0 });
+      const firstColumn = first_worksheet.A1 ? first_worksheet.A1.v : null;
+      const data = await XLSX.utils.sheet_to_json(first_worksheet, {
+        header: 0,
+      });
       this.setState({ isConverting: false });
-      
-      if(firstColumn === "Group name"){
-        this.setState({ importType: "PLANILHA ATL" });
+
+      if (firstColumn === 'Group name') {
+        this.setState({ importType: 'PLANILHA ATL' });
         await this.sendImportATL(data);
-      }else if (firstColumn === "Product Number"){
-        this.setState({ importType: "PLANILHA SAP - DOW" }); 
+      } else if (firstColumn === 'Product Number') {
+        this.setState({ importType: 'PLANILHA SAP - DOW' });
         await this.sendImportSAPDow(data);
-      }else if (firstColumn === "Opening Date"){
-        this.setState({ importType: "PLANILHA SAP - DUPONT" });
+      } else if (firstColumn === 'Opening Date') {
+        this.setState({ importType: 'PLANILHA SAP - DUPONT' });
         await this.sendImportSAPDupont(data);
-      }else{
+      } else {
         this.notifyError('A PLANILHA EXCEL NÃO TEM UM FORMATO VÁLIDO!');
       }
-
-    }else{
+    } else {
       this.notifyError('NÃO É UM ARQUIVO VÁLIDO!');
     }
   };
 
   sendImportATL(data) {
-    
     this.setState({ isSending: true });
     API.post(`products`, data, {
       headers: { 'Content-Type': 'application/json' },
@@ -68,7 +72,7 @@ class Import extends Component {
       this.notifyWarn('IMPORTAÇÃO ATL ENVIADA! AGUARDANDO CONCLUSÃO!');
     });
   }
-  
+
   sendImportSAPDow(data) {
     this.setState({ isSending: true });
     API.post(`products/importSapDow`, data, {
@@ -78,7 +82,7 @@ class Import extends Component {
       this.notifyWarn('IMPORTAÇÃO SAP DOW ENVIADA! AGUARDANDO CONCLUSÃO!');
     });
   }
-  
+
   sendImportSAPDupont(data) {
     this.setState({ isSending: true });
     API.post(`products/importSapDupont`, data, {
@@ -147,12 +151,12 @@ class Import extends Component {
               Import
             </h1>
           </div>
-          <div className='list-planilhas'>
-            <div className='item'>Planilha ATL</div>
-            <div className='item'>Planilha SAP DOW</div>
-            <div className='item'>Planilha SAP DUPONT</div>
+          <div className="list-planilhas">
+            <div className="item">Planilha ATL</div>
+            <div className="item">Planilha SAP DOW</div>
+            <div className="item">Planilha SAP DUPONT</div>
           </div>
-          <center className='box-import'>
+          <center className="box-import">
             {this.state.isConverting ? (
               <Fragment>
                 <h2>{this.state.importType}</h2>
@@ -163,13 +167,18 @@ class Import extends Component {
               <Fragment>
                 <h2>{this.state.importType}</h2>
                 <Loading />
-                <h2>{this.state.importType}... ENVIANDO DADOS PARA O SERVIDOR...</h2>
+                <h2>
+                  {this.state.importType}... ENVIANDO DADOS PARA O SERVIDOR...
+                </h2>
               </Fragment>
             ) : this.state.isWaiting ? (
               <Fragment>
                 <h2>{this.state.importType}</h2>
                 <Loading />
-                <h2>{this.state.importType}... ENVIADA COM SUCESSO! AGUARDANDO RESPOSTA DO SERVIDOR... </h2>
+                <h2>
+                  {this.state.importType}... ENVIADA COM SUCESSO! AGUARDANDO
+                  RESPOSTA DO SERVIDOR...{' '}
+                </h2>
               </Fragment>
             ) : (
               <Fragment>
@@ -179,10 +188,8 @@ class Import extends Component {
                 />
 
                 <DragAndDrop handleDrop={this.handleImportAtl}>
-                  <div className='box-drop'>
-                    <p>
-                      Arraste a planilha para este local...
-                    </p>
+                  <div className="box-drop">
+                    <p>Arraste a planilha para este local...</p>
                   </div>
                 </DragAndDrop>
               </Fragment>

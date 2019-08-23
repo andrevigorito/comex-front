@@ -1,6 +1,5 @@
 import styled from 'styled-components';
-import imgChecked from '../../img/icons/icon-check.png';
-import imgloading from '../../img/load.gif';
+import imgChecked from '../../../img/icons/icon-check.png';
 
 export const ContentTransit = styled.div`
   position: relative;
@@ -58,11 +57,4 @@ export const ContentTransit = styled.div`
       }
     }
   }
-`;
-
-export const Loadingbtn = styled.div`
-  width: 44px;
-  height: 44px;
-  background: url(${imgloading}) no-repeat center;
-  display: none;
 `;

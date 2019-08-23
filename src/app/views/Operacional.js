@@ -247,14 +247,30 @@ class Operacional extends Component {
       const Descricao = op.po.product.product_description;
       const Quantidade = op.qty;
       const PlantaId = op.plant_id;
-      const GRRequested = op.gr_requested_date ? new Date(op.gr_requested_date).toLocaleDateString() : '-';
-      const GRActual = op.gr_actual ? new Date(op.gr_actual).toLocaleDateString() : '-';
-      const BookingConfirmationDate = op.booking_confirmation_date ? new Date(op.booking_confirmation_date).toLocaleDateString() : '-';
-      const ETDDate = op.etd_date ? new Date(op.etd_date).toLocaleDateString() : '-';
-      const ATDDate = op.atd_date ? new Date(op.atd_date).toLocaleDateString() : '-';
-      const ETArequestedDate = op.eta_requested_date ? new Date(op.eta_requested_date).toLocaleDateString() : '-';
-      const ATAdate = op.ata_date ? new Date(op.ata_date).toLocaleDateString() : '-';
-      const PortEntryDate = op.port_entry_date ? new Date(op.port_entry_date).toLocaleDateString() : '-';
+      const GRRequested = op.gr_requested_date
+        ? new Date(op.gr_requested_date).toLocaleDateString()
+        : '-';
+      const GRActual = op.gr_actual
+        ? new Date(op.gr_actual).toLocaleDateString()
+        : '-';
+      const BookingConfirmationDate = op.booking_confirmation_date
+        ? new Date(op.booking_confirmation_date).toLocaleDateString()
+        : '-';
+      const ETDDate = op.etd_date
+        ? new Date(op.etd_date).toLocaleDateString()
+        : '-';
+      const ATDDate = op.atd_date
+        ? new Date(op.atd_date).toLocaleDateString()
+        : '-';
+      const ETArequestedDate = op.eta_requested_date
+        ? new Date(op.eta_requested_date).toLocaleDateString()
+        : '-';
+      const ATAdate = op.ata_date
+        ? new Date(op.ata_date).toLocaleDateString()
+        : '-';
+      const PortEntryDate = op.port_entry_date
+        ? new Date(op.port_entry_date).toLocaleDateString()
+        : '-';
       const Status = op.status;
 
       const objeto = {
@@ -277,7 +293,7 @@ class Operacional extends Component {
     });
 
     const csvData = arrayExcel;
-    console.log(csvData)
+    console.log(csvData);
 
     return (
       <div>

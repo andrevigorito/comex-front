@@ -31,7 +31,7 @@ const JustifieForm = props => {
 
   return (
     <Formik
-      enableReinitialize={true}
+      enableReinitialize
       initialValues={{
         type: '',
         email: '',

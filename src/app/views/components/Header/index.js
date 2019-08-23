@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Route, Link } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import API from '../../../services/api';
+import history from '../../../services/history';
 
 import logo from '../../../img/logo.png';
 import imgUser from '../../../img/user-header.png';
@@ -12,25 +13,19 @@ export default function Header() {
   const [useruuid, setUserUuid] = useState(localStorage.getItem('USER_UUID'));
   const [userPhoto, setUserPhoto] = useState(imgUser);
 
-  async function markAlertAsRead(alertObj) {
-    await API.put(`alerts/read/`, {
-      useruuid,
-      alertuuid: alertObj.uuid,
-    });
-  }
-
-  async function notifySucess(alertObj) {
-    toast.success(alertObj.message, {
+  async function notifyErr(message) {
+    toast.error(message, {
       position: toast.POSITION.BOTTOM_RIGHT,
-      onClick: () => markAlertAsRead(alertObj),
+      onClick: () => history.push('/alertas'),
     });
   }
 
-  async function showUnreadAlerts() {
+  async function haveUnreadAlerts() {
     const alerts = await API.get(`alerts/user/unread/${useruuid}`);
-    alerts.data.forEach(alert => {
-      notifySucess(alert);
-    });
+    if (alerts.data.length > 0)
+      notifyErr(
+        `Há ${alerts.data.length} alertas não lidos. Clique aqui para ver.`
+      );
   }
 
   async function getUser() {
@@ -47,7 +42,7 @@ export default function Header() {
     async function load() {
       await getUser();
       await setUserUuid(localStorage.getItem('USER_UUID'));
-      await showUnreadAlerts();
+      await haveUnreadAlerts();
     }
 
     load();

@@ -15,36 +15,29 @@ class justifieContainer extends Component {
   };
 
   async componentDidMount() {
-    
-    this.getJustifies(this.props.uuid)
-    
+    this.getJustifies(this.props.uuid);
   }
-  
+
   async getJustifies(uuid) {
     this.setState({
-        isLoading: true
-      });
+      isLoading: true,
+    });
     API.get(`justifies/${uuid}`).then(res => {
       const justifies = res.data;
       this.setState({
         justifies,
-        isLoading: false
+        isLoading: false,
       });
     });
   }
-  
+
   handleJustifieDelete = async uuid => {
-    
     API.delete(`justifies/${uuid}`).then(res => {
-      
-      this.getJustifies(this.props.uuid)
-      
+      this.getJustifies(this.props.uuid);
     });
-  }
-  
+  };
 
   handleJustifieCreation = async justifie => {
-
     try {
       const rawResponse = await API.post(
         'justifies',
@@ -62,15 +55,13 @@ class justifieContainer extends Component {
       });
 
       const content = await rawResponse;
-      
-      this.getJustifies(this.props.uuid)
-      
-      this.setState({ modalJust: true, modalAddJust: false })
-      
+
+      this.getJustifies(this.props.uuid);
+
+      this.setState({ modalJust: true, modalAddJust: false });
     } catch (err) {
       alert(err);
     }
-    
   };
 
   render() {
@@ -80,23 +71,16 @@ class justifieContainer extends Component {
         <div className="content">
           <h2>Justificativa</h2>
           {this.state.modalAddJust && (
-          
-            <JustifieForm 
-              onJustifieCreation={this.handleJustifieCreation} 
-            />
-            
+            <JustifieForm onJustifieCreation={this.handleJustifieCreation} />
           )}
 
           {this.state.modalJust && (
-          
-            <JustifieList 
+            <JustifieList
               isLoading={this.state.isLoading}
               onJustifieDelete={this.handleJustifieDelete}
               justifies={this.state.justifies}
             />
-          
           )}
-
         </div>
         <div className="wrap-btns">
           <button type="button" className="btn abonar">

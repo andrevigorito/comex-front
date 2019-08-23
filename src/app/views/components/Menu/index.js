@@ -68,6 +68,9 @@ class Menu extends Component {
                 <Link onClick={this.btnMenu} to="/alertas">
                   Alertas
                 </Link>
+                <Link onClick={this.btnMenu} to="/tipoJustificativa">
+                  Tipos de Justificativa
+                </Link>
               </Route>
             </nav>
             <div className="logout" onClick={onLogout}>

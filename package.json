@@ -33,7 +33,7 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "eslint": "node_modules/.bin/eslint --fix --ext .js src/app/"
+    "eslint": "node_modules/.bin/eslint --fix --ext .js \"src\\app\\**\\*.js\""
   },
   "browserslist": [
     ">0.2%",

@@ -24,13 +24,13 @@ class Detalhe extends Component {
     let i;
 
     for (i = 0; i < acc.length; i++) {
-      acc[i].addEventListener("click", function() {
-        this.classList.toggle("active");
-        let panel = this.nextElementSibling;
-        if (panel.style.maxHeight){
-        panel.style.maxHeight = null;
+      acc[i].addEventListener('click', function() {
+        this.classList.toggle('active');
+        const panel = this.nextElementSibling;
+        if (panel.style.maxHeight) {
+          panel.style.maxHeight = null;
         } else {
-        panel.style.maxHeight = panel.scrollHeight + "px";
+          panel.style.maxHeight = `${panel.scrollHeight}px`;
         }
       });
     }
@@ -95,9 +95,15 @@ class Detalhe extends Component {
                     <div className="item accordion">
                       <p>{po.order_reference}</p>
                       <p>{po.po_items.item}</p>
-                      <p>{new Date(po.po_items.gr_actual).toLocaleDateString()}</p>
+                      <p>
+                        {new Date(po.po_items.gr_actual).toLocaleDateString()}
+                      </p>
                       <p>{po.po_items.qty}</p>
-                      <p>{po.po_items.reduce((total, obj) => obj.invoice_value + total, 0)}
+                      <p>
+                        {po.po_items.reduce(
+                          (total, obj) => obj.invoice_value + total,
+                          0
+                        )}
                       </p>
                     </div>
 
@@ -213,12 +219,35 @@ class Detalhe extends Component {
                             </div>
                           </div>
                           <div className="box-transportadora">
-                            <p className="tit">Tranportadora: <span>{accordion.carrier}</span></p>
+                            <p className="tit">
+                              Tranportadora: <span>{accordion.carrier}</span>
+                            </p>
                             <div className="line-status">
                               <div className="position">
-                                <div className={accordion.process_status === '1 - PRE-Embarque' ? 'boll atual' : 'boll'}></div>
-                                <div className={accordion.process_status === '2 - Em Transito' ? 'boll atual' : 'boll'}></div>
-                                <div className={accordion.process_status === '3 - PRE-Embarque' ? 'boll atual' : 'boll'}></div>
+                                <div
+                                  className={
+                                    accordion.process_status ===
+                                    '1 - PRE-Embarque'
+                                      ? 'boll atual'
+                                      : 'boll'
+                                  }
+                                />
+                                <div
+                                  className={
+                                    accordion.process_status ===
+                                    '2 - Em Transito'
+                                      ? 'boll atual'
+                                      : 'boll'
+                                  }
+                                />
+                                <div
+                                  className={
+                                    accordion.process_status ===
+                                    '3 - PRE-Embarque'
+                                      ? 'boll atual'
+                                      : 'boll'
+                                  }
+                                />
                               </div>
                               <div className="legenda">
                                 <p>Embarque</p>

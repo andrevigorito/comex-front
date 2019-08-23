@@ -9,7 +9,7 @@ import API from '../../services/api';
 import Loading from '../components/Loading';
 
 // styles
-import { Box, UserList, BtnCadastrar} from './styles';
+import { Box, UserList, BtnCadastrar } from './styles';
 // import { Box, UserList, Popup } from './styles';
 
 class Usuarios extends Component {
