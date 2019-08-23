@@ -228,8 +228,21 @@ class DetalheOperacional extends Component {
                         </div>
                       </div>
                       <div className="aguardando">
-                        <div className="it not">
-                          <img src={checkNot} alt="" />
+                        <div
+                          className={` ${
+                            deop.docs_received_date_alert ? 'it not' : 'it ok'
+                          }`}
+                        >
+                          <img
+                            src={` ${
+                              !deop.docs_received_date
+                                ? checkNull
+                                : deop.docs_received_date_alert
+                                ? checkNot
+                                : checkOk
+                            }`}
+                            alt=""
+                          />
                           <span>
                             <p>Aguardando DOCS</p>
                             <p>
@@ -241,8 +254,21 @@ class DetalheOperacional extends Component {
                             </p>
                           </span>
                         </div>
-                        <div className="it ok">
-                          <img src={checkOk} alt="" />
+                            deop.protocol_mapa_in26_date_alert
+                              ? 'it not'
+                              : 'it ok'
+                          }`}
+                        >
+                          <img
+                            src={` ${
+                              !deop.protocol_mapa_in26_date
+                                ? checkNull
+                                : deop.protocol_mapa_in26_date_alert
+                                ? checkNot
+                                : checkOk
+                            }`}
+                            alt=""
+                          />
                           <span>
                             <p>Aguardando Protocolo LI</p>
                             <p>
@@ -254,8 +280,23 @@ class DetalheOperacional extends Component {
                             </p>
                           </span>
                         </div>
-                        <div className="it">
-                          <img src={checkNull} alt="" />
+                        <div
+                          className={` ${
+                            deop.post_import_license_release_date_alert
+                              ? 'it not'
+                              : 'it ok'
+                          }`}
+                        >
+                          <img
+                            src={` ${
+                              !deop.post_import_license_release_date
+                                ? checkNull
+                                : deop.post_import_license_release_date_alert
+                                ? checkNot
+                                : checkOk
+                            }`}
+                            alt=""
+                          />
                           <span>
                             <p>Aguardando Defrimento LI</p>
                             <p>
