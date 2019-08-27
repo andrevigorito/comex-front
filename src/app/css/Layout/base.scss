@@ -293,6 +293,24 @@
 			input{
 				width: 100%;
 			}
+    }
+    &.filtealert{
+      .row{
+        margin-bottom: 20px;
+        button{
+          width: 100%;
+        }
+      }
+      .item span {
+        display: flex;
+        justify-content: space-between;
+        .react-datepicker-wrapper{
+          width: 48%;
+        }
+      }
+			input, select{
+				width: 100%;
+			}
 		}
 	}
 	.btn-status{
