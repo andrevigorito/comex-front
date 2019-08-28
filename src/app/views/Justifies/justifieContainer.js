@@ -12,10 +12,12 @@ class justifieContainer extends Component {
     modalAddJust: true,
     isLoading: true,
     justifies: {},
+    typesJustifies: {},
   };
 
   async componentDidMount() {
     this.getJustifies(this.props.uuid);
+    this.getTypesJustifies();
   }
 
   async getJustifies(uuid) {
@@ -28,6 +30,20 @@ class justifieContainer extends Component {
         justifies,
         isLoading: false,
       });
+    });
+  }
+  
+  async getTypesJustifies(uuid) {
+    this.setState({
+      isLoading: true,
+    });
+    API.get(`typesJustification`).then(res => {
+      const typesJustifies = res.data;
+      this.setState({
+        typesJustifies,
+        isLoading: false,
+      });
+      console.log(typesJustifies)
     });
   }
 
@@ -71,7 +87,10 @@ class justifieContainer extends Component {
         <div className="content">
           <h2>Justificativa</h2>
           {this.state.modalAddJust && (
-            <JustifieForm onJustifieCreation={this.handleJustifieCreation} />
+            <JustifieForm 
+              onJustifieCreation={this.handleJustifieCreation} 
+              typesJustifies={this.state.typesJustifies}  
+            />
           )}
 
           {this.state.modalJust && (
