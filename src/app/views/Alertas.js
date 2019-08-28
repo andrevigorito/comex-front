@@ -1,6 +1,7 @@
 /* eslint-disable no-nested-ternary */
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
+import { format } from 'date-fns';
 import API from '../services/api';
 
 // Images
@@ -14,12 +15,13 @@ export default function Alertas({ useruuid }) {
   const [alerts, setalerts] = useState([]);
   const [isLoading, setisLoading] = useState(false);
 
-  async function getAlerts() {
+  async function getAlerts(params = null) {
     // const useruuid = '12430f8a-e492-4efb-a8cd-bb2b2784567c';
     setisLoading(true);
-    const res = await API.get(`alerts/user/all/${useruuid}`);
+
+    const res = await API.get(`alerts/user/all/${useruuid}`, { params });
     // console.log('##################');
-    // console.log(res.data);
+    console.log(res.data);
     setalerts(res.data);
     setisLoading(false);
   }
@@ -43,6 +45,20 @@ export default function Alertas({ useruuid }) {
     btn.classList.toggle('active');
   }
 
+  async function filtrar(data) {
+
+    const teste = format(new Date(), "yyyy-MM-dd'T'HH:mm:ss.SSSxxx")
+    console.log(teste)
+
+    const data1 = {
+      ...data,
+      date: new Date()
+    }
+    console.log(data1.date)
+
+    await getAlerts(data1);
+  }
+
   return (
     <div>
       <div className="center">
@@ -63,7 +79,7 @@ export default function Alertas({ useruuid }) {
           </div>
         </div>
 
-        <FilterAlert />
+        <FilterAlert filtrar={filtrar} />
 
         <div className="list-alerts">
           <div className="header">
@@ -77,7 +93,7 @@ export default function Alertas({ useruuid }) {
           {alerts.map(alerta => (
             <div className="item" key={alerta.uuid}>
               <p className="date current">
-                {new Date(alerta.createdAt).toLocaleDateString()}
+                {new Date(alerta.createdAt).toLocaleString()}
               </p>
               <p className="po">{alerta.message}</p>
               <p className="po">
@@ -92,7 +108,7 @@ export default function Alertas({ useruuid }) {
                   ? alerta.user_alerts[0].read
                     ? new Date(
                         alerta.user_alerts[0].updatedAt
-                      ).toLocaleDateString()
+                      ).toLocaleString()
                     : ''
                   : ''}
               </p>

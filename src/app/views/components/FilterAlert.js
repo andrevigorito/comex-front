@@ -9,19 +9,40 @@ registerLocale('pt-BR', ptBR);
 
 class Filter extends Component {
   state = {
-    startDate: new Date(),
-    endDate: new Date(),
+    dataDe: new Date(),
+    dataAte: new Date(),
+    mensagem: '',
+    status: '',
+  };
+
+  handleFilter = async e => {
+    e.preventDefault();
+    await this.props.filtrar(this.state);
+  };
+
+  handleChangeDateAta = date => {
+    this.setState({ dataDe: date });
+  };
+
+  handleChangeDateAtaFim = date => {
+    this.setState({ dataAte: date });
+  };
+
+  handleQueryInput = e => {
+    this.setState({ mensagem: e.target.value });
+  };
+
+  handleSelect = e => {
+    this.setState({ status: e.target.value });
+    console.log(this.state.status);
   };
 
   render() {
-    const {
-      startDate,
-      endDate,
-    } = this.state;
+    const { dataDe, dataAte, status } = this.state;
 
     return (
       <div className="filter-box">
-        <form className="filtealert">
+        <form className="filtealert" onSubmit={this.handleFilter}>
           <Grid>
             <Row>
               <Col xs={12} md={4}>
@@ -30,10 +51,10 @@ class Filter extends Component {
                   <span>
                     <DatePicker
                       locale="pt-BR"
-                      selected={startDate}
+                      selected={dataDe}
                       selectsStart
-                      startDate={startDate}
-                      endDate={endDate}
+                      dataDe={dataDe}
+                      dataAte={dataAte}
                       onChange={this.handleChangeDateAta}
                       dateFormat="dd/MM/yyyy"
                       placeholderText="De"
@@ -41,10 +62,10 @@ class Filter extends Component {
 
                     <DatePicker
                       locale="pt-BR"
-                      selected={endDate}
+                      selected={dataAte}
                       selectsEnd
-                      startDate={startDate}
-                      endDate={endDate}
+                      dataDe={dataDe}
+                      dataAte={dataAte}
                       onChange={this.handleChangeDateAtaFim}
                       dateFormat="dd/MM/yyyy"
                       placeholderText="Até"
@@ -67,10 +88,13 @@ class Filter extends Component {
               <Col xs={12} md={2}>
                 <div className="item">
                   <label>Status:</label>
-                  <select>
-                    <option>Não lido</option>
-                    <option>lido</option>
-                    <option>Todos</option>
+                  <select
+                    value={status}
+                    onChange={this.handleSelect}
+                  >
+                    <option value="">Todos</option>
+                    <option value="false">Não lido</option>
+                    <option value="true">lido</option>
                   </select>
                 </div>
               </Col>
