@@ -151,7 +151,7 @@ class DetalheOperacional extends Component {
                           </div>
                           <div className="row">
                             <p>Porto Destino:</p>
-                            <p>{deop.origin}</p>
+                            <p>{deop.destination}</p>
                           </div>
                           <div className="row">
                             <p>Planta Destino:</p>
