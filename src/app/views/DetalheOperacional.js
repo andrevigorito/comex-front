@@ -189,7 +189,7 @@ class DetalheOperacional extends Component {
                             <p>GR - Prev. Entrega:</p>
                             <p>
                               {new Date(
-                                deop.gr_requested_date
+                                deop.gr_actual
                               ).toLocaleDateString()}
                             </p>
                           </div>
