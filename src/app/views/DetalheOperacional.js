@@ -14,11 +14,15 @@ import iconMap from '../img/icons/icon-nf-map.png';
 import iconBarco from '../img/icons/icon-barco.png';
 import iconAir from '../img/icons/icon-air.png';
 import iconBack from '../img/icons/back.png';
+import checkNot from '../img/icons/check-not.png';
+import checkOk from '../img/icons/check-ok.png';
+import checkNull from '../img/icons/check-null.png';
+
 
 // Components
 
 class DetalheOperacional extends Component {
-  
+
   state = {
     deop: [],
     isLoading: false,
@@ -26,9 +30,9 @@ class DetalheOperacional extends Component {
   };
 
   async componentDidMount() {
-    this.getPoItem() 
+    this.getPoItem()
   }
-  
+
   getPoItem = async () => {
     this.setState({
       isLoading: true,
@@ -194,34 +198,123 @@ class DetalheOperacional extends Component {
                       </p>
                       <div className="line-status">
                         <div className="position">
-                          <div
-                            className={
-                              !deop.ata_date && !deop.gr_actual
-                                ? 'boll atual'
-                                : 'boll'
-                            }
-                          />
-                          <div
-                            className={
-                              deop.ata_date && !deop.gr_actual
-                                ? 'boll atual'
-                                : 'boll'
-                            }
-                          />
-                          <div
-                            className={deop.gr_actual ? 'boll atual' : 'boll'}
-                          />
+                          {deop.timeline
+                            ? deop.timeline.map(posit => (
+                                <div
+                                  className={` ${
+                                    posit.actual ? 'boll atual' : 'boll'
+                                  } ${posit.red ? 'not' : ''} `}
+                                  key={posit.step}
+                                >
+                                  <span />
+                                </div>
+                              ))
+                            : null}
                         </div>
                         <div className="legenda">
-                          <p>Embarque</p>
-                          <p>Chegada Porto/Aeroporto</p>
-                          <p>Chegada na Planta</p>
+                          <p>Aguardando Confirmação Booking</p>
+                          <p>Aguardando ATD</p>
+                          <p>Aguardando ATA</p>
+                          <p>Aguardando Porty Entry</p>
+                          <p>Aguardando Registro DI</p>
+                          <p>Aguardando NF</p>
+                          <p>
+                            Transito
+                            <br />
+                            (Loading terminal)
+                          </p>
+                          <p>Aguardando chegada planta</p>
+                          <p>GR efetivo</p>
+                        </div>
+                      </div>
+                      <div className="aguardando">
+                        <div
+                          className={` ${
+                            deop.docs_received_date_alert ? 'it not' : 'it ok'
+                          }`}
+                        >
+                          <img
+                            src={` ${
+                              !deop.docs_received_date
+                                ? checkNull
+                                : deop.docs_received_date_alert
+                                ? checkNot
+                                : checkOk
+                            }`}
+                            alt=""
+                          />
+                          <span>
+                            <p>Aguardando DOCS</p>
+                            <p>
+                              {deop.docs_received_date
+                                ? new Date(
+                                    deop.docs_received_date
+                                  ).toLocaleDateString()
+                                : '-'}
+                            </p>
+                          </span>
+                        </div>
+                        <div
+                          className={` ${
+                            deop.protocol_mapa_in26_date_alert
+                              ? 'it not'
+                              : 'it ok'
+                          }`}
+                        >
+                          <img
+                            src={` ${
+                              !deop.protocol_mapa_in26_date
+                                ? checkNull
+                                : deop.protocol_mapa_in26_date_alert
+                                ? checkNot
+                                : checkOk
+                            }`}
+                            alt=""
+                          />
+                          <span>
+                            <p>Aguardando Protocolo LI</p>
+                            <p>
+                              {deop.protocol_mapa_in26_date
+                                ? new Date(
+                                    deop.protocol_mapa_in26_date
+                                  ).toLocaleDateString()
+                                : '-'}
+                            </p>
+                          </span>
+                        </div>
+                        <div
+                          className={` ${
+                            deop.post_import_license_release_date_alert
+                              ? 'it not'
+                              : 'it ok'
+                          }`}
+                        >
+                          <img
+                            src={` ${
+                              !deop.post_import_license_release_date
+                                ? checkNull
+                                : deop.post_import_license_release_date_alert
+                                ? checkNot
+                                : checkOk
+                            }`}
+                            alt=""
+                          />
+                          <span>
+                            <p>Aguardando Defrimento LI</p>
+                            <p>
+                              {deop.post_import_license_release_date
+                                ? new Date(
+                                    deop.post_import_license_release_date
+                                  ).toLocaleDateString()
+                                : '-'}
+                            </p>
+                          </span>
                         </div>
                       </div>
                     </div>
                   </div>
                 </div>
-                <JustifieContainer 
+                <JustifieContainer
                   uuid={uuid}
                   deop={deop}
                   getPoItem={this.getPoItem}
