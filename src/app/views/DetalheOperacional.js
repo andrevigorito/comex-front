@@ -174,19 +174,19 @@ class DetalheOperacional extends Component {
                         </div>
                         <div className="info">
                           <div className="row">
+                            <p>ETA:</p>
+                            <p>
+                              {new Date(deop.eta_date).toLocaleDateString()}
+                            </p>
+                          </div>
+                          <div className="row">
                             <p>ETD:</p>
                             <p>
                               {new Date(deop.etd_date).toLocaleDateString()}
                             </p>
                           </div>
                           <div className="row">
-                            <p>ATD:</p>
-                            <p>
-                              {new Date(deop.atd_date).toLocaleDateString()}
-                            </p>
-                          </div>
-                          <div className="row">
-                            <p>GR - Prev. Entrega:</p>
+                            <p>GR Atual</p>
                             <p>
                               {new Date(
                                 deop.gr_actual
@@ -202,15 +202,69 @@ class DetalheOperacional extends Component {
                       </p>
                       <div className="line-status">
                       <div className="date-leg">
-                          <p>29/08/2019</p>
-                          <p>29/08/2019</p>
-                          <p>29/08/2019</p>
-                          <p>29/08/2019</p>
-                          <p>29/08/2019</p>
-                          <p>29/08/2019</p>
-                          <p>29/08/2019 </p>
-                          <p>29/08/2019</p>
-                          <p>29/08/2019</p>
+                          <p>
+                            {deop.booking_confirmation_date
+                              ? new Date(
+                                  deop.booking_confirmation_date
+                                ).toLocaleDateString()
+                              : ' '}
+                          </p>
+                          <p>
+                            {deop.eta_date
+                              ? new Date(
+                                  deop.eta_date
+                                ).toLocaleDateString()
+                              : ''}
+                          </p>
+                          <p>
+                            {deop.ata_date
+                              ? new Date(
+                                  deop.ata_date
+                                ).toLocaleDateString()
+                              : ''}
+                          </p>
+                          <p>
+                            {deop.port_entry_date
+                              ? new Date(
+                                  deop.port_entry_date
+                                ).toLocaleDateString()
+                              : '-'}
+                          </p>
+                          <p>
+                            {deop.data_do_registro_da_di
+                              ? new Date(
+                                  deop.data_do_registro_da_di
+                                ).toLocaleDateString()
+                              : ' '}
+                          </p>
+                          <p>
+                            {deop.nf_date
+                              ? new Date(
+                                  deop.nf_date
+                                ).toLocaleDateString()
+                              : ' '}
+                          </p>
+                          <p>
+                            {deop.loading_at_the_terminal
+                              ? new Date(
+                                  deop.loading_at_the_terminal
+                                ).toLocaleDateString()
+                              : ' '}
+                          </p>
+                          <p>
+                            {deop.plant_delivery
+                              ? new Date(
+                                  deop.plant_delivery
+                                ).toLocaleDateString()
+                              : ' '}
+                          </p>
+                          <p>
+                            {deop.gr_actual
+                              ? new Date(
+                                  deop.gr_actual
+                                ).toLocaleDateString()
+                              : ' '}
+                          </p>
                         </div>
                         <div className="position">
                           {deop.timeline
