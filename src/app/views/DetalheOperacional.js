@@ -201,6 +201,17 @@ class DetalheOperacional extends Component {
                         Tranportadora: <span>{deop.carrier}</span>
                       </p>
                       <div className="line-status">
+                      <div className="date-leg">
+                          <p>29/08/2019</p>
+                          <p>29/08/2019</p>
+                          <p>29/08/2019</p>
+                          <p>29/08/2019</p>
+                          <p>29/08/2019</p>
+                          <p>29/08/2019</p>
+                          <p>29/08/2019 </p>
+                          <p>29/08/2019</p>
+                          <p>29/08/2019</p>
+                        </div>
                         <div className="position">
                           {deop.timeline
                             ? deop.timeline.map(posit => (
