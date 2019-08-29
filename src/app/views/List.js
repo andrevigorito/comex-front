@@ -246,7 +246,7 @@ class List extends Component {
                           <p>
                             <img src={iconRgc} alt="" />{' '}
                             {new Date(
-                              po.gr_requested_date
+                              po.gr_actual
                             ).toLocaleDateString()}
                           </p>
                           <p>
