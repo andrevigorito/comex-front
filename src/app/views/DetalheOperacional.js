@@ -18,6 +18,7 @@ import iconBack from '../img/icons/back.png';
 // Components
 
 class DetalheOperacional extends Component {
+  
   state = {
     deop: [],
     isLoading: false,
@@ -25,6 +26,10 @@ class DetalheOperacional extends Component {
   };
 
   async componentDidMount() {
+    this.getPoItem() 
+  }
+  
+  getPoItem = async () => {
     this.setState({
       isLoading: true,
     });
@@ -216,7 +221,11 @@ class DetalheOperacional extends Component {
                     </div>
                   </div>
                 </div>
-                <JustifieContainer uuid={uuid} />
+                <JustifieContainer 
+                  uuid={uuid}
+                  deop={deop}
+                  getPoItem={this.getPoItem}
+                />
               </div>
             </div>
           )}

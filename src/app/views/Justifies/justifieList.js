@@ -6,12 +6,18 @@ function JustifieList(props) {
     <Fragment>
       {!props.isLoading ? (
         props.justifies.map(justifie => (
+          !props.warranted || justifie.warranted?
           <div className="list-justificativas">
             <div className="item">
               <p>{justifie.description}</p>
-              <button onClick={() => props.onJustifieDelete(justifie.uuid)}>
-                Del
-              </button>
+              {!props.warranted &&
+                <Fragment>
+                  <input type="checkbox" onChange={(e) => props.onJustifieChecked(e.target.checked,justifie.uuid)} />
+                  <button onClick={() => props.onJustifieDelete(justifie.uuid)}>
+                    Del
+                  </button>
+                </Fragment>
+              }
               <div className="user">
                 <p>{justifie.tye}</p>
                 <p>{new Date(justifie.createdAt).toLocaleDateString()}</p>
@@ -19,6 +25,7 @@ function JustifieList(props) {
               </div>
             </div>
           </div>
+          : null
         ))
       ) : (
         <Loading />

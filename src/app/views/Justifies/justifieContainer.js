@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import API from '../../services/api';
 
 // Components
@@ -11,8 +11,9 @@ class justifieContainer extends Component {
     modalJust: false,
     modalAddJust: true,
     isLoading: true,
-    justifies: {},
+    justifies: null,
     typesJustifies: {},
+    checkedJustifies: [],
   };
 
   async componentDidMount() {
@@ -79,41 +80,93 @@ class justifieContainer extends Component {
       alert(err);
     }
   };
+  
+  handlePoItemWarrant = async () => {
+    try {
+      const rawResponse = await API.post(
+        'poItems/warrant',
+        {
+          uuid: this.props.uuid,
+          justifies: this.state.checkedJustifies,
+        },
+        {
+          headers: { 'Content-Type': 'application/json' },
+        }
+      ).catch(error => {
+        throw error;
+      });
+
+      const content = await rawResponse;
+      
+      this.props.getPoItem()
+
+      this.setState({ modalJust: true, modalAddJust: false });
+    } catch (err) {
+      alert(err);
+    }
+  };
+  
+  handleJustifieChecked = async (checked,uuid) => {
+      if(checked){
+        await this.setState(prevState => ({
+              checkedJustifies: [...prevState.checkedJustifies,{uuid}]
+          })
+        )
+        console.log(this.state.checkedJustifies)
+      }else{
+        delete this.state.checkedJustifies[uuid]
+        console.log(this.state.checkedJustifies)
+      }
+  }
 
   render() {
-    const { deop } = this.state;
+    const { deop } = this.props;
     return (
       <div className="lb-justificativa">
         <div className="content">
-          <h2>Justificativa</h2>
-          {this.state.modalAddJust && (
+          <h2>Justificativas {deop.warranted && 'Abonadas'}</h2>
+          {this.state.modalAddJust && !deop.warranted && (
             <JustifieForm 
               onJustifieCreation={this.handleJustifieCreation} 
               typesJustifies={this.state.typesJustifies}  
             />
           )}
 
-          {this.state.modalJust && (
+          {this.state.modalJust || deop.warranted ? (
             <JustifieList
               isLoading={this.state.isLoading}
               onJustifieDelete={this.handleJustifieDelete}
+              onJustifieChecked={this.handleJustifieChecked}
+              warranted={deop.warranted}
               justifies={this.state.justifies}
             />
-          )}
+          ):null}
         </div>
         <div className="wrap-btns">
-          <button type="button" className="btn abonar">
-            Abonar
-          </button>
-          <button
-            type="button"
-            className="btn"
-            onClick={() =>
-              this.setState({ modalJust: false, modalAddJust: true })
-            }
-          >
-            Adicionar
-          </button>
+          {!deop.warranted ?
+            <Fragment>
+              <button 
+                type="button" 
+                className="btn abonar"
+                onClick={() =>
+                  this.handlePoItemWarrant()
+                }
+              >
+                Abonar
+              </button>
+              <button
+                type="button"
+                className="btn"
+                onClick={() =>
+                  this.setState({ modalJust: false, modalAddJust: true })
+                }
+              >
+                Adicionar
+              </button>
+            </Fragment>  
+            : null
+          }
+          
           <button
             type="button"
             className="btn"
