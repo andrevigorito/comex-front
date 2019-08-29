@@ -1,10 +1,13 @@
 import React, { Fragment } from 'react';
 import Loading from '../components/Loading';
 
+
+
 function JustifieList(props) {
+  
   return (
     <Fragment>
-      {!props.isLoading ? (
+      {!props.isLoading  ? (
         props.justifies.map(justifie => (
           !props.warranted || justifie.warranted?
           <div className="list-justificativas">

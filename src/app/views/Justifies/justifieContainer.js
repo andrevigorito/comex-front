@@ -11,6 +11,7 @@ class justifieContainer extends Component {
     modalJust: false,
     modalAddJust: true,
     isLoading: true,
+    isLoadingTypes: true,
     justifies: null,
     typesJustifies: {},
     checkedJustifies: [],
@@ -36,15 +37,14 @@ class justifieContainer extends Component {
   
   async getTypesJustifies(uuid) {
     this.setState({
-      isLoading: true,
+      isLoadingTypes: true,
     });
     API.get(`typesJustification`).then(res => {
       const typesJustifies = res.data;
       this.setState({
         typesJustifies,
-        isLoading: false,
+        isLoadingTypes: false,
       });
-      console.log(typesJustifies)
     });
   }
 
