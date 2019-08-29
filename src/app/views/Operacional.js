@@ -325,7 +325,97 @@ class Operacional extends Component {
             <form className="formoperacional" onSubmit={this.handleFormSubit}>
               <Grid>
                 <Row>
-                  <Col xs={12} md={2}>
+                  <Col xs={12}>
+                    <div className="item">
+                      <label>Status:</label>
+                      <div className="boxstatus">
+                        <label>
+                          <input
+                            type="checkbox"
+                            name="booking"
+                            id="sts-booking"
+                            onChange={this.handleCheckbox}
+                          />
+                          Booking
+                        </label>
+                        <label>
+                          <input
+                            type="checkbox"
+                            name="atd"
+                            id="sts-atd"
+                            onChange={this.handleCheckbox}
+                          />
+                          ATD
+                        </label>
+                        <label>
+                          <input
+                            type="checkbox"
+                            name="ata"
+                            id="sts-ata"
+                            onChange={this.handleCheckbox}
+                          />
+                          ATA
+                        </label>
+                        <label>
+                          <input
+                            type="checkbox"
+                            name="porty-entry"
+                            id="sts-porty-entry"
+                            onChange={this.handleCheckbox}
+                          />
+                          Porty Entry
+                        </label>
+                        <label>
+                          <input
+                            type="checkbox"
+                            name="registro-di"
+                            id="sts-registro-di"
+                            onChange={this.handleCheckbox}
+                          />
+                          Registro DI
+                        </label>
+                        <label>
+                          <input
+                            type="checkbox"
+                            name="ag-nf"
+                            id="sts-ag-nf"
+                            onChange={this.handleCheckbox}
+                          />
+                          AG. NF
+                        </label>
+                        <label>
+                          <input
+                            type="checkbox"
+                            name="loading-terminal"
+                            id="sts-loading-terminal"
+                            onChange={this.handleCheckbox}
+                          />
+                          Loading Terminal
+                        </label>
+                        <label>
+                          <input
+                            type="checkbox"
+                            name="planta"
+                            id="sts-planta"
+                            onChange={this.handleCheckbox}
+                          />
+                          Planta
+                        </label>
+                        <label>
+                          <input
+                            type="checkbox"
+                            name="gr-efetivo"
+                            id="sts-gr-efetivo"
+                            onChange={this.handleCheckbox}
+                          />
+                          GR Efetivo
+                        </label>
+                      </div>
+                    </div>
+                  </Col>
+                </Row>
+                <Row>
+                  <Col xs={12} md={3}>
                     <div className="item">
                       <label>PO:</label>
                       <input
@@ -336,7 +426,7 @@ class Operacional extends Component {
                       />
                     </div>
                   </Col>
-                  <Col xs={12} md={2}>
+                  <Col xs={12} md={6}>
                     <div className="item">
                       <label>Produto:</label>
                       <input
@@ -346,7 +436,7 @@ class Operacional extends Component {
                       />
                     </div>
                   </Col>
-                  <Col xs={12} md={2}>
+                  <Col xs={12} md={3}>
                     <div className="item">
                       <label>Planta Destino:</label>
                       <input
@@ -356,50 +446,8 @@ class Operacional extends Component {
                       />
                     </div>
                   </Col>
-                  <Col xs={12} md={6}>
-                    <div className="item">
-                      <label>Status:</label>
-                      <div className="boxstatus">
-                        <label>
-                          <input
-                            type="checkbox"
-                            name="NO PRAZO"
-                            id="sts-dentrodoprazo"
-                            onChange={this.handleCheckbox}
-                          />
-                          Dentro do prazo
-                        </label>
-                        <label>
-                          <input
-                            type="checkbox"
-                            name="ATRASADO"
-                            id="sts-foradoprazo"
-                            onChange={this.handleCheckbox}
-                          />
-                          Fora do Prazo
-                        </label>
-                        <label>
-                          <input
-                            type="checkbox"
-                            name="ABERTA"
-                            id="sts-emaberto"
-                            onChange={this.handleCheckbox}
-                          />
-                          Em Aberto
-                        </label>
-                        <label>
-                          <input
-                            type="checkbox"
-                            name="SEM PRAZO"
-                            id="sts-ematraso"
-                            onChange={this.handleCheckbox}
-                          />
-                          Sem Prazo
-                        </label>
-                      </div>
-                    </div>
-                  </Col>
                 </Row>
+
                 <Row>
                   <Col xs={12} md={3}>
                     <div className="item">
