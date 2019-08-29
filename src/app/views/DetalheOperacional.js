@@ -150,8 +150,12 @@ class DetalheOperacional extends Component {
                             <p>{deop.shipper}</p>
                           </div>
                           <div className="row">
-                            <p>Origem:</p>
+                            <p>Porto Destino:</p>
                             <p>{deop.origin}</p>
+                          </div>
+                          <div className="row">
+                            <p>Planta Destino:</p>
+                            <p>-</p>
                           </div>
                         </div>
                       </div>
@@ -170,13 +174,13 @@ class DetalheOperacional extends Component {
                         </div>
                         <div className="info">
                           <div className="row">
-                            <p>ETD - Prev. Embarque:</p>
+                            <p>ETD:</p>
                             <p>
                               {new Date(deop.etd_date).toLocaleDateString()}
                             </p>
                           </div>
                           <div className="row">
-                            <p>ATD - Prev. Chegada:</p>
+                            <p>ATD:</p>
                             <p>
                               {new Date(deop.atd_date).toLocaleDateString()}
                             </p>
