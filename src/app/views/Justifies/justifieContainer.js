@@ -82,27 +82,31 @@ class justifieContainer extends Component {
   };
   
   handlePoItemWarrant = async () => {
-    try {
-      const rawResponse = await API.post(
-        'poItems/warrant',
-        {
-          uuid: this.props.uuid,
-          justifies: this.state.checkedJustifies,
-        },
-        {
-          headers: { 'Content-Type': 'application/json' },
-        }
-      ).catch(error => {
-        throw error;
-      });
-
-      const content = await rawResponse;
-      
-      this.props.getPoItem()
-
-      this.setState({ modalJust: true, modalAddJust: false });
-    } catch (err) {
-      alert(err);
+    if(this.state.checkedJustifies.length > 0){
+      try {
+        const rawResponse = await API.post(
+          'poItems/warrant',
+          {
+            uuid: this.props.uuid,
+            justifies: this.state.checkedJustifies,
+          },
+          {
+            headers: { 'Content-Type': 'application/json' },
+          }
+        ).catch(error => {
+          throw error;
+        });
+  
+        const content = await rawResponse;
+        
+        this.props.getPoItem()
+  
+        this.setState({ modalJust: true, modalAddJust: false });
+      } catch (err) {
+        alert(err);
+      }
+    }else{
+      alert("Nenhuma justificativa selecionada!")
     }
   };
   
