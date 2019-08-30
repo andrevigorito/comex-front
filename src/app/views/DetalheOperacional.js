@@ -210,9 +210,9 @@ class DetalheOperacional extends Component {
                               : ' '}
                           </p>
                           <p>
-                            {deop.eta_date
+                            {deop.atd_date
                               ? new Date(
-                                  deop.eta_date
+                                  deop.atd_date
                                 ).toLocaleDateString()
                               : ''}
                           </p>

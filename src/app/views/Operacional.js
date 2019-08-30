@@ -37,7 +37,7 @@ class Operacional extends Component {
     po: '',
     produto: '',
     plantaDestino: '',
-    status: [],
+    statusTimeLine: [],
   };
 
   handleBefore = () => {
@@ -96,7 +96,7 @@ class Operacional extends Component {
       grProgramadoFim,
       grEfetivo,
       grEfetivoFim,
-      status,
+      statusTimeLine,
     } = this.state;
 
     const params = {
@@ -106,8 +106,8 @@ class Operacional extends Component {
       plantaDestino,
     };
 
-    if (status.length !== 0) {
-      params.status = JSON.stringify(status);
+    if (statusTimeLine.length !== 0) {
+      params.statusTimeLine = JSON.stringify(statusTimeLine);
     }
 
     if (ataDateIncio) {
@@ -172,23 +172,21 @@ class Operacional extends Component {
   };
 
   handleCheckbox = e => {
-    const { status } = this.state;
+    const { statusTimeLine } = this.state;
 
     if (e.target.checked) {
-      const statusExiste = status.find(s => s.status === e.target.name);
+      const statusTimeLineExiste = statusTimeLine.find(s => s === e.target.name);
 
-      if (!statusExiste) {
-        const data = {
-          status: e.target.name,
-        };
+      if (!statusTimeLineExiste) {
+        // const data = [];
 
-        this.setState({ status: [...status, data] });
+        this.setState({ statusTimeLine: [...statusTimeLine, e.target.name] });
       }
     } else {
-      const statusIndex = status.findIndex(s => s.status === e.target.name);
+      const statusTimeLineIndex = statusTimeLine.findIndex(s => s === e.target.name);
 
-      status.splice(statusIndex, 1);
-      this.setState({ status });
+      statusTimeLine.splice(statusTimeLineIndex, 1);
+      this.setState({ statusTimeLine });
     }
   };
 
@@ -247,8 +245,8 @@ class Operacional extends Component {
       const Descricao = op.po.product.product_description;
       const Quantidade = op.qty;
       const PlantaId = op.plant_id;
-      const GRRequested = op.gr_actual
-        ? new Date(op.gr_actual).toLocaleDateString()
+      const GRRequested = op.gr_requested_date
+        ? new Date(op.gr_requested_date).toLocaleDateString()
         : '-';
       const GRActual = op.gr_actual
         ? new Date(op.gr_actual).toLocaleDateString()
@@ -293,7 +291,6 @@ class Operacional extends Component {
     });
 
     const csvData = arrayExcel;
-    console.log(csvData);
 
     return (
       <div>
@@ -332,7 +329,7 @@ class Operacional extends Component {
                         <label>
                           <input
                             type="checkbox"
-                            name="booking"
+                            name="AG Booking"
                             id="sts-booking"
                             onChange={this.handleCheckbox}
                           />
@@ -341,7 +338,7 @@ class Operacional extends Component {
                         <label>
                           <input
                             type="checkbox"
-                            name="atd"
+                            name="AG. ATD"
                             id="sts-atd"
                             onChange={this.handleCheckbox}
                           />
@@ -350,7 +347,7 @@ class Operacional extends Component {
                         <label>
                           <input
                             type="checkbox"
-                            name="ata"
+                            name="AG. ATA"
                             id="sts-ata"
                             onChange={this.handleCheckbox}
                           />
@@ -359,7 +356,7 @@ class Operacional extends Component {
                         <label>
                           <input
                             type="checkbox"
-                            name="porty-entry"
+                            name="AG. PORTY ENTRY"
                             id="sts-porty-entry"
                             onChange={this.handleCheckbox}
                           />
@@ -368,7 +365,7 @@ class Operacional extends Component {
                         <label>
                           <input
                             type="checkbox"
-                            name="registro-di"
+                            name="AG. DI"
                             id="sts-registro-di"
                             onChange={this.handleCheckbox}
                           />
@@ -377,7 +374,7 @@ class Operacional extends Component {
                         <label>
                           <input
                             type="checkbox"
-                            name="ag-nf"
+                            name="AG. NF"
                             id="sts-ag-nf"
                             onChange={this.handleCheckbox}
                           />
@@ -386,7 +383,7 @@ class Operacional extends Component {
                         <label>
                           <input
                             type="checkbox"
-                            name="loading-terminal"
+                            name="EM TRÂNSITO"
                             id="sts-loading-terminal"
                             onChange={this.handleCheckbox}
                           />
@@ -395,7 +392,7 @@ class Operacional extends Component {
                         <label>
                           <input
                             type="checkbox"
-                            name="planta"
+                            name="AG. CHEGADA PLANTA"
                             id="sts-planta"
                             onChange={this.handleCheckbox}
                           />
@@ -404,7 +401,7 @@ class Operacional extends Component {
                         <label>
                           <input
                             type="checkbox"
-                            name="gr-efetivo"
+                            name="AG. GR"
                             id="sts-gr-efetivo"
                             onChange={this.handleCheckbox}
                           />
@@ -579,8 +576,8 @@ class Operacional extends Component {
                         : '-'}
                     </p>
                     <p className="grp">
-                      {ope.gr_actual
-                        ? new Date(ope.gr_actual).toLocaleDateString()
+                      {ope.gr_requested_date
+                        ? new Date(ope.gr_requested_date).toLocaleDateString()
                         : '-'}
                     </p>
                     <p className="gre">
