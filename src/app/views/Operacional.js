@@ -541,7 +541,7 @@ class Operacional extends Component {
                         : '-'}
                     </p>
                     <div className="status alert">
-                      <p>{ope.status}</p>{' '}
+                      <p>{ope.status_time_line}</p>{' '}
                       {/* <div
                       onClick={this.openPopupbox}
                       className="icon-justificativa"
