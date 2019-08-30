@@ -247,8 +247,8 @@ class Operacional extends Component {
       const Descricao = op.po.product.product_description;
       const Quantidade = op.qty;
       const PlantaId = op.plant_id;
-      const GRRequested = op.gr_requested_date
-        ? new Date(op.gr_requested_date).toLocaleDateString()
+      const GRRequested = op.gr_actual
+        ? new Date(op.gr_actual).toLocaleDateString()
         : '-';
       const GRActual = op.gr_actual
         ? new Date(op.gr_actual).toLocaleDateString()
@@ -579,8 +579,8 @@ class Operacional extends Component {
                         : '-'}
                     </p>
                     <p className="grp">
-                      {ope.gr_requested_date
-                        ? new Date(ope.gr_requested_date).toLocaleDateString()
+                      {ope.gr_actual
+                        ? new Date(ope.gr_actual).toLocaleDateString()
                         : '-'}
                     </p>
                     <p className="gre">
@@ -589,7 +589,7 @@ class Operacional extends Component {
                         : '-'}
                     </p>
                     <div className="status alert">
-                      <p>{ope.status}</p>{' '}
+                      <p>{ope.status_time_line}</p>{' '}
                       {/* <div
                       onClick={this.openPopupbox}
                       className="icon-justificativa"
