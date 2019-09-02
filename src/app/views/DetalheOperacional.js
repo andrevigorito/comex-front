@@ -155,7 +155,29 @@ class DetalheOperacional extends Component {
                           </div>
                           <div className="row">
                             <p>Planta Destino:</p>
-                            <p>-</p>
+                            <p>{deop.plant_destiny
+                                === '47.180.625/0021-90'
+                                ? 'DOW - FR. ROCHA' :
+                                deop.plant_destiny
+                                === '47.180.625/0019-75'
+                                ? 'DOW - MOGI MIRIM' :
+                                deop.plant_destiny
+                                === '47.180.625/0020-09'
+                                ? 'DOW - JACAREI' :
+                                deop.plant_destiny
+                                === '47.180.625/0022-70'
+                                ? 'DOW - IBIPORA' :
+                                deop.plant_destiny
+                                === '61.064.929/0001-79'
+                                ? 'DUPONT - BARUERI' :
+                                deop.plant_destiny
+                                === '61.064.929/0072-62'
+                                ? 'DUPONT - IBIPORA' :
+                                deop.plant_destiny
+                                === '61.064.929/0076-96'
+                                ? 'DUPONT - PAULINIA'
+                                : '-'}
+                            </p>
                           </div>
                         </div>
                       </div>
