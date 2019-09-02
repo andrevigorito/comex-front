@@ -44,9 +44,11 @@ class Import extends Component {
       const data = await XLSX.utils.sheet_to_json(first_worksheet, {
         header: 0,
       });
+
+      console.log(data);
       this.setState({ isConverting: false });
 
-      if (firstColumn === 'Group name') {
+      if (firstColumn === 'CSR Name') {
         this.setState({ importType: 'PLANILHA ATL' });
         await this.sendImportATL(data);
       } else if (firstColumn === 'Product Number') {
