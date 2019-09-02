@@ -72,7 +72,9 @@ class DetalheOperacional extends Component {
           ) : (
             <div className="content-regerencial">
               <div className="page-interna">
-                <header className="title">
+                <header className={
+                      deop.process_critical === 'YES' ? 'title yes' : 'title'
+                    } >
                   <div className="first">
                     <p>
                       PO:
@@ -196,15 +198,15 @@ class DetalheOperacional extends Component {
                         </div>
                         <div className="info">
                           <div className="row">
-                            <p>ETA:</p>
-                            <p>
-                              {new Date(deop.eta_date).toLocaleDateString()}
-                            </p>
-                          </div>
-                          <div className="row">
                             <p>ETD:</p>
                             <p>
                               {new Date(deop.etd_date).toLocaleDateString()}
+                            </p>
+                          </div>
+                          <div className="row">
+                            <p>ETA:</p>
+                            <p>
+                              {new Date(deop.eta_date).toLocaleDateString()}
                             </p>
                           </div>
                           <div className="row">
@@ -281,9 +283,9 @@ class DetalheOperacional extends Component {
                               : ' '}
                           </p>
                           <p>
-                            {deop.gr_actual
+                            {deop.gr_effective
                               ? new Date(
-                                  deop.gr_actual
+                                  deop.gr_effective
                                 ).toLocaleDateString()
                               : ' '}
                           </p>

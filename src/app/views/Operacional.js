@@ -175,7 +175,9 @@ class Operacional extends Component {
     const { statusTimeLine } = this.state;
 
     if (e.target.checked) {
-      const statusTimeLineExiste = statusTimeLine.find(s => s === e.target.name);
+      const statusTimeLineExiste = statusTimeLine.find(
+        s => s === e.target.name
+      );
 
       if (!statusTimeLineExiste) {
         // const data = [];
@@ -183,7 +185,9 @@ class Operacional extends Component {
         this.setState({ statusTimeLine: [...statusTimeLine, e.target.name] });
       }
     } else {
-      const statusTimeLineIndex = statusTimeLine.findIndex(s => s === e.target.name);
+      const statusTimeLineIndex = statusTimeLine.findIndex(
+        s => s === e.target.name
+      );
 
       statusTimeLine.splice(statusTimeLineIndex, 1);
       this.setState({ statusTimeLine });
@@ -561,7 +565,12 @@ class Operacional extends Component {
             ) : (
               operacional.map(ope => (
                 <Link to={`operacional/detalhe/${ope.uuid}`} key={ope.uuid}>
-                  <div className="item" key={ope.uuid}>
+                  <div
+                    className={
+                      ope.process_critical === 'YES' ? 'item yes' : 'item'
+                    }
+                    key={ope.uuid}
+                  >
                     <span className="critico" />
                     <p className="po">{ope.po.order_reference}</p>
                     <p className="produto">{ope.po.product.product_id}</p>

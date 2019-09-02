@@ -10,7 +10,7 @@
             .first{
                 display: flex;
                 padding-left: 40px;
-  
+
                 p{
                     text-align: left;
                     &:first-child{
@@ -56,7 +56,7 @@
             //     box-shadow: 1px 10px 10px rgba($color: #000000, $alpha: 0.1)
             // }
             .main-info{
-  
+
                 width: 140px;
                 text-align: left;
                 padding-right: 20px;
@@ -86,7 +86,7 @@
                 width: calc(100% - 160px);
                 padding-left: 40px;
                 border-left: solid 1px #8B8D97;
-  
+
                 .list-gra{
                     display: flex;
                     align-items: center;
@@ -97,7 +97,7 @@
                     flex-direction: column;
                     justify-content: space-between;
                     margin: 10px 30px 10px 0;
-  
+
                     &:last-child{
                         margin-right: 0;
                     }
@@ -124,14 +124,14 @@
                 p{
                     font-size: 14px;
                 }
-  
+
               .item-total{
                 width: 100px;
                   display: flex;
                   flex-direction: column;
                   justify-content: space-between;
                   margin: 10px 30px 10px 0;
-  
+
                   &:last-child{
                       margin-right: 0;
                   }
@@ -194,7 +194,7 @@
             }
         }
     }
-  
+
     .page-interna{
         .title{
             background: #fff;
@@ -219,7 +219,7 @@
                 &:nth-child(2){
                     strong{
                         font-size: 22px;
-  
+
                     }
                 }
                 &.emp{
@@ -251,6 +251,10 @@
                     }
                 }
             }
+            &.yes{
+              border-bottom: solid 10px #E99898;
+
+            }
         }
         .boxgra{
             background: #fff;
@@ -265,7 +269,7 @@
                 display: flex;
                 align-items: center;
                 flex-wrap: wrap;
-  
+
             }
             .tit{
                 display: flex;
@@ -283,7 +287,7 @@
                 flex-direction: column;
                 justify-content: space-between;
                 margin: 10px 30px 10px 0;
-  
+
                 &:last-child{
                     margin-right: 0;
                 }
@@ -325,7 +329,7 @@
                 }
             }
         }
-  
+
         .list-po{
             margin: 60px 0 0;
             text-align: left;
@@ -424,7 +428,7 @@
                                 color: #8B8D97;
                             }
                         }
-  
+
                     }
                     .boll{
                         width: 20px;
@@ -471,13 +475,13 @@
                             font-size: 14px;
                             color: #292D41;
                             &.user{
-  
+
                                 color: #707385;
                                 margin-bottom: 10px;
                             }
                         }
                     }
-  
+
                 }
             }
             .boxs{
@@ -545,7 +549,7 @@
               position: relative;
               width: 100%;
               margin-bottom: 30px;
-  
+
               .position{
                   width: 91%;
                   margin: auto;
@@ -615,15 +619,15 @@
                         span{
                           background: $verde;
                         }
-  
+
                       }
                       &.not{
                         span{
                           background: $vermelho;
                         }
-  
+
                       }
-  
+
                       &.atual ~ .boll{
                           background: #C8CFD4;
                           width: 20px;
@@ -636,7 +640,7 @@
                             width: 20px;
                             height: 20px;
                           }
-  
+
                       }
                       &:nth-child(1){
                           &:before{
@@ -657,7 +661,7 @@
                   color: #8B8D97;
                   text-align: center;
                   line-height: 14px;
-  
+
                 }
               }
               .date-leg{
@@ -673,7 +677,7 @@
                   color: #8B8D97;
                   text-align: center;
                   line-height: 14px;
-  
+
                 }
               }
           }
@@ -742,20 +746,19 @@
                     }
                 }
             }
-  
+
         }
         .panel {
             max-height: 0;
             overflow: hidden;
             transition: max-height 0.3s ease-out;
-  
+
         }
-  
+
     }
-  
+
     .alterada{
         color: #d25b5b !important;
         font-weight: 700;
     }
   }
-  
