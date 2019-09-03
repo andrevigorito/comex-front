@@ -209,15 +209,7 @@ class List extends Component {
                   <p>ID / Produto</p>
                   <p>GR Programado</p>
                 </div>
-                <div className="last">
-                  <p>
-                    *Alterada <span className="a" />
-                  </p>
-                  <p>
-                    *Urgente: Y<span className="y" />N
-                    <span className="n" />
-                  </p>
-                </div>
+
               </header>
 
               {isLoading && <Loading />}
