@@ -295,6 +295,7 @@ class Operacional extends Component {
     });
 
     const csvData = arrayExcel;
+    console.log(operacional);
 
     return (
       <div>
@@ -557,7 +558,7 @@ class Operacional extends Component {
               <p className="ata">ATA</p>
               <p className="grp">GR Prog.</p>
               <p className="gre">GR Atual</p>
-              <p className="status">Status / Just.</p>
+              <p className="status">Status</p>
             </header>
 
             {isLoading ? (
@@ -566,9 +567,9 @@ class Operacional extends Component {
               operacional.map(ope => (
                 <Link to={`operacional/detalhe/${ope.uuid}`} key={ope.uuid}>
                   <div
-                    className={
+                    className={` ${
                       ope.process_critical === 'YES' ? 'item yes' : 'item'
-                    }
+                    } ${ope.channel === 'Red' ? 'red' : ''} `}
                     key={ope.uuid}
                   >
                     <span className="critico" />
