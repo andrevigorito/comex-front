@@ -149,7 +149,7 @@ class DetalheOperacional extends Component {
                         <div className="info">
                           <div className="row">
                             <p>Razão Social:</p>
-                            <p>{deop.shipper}</p>
+                            <p>{deop.po ? deop.po.product.consignee : ''}</p>
                           </div>
                           <div className="row">
                             <p>Porto Destino:</p>
