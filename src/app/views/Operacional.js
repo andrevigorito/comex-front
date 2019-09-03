@@ -306,7 +306,7 @@ class Operacional extends Component {
               Operacional
             </h1>
             <div className="last-wrap">
-              <CSVLink data={csvData} filename="webcol-operacional.xls">
+              <CSVLink data={csvData} separator={";"} filename="webcol-operacional.xls">
                 <ExportExcel />
               </CSVLink>
               <div
