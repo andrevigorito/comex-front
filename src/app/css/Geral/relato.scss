@@ -540,6 +540,9 @@
               border-radius: 6px;
               .tit{
                 margin-bottom: 20px;
+                @media (max-width: 750px){
+                  margin-bottom: 0px;
+                }
                 span{
                   color: #8B8D97;
                 }
@@ -680,6 +683,9 @@
 
                 }
               }
+              @media (max-width: 750px){
+                display: none;
+              }
           }
           .aguardando{
             display: flex;
@@ -725,6 +731,9 @@
                 }
               }
             }
+            @media (max-width: 750px){
+              display: none;
+            }
           }
             @media (max-width: 640px){
                 header{
@@ -735,6 +744,22 @@
                     }
                     .historico{
                         width: 100%;
+                        flex-wrap: wrap;
+                        .boll{
+                          display: none;
+                        }
+                        .hist-tit{
+                          width: 100%;
+                          text-align: left;
+                          margin-bottom: 10px;
+                        }
+                        .infouser{
+                          width: 100%;
+                          margin: 0;
+                          &:before{
+                            display: none;
+                          }
+                        }
                     }
                 }
                 .boxs{
