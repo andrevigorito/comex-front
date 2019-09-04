@@ -7,10 +7,12 @@ import { NewUsuario, BtnMostrar } from './styles';
 import getCroppedImg from './cropImage';
 import api from '../../services/api';
 
+import swal from '@sweetalert/with-react';
+
 // eslint-disable-next-line react/prefer-stateless-function
 
-export default function NovoUsuario({history }) {
-  const [name, setName] = useState('');
+export default function NovoUsuario({ history }) {
+  const [newName, setNewName] = useState('');
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [phone, setPhone] = useState('');
@@ -40,7 +42,7 @@ export default function NovoUsuario({history }) {
       user: {
         username,
         password,
-        name,
+        name: newName,
         phone, // Deixar apenas numeros inteiros
         admin: isAdmin,
         mailAlert,
@@ -54,7 +56,10 @@ export default function NovoUsuario({history }) {
     // console.log(data);
     // verificar se deu tudo certo
     if (response.status === 200) {
+      swal('Concluído', 'Usuário criado com sucesso!', 'success');
       history.push('/usuarios');
+    } else {
+      swal('Erro', 'Não foi possível criar o usuário!', 'error');
     }
   }
 
@@ -103,10 +108,11 @@ export default function NovoUsuario({history }) {
                   <label>Nome:</label>
                   <input
                     type="text"
-                    value={name}
-                    onChange={e => setName(e.target.value)}
+                    value={newName}
+                    onChange={e => setNewName(e.target.value)}
                     placeholder="Digite o seu nome"
                     id="nu-name"
+                    autoComplete="off"
                   />
                 </div>
               </Col>
