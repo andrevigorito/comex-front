@@ -289,18 +289,18 @@ class DetalheOperacional extends Component {
                             : null}
                         </div>
                         <div className="legenda">
-                          <p>Aguardando Confirmação Booking</p>
-                          <p>Aguardando ATD</p>
-                          <p>Aguardando ATA</p>
-                          <p>Aguardando Porty Entry</p>
-                          <p>Aguardando Registro DI</p>
-                          <p>Aguardando NF</p>
+                          <p>Confirmação Booking</p>
+                          <p>ATD</p>
+                          <p>ATA</p>
+                          <p>Porty Entry</p>
+                          <p>Registro DI</p>
+                          <p>NF</p>
                           <p>
                             Transito
                             <br />
                             (Loading terminal)
                           </p>
-                          <p>Aguardando chegada planta</p>
+                          <p>chegada planta</p>
                           <p>GR efetivo</p>
                         </div>
                       </div>
