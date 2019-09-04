@@ -75,6 +75,9 @@
         opacity: 1;
       }
     }
+    @media (max-width: 520px){
+      display: none;
+    }
   }
 	.btnvoltar{
 		display: flex;
@@ -224,6 +227,9 @@
 				align-items: center;
         margin-right: 10px;
         cursor: pointer;
+        @media (max-width: 520px){
+          width: 100%;
+        }
 				input{
 					margin-right: 10px;
 				}
@@ -455,6 +461,11 @@ h1{
         background: #e6e6e6;
         color: #999;
       }
+    }
+    @media (max-width: 520px){
+      padding: 0px 10px;
+      font-size: 9px;
+      height: 36px;
     }
   }
 }

@@ -249,4 +249,19 @@
           }
       }
   }
+  @media (max-width: 740px){
+    flex-wrap: wrap;
+    .wrap-btns{
+      order: 1;
+      width: 100%;
+      padding: 20px 0;
+      button.abonar{
+        margin-bottom: 20px;
+      }
+    }
+    .content{
+      order: 2;
+      width: 100%;
+    }
+  }
 }

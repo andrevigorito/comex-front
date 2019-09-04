@@ -50,15 +50,17 @@ class Menu extends Component {
                 {/* <Link onClick={this.btnMenu} to="/dashboard">
                   Dashboard
                 </Link>
+
+
+                <Link onClick={this.btnMenu} to="/import">
+                  Import
+                </Link> */}
                 <Link onClick={this.btnMenu} to="/gerencial">
                   Gerencial{' '}
                 </Link>
                 <Link onClick={this.btnMenu} to="/operacional">
                   Operacional{' '}
                 </Link>
-                <Link onClick={this.btnMenu} to="/import">
-                  Import
-                </Link> */}
                 <Link onClick={this.btnMenu} to="/usuarios">
                   Usuários
                 </Link>
