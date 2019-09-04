@@ -586,8 +586,8 @@ class Operacional extends Component {
                         : '-'}
                     </p>
                     <p className="grp">
-                      {ope.gr_requested_date
-                        ? new Date(ope.gr_requested_date).toLocaleDateString()
+                      {ope.gr_original
+                        ? new Date(ope.gr_original).toLocaleDateString()
                         : '-'}
                     </p>
                     <p className="gre">
