@@ -58,6 +58,7 @@ class Import extends Component {
       } else {
         this.notifyError('A PLANILHA EXCEL NÃO TEM UM FORMATO VÁLIDO!');
       }
+      
     } else {
       this.notifyError('NÃO É UM ARQUIVO VÁLIDO!');
     }

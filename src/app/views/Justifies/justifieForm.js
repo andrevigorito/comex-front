@@ -57,13 +57,13 @@ const JustifieForm = props => {
                 }}
               >
                 <option value="">Selecione um tipo</option>
-                {typesJustifies && typesJustifies.length > 0 ?
+                {typesJustifies && typesJustifies.length > 0 && (
                   typesJustifies.map(typesJustifie => (
                     <Fragment>
                       <option value={typesJustifie.name}>{typesJustifie.name}</option>
                     </Fragment> 
                   ))
-                  : null
+                  )
                 }  
               </Field>
               {props.errors.type && props.touched.type && (

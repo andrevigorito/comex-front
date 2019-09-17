@@ -52,8 +52,10 @@ class DetalheOperacional extends Component {
     const { deop, uuid } = this.state;
     return (
       <div>
-        <div className="center">
-          <div className="page-header">
+        <div className="center" style={{position: "absolute",
+            left: "50%",
+            top:"50%"}}>
+          <div className="page-header" >
             <h1>
               <img src={iconOperacional} alt="" />
               Operacional
