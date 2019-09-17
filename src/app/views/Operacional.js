@@ -37,7 +37,7 @@ class Operacional extends Component {
     po: '',
     produto: '',
     plantaDestino: '',
-    status: [],
+    statusTimeLine: [],
   };
 
   handleBefore = () => {
@@ -96,7 +96,7 @@ class Operacional extends Component {
       grProgramadoFim,
       grEfetivo,
       grEfetivoFim,
-      status,
+      statusTimeLine,
     } = this.state;
 
     const params = {
@@ -106,8 +106,8 @@ class Operacional extends Component {
       plantaDestino,
     };
 
-    if (status.length !== 0) {
-      params.status = JSON.stringify(status);
+    if (statusTimeLine.length !== 0) {
+      params.statusTimeLine = JSON.stringify(statusTimeLine);
     }
 
     if (ataDateIncio) {
@@ -172,23 +172,25 @@ class Operacional extends Component {
   };
 
   handleCheckbox = e => {
-    const { status } = this.state;
+    const { statusTimeLine } = this.state;
 
     if (e.target.checked) {
-      const statusExiste = status.find(s => s.status === e.target.name);
+      const statusTimeLineExiste = statusTimeLine.find(
+        s => s === e.target.name
+      );
 
-      if (!statusExiste) {
-        const data = {
-          status: e.target.name,
-        };
+      if (!statusTimeLineExiste) {
+        // const data = [];
 
-        this.setState({ status: [...status, data] });
+        this.setState({ statusTimeLine: [...statusTimeLine, e.target.name] });
       }
     } else {
-      const statusIndex = status.findIndex(s => s.status === e.target.name);
+      const statusTimeLineIndex = statusTimeLine.findIndex(
+        s => s === e.target.name
+      );
 
-      status.splice(statusIndex, 1);
-      this.setState({ status });
+      statusTimeLine.splice(statusTimeLineIndex, 1);
+      this.setState({ statusTimeLine });
     }
   };
 
@@ -293,7 +295,7 @@ class Operacional extends Component {
     });
 
     const csvData = arrayExcel;
-    console.log(csvData);
+    console.log(operacional);
 
     return (
       <div>
@@ -304,7 +306,7 @@ class Operacional extends Component {
               Operacional
             </h1>
             <div className="last-wrap">
-              <CSVLink data={csvData} filename="webcol-operacional.xls">
+              <CSVLink data={csvData} separator={";"} filename="webcol-operacional.xls">
                 <ExportExcel />
               </CSVLink>
               <div
@@ -325,7 +327,97 @@ class Operacional extends Component {
             <form className="formoperacional" onSubmit={this.handleFormSubit}>
               <Grid>
                 <Row>
-                  <Col xs={12} md={2}>
+                  <Col xs={12}>
+                    <div className="item">
+                      <label>Status:</label>
+                      <div className="boxstatus">
+                        <label>
+                          <input
+                            type="checkbox"
+                            name="AG Booking"
+                            id="sts-booking"
+                            onChange={this.handleCheckbox}
+                          />
+                          Booking
+                        </label>
+                        <label>
+                          <input
+                            type="checkbox"
+                            name="AG. ATD"
+                            id="sts-atd"
+                            onChange={this.handleCheckbox}
+                          />
+                          ATD
+                        </label>
+                        <label>
+                          <input
+                            type="checkbox"
+                            name="AG. ATA"
+                            id="sts-ata"
+                            onChange={this.handleCheckbox}
+                          />
+                          ATA
+                        </label>
+                        <label>
+                          <input
+                            type="checkbox"
+                            name="AG. PORTY ENTRY"
+                            id="sts-porty-entry"
+                            onChange={this.handleCheckbox}
+                          />
+                          Porty Entry
+                        </label>
+                        <label>
+                          <input
+                            type="checkbox"
+                            name="AG. DI"
+                            id="sts-registro-di"
+                            onChange={this.handleCheckbox}
+                          />
+                          Registro DI
+                        </label>
+                        <label>
+                          <input
+                            type="checkbox"
+                            name="AG. NF"
+                            id="sts-ag-nf"
+                            onChange={this.handleCheckbox}
+                          />
+                          AG. NF
+                        </label>
+                        <label>
+                          <input
+                            type="checkbox"
+                            name="EM TRÂNSITO"
+                            id="sts-loading-terminal"
+                            onChange={this.handleCheckbox}
+                          />
+                          Loading Terminal
+                        </label>
+                        <label>
+                          <input
+                            type="checkbox"
+                            name="AG. CHEGADA PLANTA"
+                            id="sts-planta"
+                            onChange={this.handleCheckbox}
+                          />
+                          Planta
+                        </label>
+                        <label>
+                          <input
+                            type="checkbox"
+                            name="AG. GR"
+                            id="sts-gr-efetivo"
+                            onChange={this.handleCheckbox}
+                          />
+                          GR Efetivo
+                        </label>
+                      </div>
+                    </div>
+                  </Col>
+                </Row>
+                <Row>
+                  <Col xs={12} md={3}>
                     <div className="item">
                       <label>PO:</label>
                       <input
@@ -336,7 +428,7 @@ class Operacional extends Component {
                       />
                     </div>
                   </Col>
-                  <Col xs={12} md={2}>
+                  <Col xs={12} md={6}>
                     <div className="item">
                       <label>Produto:</label>
                       <input
@@ -346,7 +438,7 @@ class Operacional extends Component {
                       />
                     </div>
                   </Col>
-                  <Col xs={12} md={2}>
+                  <Col xs={12} md={3}>
                     <div className="item">
                       <label>Planta Destino:</label>
                       <input
@@ -356,50 +448,8 @@ class Operacional extends Component {
                       />
                     </div>
                   </Col>
-                  <Col xs={12} md={6}>
-                    <div className="item">
-                      <label>Status:</label>
-                      <div className="boxstatus">
-                        <label>
-                          <input
-                            type="checkbox"
-                            name="NO PRAZO"
-                            id="sts-dentrodoprazo"
-                            onChange={this.handleCheckbox}
-                          />
-                          Dentro do prazo
-                        </label>
-                        <label>
-                          <input
-                            type="checkbox"
-                            name="ATRASADO"
-                            id="sts-foradoprazo"
-                            onChange={this.handleCheckbox}
-                          />
-                          Fora do Prazo
-                        </label>
-                        <label>
-                          <input
-                            type="checkbox"
-                            name="ABERTA"
-                            id="sts-emaberto"
-                            onChange={this.handleCheckbox}
-                          />
-                          Em Aberto
-                        </label>
-                        <label>
-                          <input
-                            type="checkbox"
-                            name="SEM PRAZO"
-                            id="sts-ematraso"
-                            onChange={this.handleCheckbox}
-                          />
-                          Sem Prazo
-                        </label>
-                      </div>
-                    </div>
-                  </Col>
                 </Row>
+
                 <Row>
                   <Col xs={12} md={3}>
                     <div className="item">
@@ -506,9 +556,9 @@ class Operacional extends Component {
               <p className="qtd">Qtd.</p>
               <p className="pd">P. Destino</p>
               <p className="ata">ATA</p>
-              <p className="grp">GR Prog.</p>
+              <p className="grp">GR Original</p>
               <p className="gre">GR Atual</p>
-              <p className="status">Status / Just.</p>
+              <p className="status">Status</p>
             </header>
 
             {isLoading ? (
@@ -516,7 +566,12 @@ class Operacional extends Component {
             ) : (
               operacional.map(ope => (
                 <Link to={`operacional/detalhe/${ope.uuid}`} key={ope.uuid}>
-                  <div className="item" key={ope.uuid}>
+                  <div
+                    className={` ${
+                      ope.process_critical === 'YES' ? 'item yes' : 'item'
+                    } ${ope.channel === 'Red' ? 'red' : ''} `}
+                    key={ope.uuid}
+                  >
                     <span className="critico" />
                     <p className="po">{ope.po.order_reference}</p>
                     <p className="produto">{ope.po.product.product_id}</p>
@@ -531,8 +586,8 @@ class Operacional extends Component {
                         : '-'}
                     </p>
                     <p className="grp">
-                      {ope.gr_requested_date
-                        ? new Date(ope.gr_requested_date).toLocaleDateString()
+                      {ope.gr_original
+                        ? new Date(ope.gr_original).toLocaleDateString()
                         : '-'}
                     </p>
                     <p className="gre">
@@ -541,7 +596,7 @@ class Operacional extends Component {
                         : '-'}
                     </p>
                     <div className="status alert">
-                      <p>{ope.status}</p>{' '}
+                      <p>{ope.status_time_line}</p>{' '}
                       {/* <div
                       onClick={this.openPopupbox}
                       className="icon-justificativa"

@@ -45,14 +45,14 @@
             display: flex;
             align-items: center;
 
-            &:before{
-                content: '';
-                width: 10px;
-                height: 10px;
-                background: #1ABC9C;
-                display: block;
-                margin-right: 10px;
-            }
+            // &:before{
+            //     content: '';
+            //     width: 10px;
+            //     height: 10px;
+            //     background: #1ABC9C;
+            //     display: block;
+            //     margin-right: 10px;
+            // }
             &.alert{
                 &:before{
                     background: #F3D641;
@@ -90,6 +90,18 @@
             p{
                 font-size: 10px;
             }
+        }
+        &.yes{
+          span.critico{
+            border-left: solid 10px #E99898;
+            display: block;
+            border-radius: 6px 0 0 6px;
+            height: 100%;
+            padding: 15px 0;
+        }
+        }
+        &.red{
+          background: #fdb4b4;
         }
     }
 }
@@ -236,5 +248,20 @@
               border: solid 1px #fff;
           }
       }
+  }
+  @media (max-width: 740px){
+    flex-wrap: wrap;
+    .wrap-btns{
+      order: 1;
+      width: 100%;
+      padding: 20px 0;
+      button.abonar{
+        margin-bottom: 20px;
+      }
+    }
+    .content{
+      order: 2;
+      width: 100%;
+    }
   }
 }

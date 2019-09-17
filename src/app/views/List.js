@@ -209,15 +209,7 @@ class List extends Component {
                   <p>ID / Produto</p>
                   <p>GR Programado</p>
                 </div>
-                <div className="last">
-                  <p>
-                    *Alterada <span className="a" />
-                  </p>
-                  <p>
-                    *Urgente: Y<span className="y" />N
-                    <span className="n" />
-                  </p>
-                </div>
+
               </header>
 
               {isLoading && <Loading />}
@@ -246,7 +238,7 @@ class List extends Component {
                           <p>
                             <img src={iconRgc} alt="" />{' '}
                             {new Date(
-                              po.gr_requested_date
+                              po.gr_actual
                             ).toLocaleDateString()}
                           </p>
                           <p>

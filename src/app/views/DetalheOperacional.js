@@ -18,11 +18,9 @@ import checkNot from '../img/icons/check-not.png';
 import checkOk from '../img/icons/check-ok.png';
 import checkNull from '../img/icons/check-null.png';
 
-
 // Components
 
 class DetalheOperacional extends Component {
-
   state = {
     deop: [],
     isLoading: false,
@@ -30,7 +28,7 @@ class DetalheOperacional extends Component {
   };
 
   async componentDidMount() {
-    this.getPoItem()
+    this.getPoItem();
   }
 
   getPoItem = async () => {
@@ -46,7 +44,7 @@ class DetalheOperacional extends Component {
       isLoading: false,
       uuid,
     });
-  }
+  };
 
   render() {
     const { deop, uuid } = this.state;
@@ -74,7 +72,11 @@ class DetalheOperacional extends Component {
           ) : (
             <div className="content-regerencial">
               <div className="page-interna">
-                <header className="title">
+                <header
+                  className={
+                    deop.process_critical === 'YES' ? 'title yes' : 'title'
+                  }
+                >
                   <div className="first">
                     <p>
                       PO:
@@ -149,15 +151,31 @@ class DetalheOperacional extends Component {
                         <div className="info">
                           <div className="row">
                             <p>Razão Social:</p>
-                            <p>{deop.shipper}</p>
+                            <p>{deop.po ? deop.po.product.consignee : ''}</p>
                           </div>
                           <div className="row">
                             <p>Porto Destino:</p>
-                            <p>{deop.origin}</p>
+                            <p>{deop.destination}</p>
                           </div>
                           <div className="row">
                             <p>Planta Destino:</p>
-                            <p>-</p>
+                            <p>
+                              {deop.plant_destiny === '47.180.625/0021-90'
+                                ? 'DOW - FR. ROCHA'
+                                : deop.plant_destiny === '47.180.625/0019-75'
+                                ? 'DOW - MOGI MIRIM'
+                                : deop.plant_destiny === '47.180.625/0020-09'
+                                ? 'DOW - JACAREI'
+                                : deop.plant_destiny === '47.180.625/0022-70'
+                                ? 'DOW - IBIPORA'
+                                : deop.plant_destiny === '61.064.929/0001-79'
+                                ? 'DUPONT - BARUERI'
+                                : deop.plant_destiny === '61.064.929/0072-62'
+                                ? 'DUPONT - IBIPORA'
+                                : deop.plant_destiny === '61.064.929/0076-96'
+                                ? 'DUPONT - PAULINIA'
+                                : '-'}
+                            </p>
                           </div>
                         </div>
                       </div>
@@ -182,17 +200,15 @@ class DetalheOperacional extends Component {
                             </p>
                           </div>
                           <div className="row">
-                            <p>ATD:</p>
+                            <p>ETA:</p>
                             <p>
-                              {new Date(deop.atd_date).toLocaleDateString()}
+                              {new Date(deop.eta_date).toLocaleDateString()}
                             </p>
                           </div>
                           <div className="row">
-                            <p>GR - Prev. Entrega:</p>
+                            <p>GR Atual</p>
                             <p>
-                              {new Date(
-                                deop.gr_requested_date
-                              ).toLocaleDateString()}
+                              {new Date(deop.gr_actual).toLocaleDateString()}
                             </p>
                           </div>
                         </div>
@@ -203,6 +219,63 @@ class DetalheOperacional extends Component {
                         Tranportadora: <span>{deop.carrier}</span>
                       </p>
                       <div className="line-status">
+                        <div className="date-leg">
+                          <p>
+                            {deop.booking_confirmation_date
+                              ? new Date(
+                                  deop.booking_confirmation_date
+                                ).toLocaleDateString()
+                              : ' '}
+                          </p>
+                          <p>
+                            {deop.atd_date
+                              ? new Date(deop.atd_date).toLocaleDateString()
+                              : ''}
+                          </p>
+                          <p>
+                            {deop.ata_date
+                              ? new Date(deop.ata_date).toLocaleDateString()
+                              : ''}
+                          </p>
+                          <p>
+                            {deop.port_entry_date
+                              ? new Date(
+                                  deop.port_entry_date
+                                ).toLocaleDateString()
+                              : '-'}
+                          </p>
+                          <p>
+                            {deop.data_do_registro_da_di
+                              ? new Date(
+                                  deop.data_do_registro_da_di
+                                ).toLocaleDateString()
+                              : ' '}
+                          </p>
+                          <p>
+                            {deop.nf_date
+                              ? new Date(deop.nf_date).toLocaleDateString()
+                              : ' '}
+                          </p>
+                          <p>
+                            {deop.loading_at_the_terminal
+                              ? new Date(
+                                  deop.loading_at_the_terminal
+                                ).toLocaleDateString()
+                              : ' '}
+                          </p>
+                          <p>
+                            {deop.plant_delivery
+                              ? new Date(
+                                  deop.plant_delivery
+                                ).toLocaleDateString()
+                              : ' '}
+                          </p>
+                          <p>
+                            {deop.gr_effective
+                              ? new Date(deop.gr_effective).toLocaleDateString()
+                              : ' '}
+                          </p>
+                        </div>
                         <div className="position">
                           {deop.timeline
                             ? deop.timeline.map(posit => (
@@ -218,18 +291,18 @@ class DetalheOperacional extends Component {
                             : null}
                         </div>
                         <div className="legenda">
-                          <p>Aguardando Confirmação Booking</p>
-                          <p>Aguardando ATD</p>
-                          <p>Aguardando ATA</p>
-                          <p>Aguardando Porty Entry</p>
-                          <p>Aguardando Registro DI</p>
-                          <p>Aguardando NF</p>
+                          <p>Confirmação Booking</p>
+                          <p>ATD</p>
+                          <p>ATA</p>
+                          <p>Porty Entry</p>
+                          <p>Registro DI</p>
+                          <p>NF</p>
                           <p>
                             Transito
                             <br />
                             (Loading terminal)
                           </p>
-                          <p>Aguardando chegada planta</p>
+                          <p>chegada planta</p>
                           <p>GR efetivo</p>
                         </div>
                       </div>
