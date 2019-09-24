@@ -97,7 +97,7 @@ export default function Alertas({ useruuid }) {
                 {new Date(alerta.createdAt).toLocaleString()}
               </p>
               <p className="responsible">
-                {alerta.po.responsible_po.toLowerCase()}
+                {alerta.po.csr_name.toLowerCase()}
               </p>
               <p className="po">{alerta.message}</p>
               <p className="po">
@@ -116,7 +116,7 @@ export default function Alertas({ useruuid }) {
                     : ''
                   : ''}
               </p>
-              
+
               <p>
                 {alerta.user_alerts[0] ? (
                   alerta.user_alerts[0].read ? (
