@@ -32,6 +32,10 @@ class Filter extends Component {
     this.setState({ mensagem: e.target.value });
   };
 
+  handleResponsibleInput = e => {
+    this.setState({ responsible: e.target.value });
+  };
+
   handleSelect = e => {
     this.setState({ status: e.target.value });
     console.log(this.state.status);
@@ -74,7 +78,7 @@ class Filter extends Component {
                 </div>
               </Col>
 
-              <Col xs={12} md={3}>
+              <Col xs={12} md={2}>
                 <div className="item">
                   <label>Mensagem:</label>
                   <input
@@ -87,11 +91,20 @@ class Filter extends Component {
               </Col>
               <Col xs={12} md={2}>
                 <div className="item">
+                  <label>Responsável:</label>
+                  <input
+                    type="text"
+                    id="idproduto"
+                    onChange={this.handleResponsibleInput}
+                    autoComplete="false"
+                  />
+                </div>
+              </Col>
+
+              <Col xs={12} md={2}>
+                <div className="item">
                   <label>Status:</label>
-                  <select
-                    value={status}
-                    onChange={this.handleSelect}
-                  >
+                  <select value={status} onChange={this.handleSelect}>
                     <option value="">Todos</option>
                     <option value="false">Não lido</option>
                     <option value="true">lido</option>
@@ -99,7 +112,7 @@ class Filter extends Component {
                 </div>
               </Col>
 
-              <Col xs={12} md={3}>
+              <Col xs={12} md={2}>
                 <div className="item">
                   <label> &nbsp; </label>
                   <button type="submit" className="btn">

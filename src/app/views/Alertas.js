@@ -84,6 +84,7 @@ export default function Alertas({ useruuid }) {
         <div className="list-alerts">
           <div className="header">
             <p>Data Alerta</p>
+            <p>Responsável</p>
             <p>Mensagem</p>
             <p>Lido</p>
             <p>Data Leitura</p>
@@ -94,6 +95,9 @@ export default function Alertas({ useruuid }) {
             <div className="item" key={alerta.uuid}>
               <p className="date current">
                 {new Date(alerta.createdAt).toLocaleString()}
+              </p>
+              <p className="responsible">
+                {alerta.po.responsible_po.toLowerCase()}
               </p>
               <p className="po">{alerta.message}</p>
               <p className="po">
@@ -112,6 +116,7 @@ export default function Alertas({ useruuid }) {
                     : ''
                   : ''}
               </p>
+              
               <p>
                 {alerta.user_alerts[0] ? (
                   alerta.user_alerts[0].read ? (
