@@ -577,7 +577,7 @@ class Operacional extends Component {
                     key={ope.uuid}
                   >
                     <span className="critico" />
-                    <p className="po">{ope.po.order_reference}</p>
+                    <p className="po">{`${ope.po.order_reference}-${ope.item}`}</p>
                     <p className="produto">{ope.po.product.product_id}</p>
                     <p className="descricao">
                       {ope.po.product.product_description}
