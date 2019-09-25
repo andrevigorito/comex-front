@@ -38,6 +38,7 @@ class Operacional extends Component {
     produto: '',
     plantaDestino: '',
     statusTimeLine: [],
+    todos: false,
   };
 
   handleBefore = () => {
@@ -97,6 +98,7 @@ class Operacional extends Component {
       grEfetivo,
       grEfetivoFim,
       statusTimeLine,
+      todos,
     } = this.state;
 
     const params = {
@@ -137,6 +139,8 @@ class Operacional extends Component {
     if (grEfetivoFim) {
       params.grAtualFim = format(grEfetivoFim, "yyyy-MM-dd'T'HH:mm:ss.SSSxxx");
     }
+    
+    params.todos = todos;
 
     const response = await API.get(`poItems`, { params });
     const { data: operacional, total: totalPages } = response.data;

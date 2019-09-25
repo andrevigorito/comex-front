@@ -5,6 +5,7 @@ import API from '../services/api';
 // Components
 import Loading from './components/Loading';
 import JustifieContainer from './Justifies/justifieContainer';
+import history from '../services/history';
 
 // Images
 import iconOperacional from '../img/icons/title-ope.png';
@@ -50,21 +51,19 @@ class DetalheOperacional extends Component {
     const { deop, uuid } = this.state;
     return (
       <div>
-        <div className="center" style={{position: "absolute",
-            left: "50%",
-            top:"50%"}}>
+        <div className="center" >
           <div className="page-header" >
             <h1>
               <img src={iconOperacional} alt="" />
               Operacional
             </h1>
             <div className="last-wrap">
-              <Link to="/operacional">
-                <div className="btnvoltar">
-                  <img src={iconBack} alt="" />
-                  <p>Voltar</p>
-                </div>
-              </Link>
+              
+              <div className="btnvoltar" onClick={() => history.goBack()}>
+                <img src={iconBack} alt="" />
+                <p>Voltar</p>
+              </div>
+              
             </div>
           </div>
           {this.state.isLoading ? (
