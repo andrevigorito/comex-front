@@ -553,7 +553,7 @@ class Operacional extends Component {
 
           <div className="list-ope">
             <header className="header-list-ope">
-              <p className="critico">Crit.</p>
+              <p className="critico"></p>
               <p className="po">PO</p>
               <p className="produto">Produto</p>
               <p className="descricao">Descrição</p>
@@ -572,7 +572,7 @@ class Operacional extends Component {
                 <Link to={`operacional/detalhe/${ope.uuid}`} key={ope.uuid}>
                   <div
                     className={` ${
-                      ope.process_critical === 'YES' ? 'item yes' : 'item'
+                      ope.alert ? 'item yes' : 'item'
                     } ${ope.channel === 'Red' ? 'red' : ''} `}
                     key={ope.uuid}
                   >
