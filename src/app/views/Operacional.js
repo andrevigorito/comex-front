@@ -39,6 +39,12 @@ class Operacional extends Component {
     plantaDestino: '',
     statusTimeLine: [],
     todos: false,
+    atrasados: false,
+    noPrazo: false,
+    criticos: false,
+    naoCriticos: false,
+    dupont: false,
+    dow: false,
   };
 
   handleBefore = () => {
@@ -99,6 +105,12 @@ class Operacional extends Component {
       grEfetivoFim,
       statusTimeLine,
       todos,
+      atrasados,
+      noPrazo,
+      criticos,
+      naoCriticos,
+      dupont,
+      dow,
     } = this.state;
 
     const params = {
@@ -106,6 +118,13 @@ class Operacional extends Component {
       po,
       produto,
       plantaDestino,
+      atrasados,
+      todos,
+      noPrazo,
+      criticos,
+      naoCriticos,
+      dupont,
+      dow,
     };
 
     if (statusTimeLine.length !== 0) {
@@ -140,8 +159,6 @@ class Operacional extends Component {
       params.grAtualFim = format(grEfetivoFim, "yyyy-MM-dd'T'HH:mm:ss.SSSxxx");
     }
 
-    params.todos = todos;
-
     const response = await API.get(`poItems`, { params });
     const { data: operacional, total: totalPages } = response.data;
 
@@ -173,6 +190,34 @@ class Operacional extends Component {
 
   handlePlantaDestino = e => {
     this.setState({ plantaDestino: e.target.value });
+  };
+  
+  handleAtrasados = async e => {
+    await this.setState({ atrasados: e.target.checked });
+  };
+  
+  handleNoPrazo = async e => {
+    await this.setState({ noPrazo: e.target.checked });
+  };
+  
+  handleTodos = async e => {
+    await this.setState({ todos: e.target.checked });
+  };
+  
+  handleCriticos = async e => {
+    await this.setState({ criticos: e.target.checked });
+  };
+  
+  handleNaoCriticos = async e => {
+    await this.setState({ naoCriticos: e.target.checked });
+  };
+  
+  handleDow = async e => {
+    await this.setState({ dow: e.target.checked });
+  };
+  
+  handleDupont = async e => {
+    await this.setState({ dupont: e.target.checked });
   };
 
   handleCheckbox = e => {
@@ -342,18 +387,18 @@ class Operacional extends Component {
                         <label>
                           <input
                             type="checkbox"
-                            name="AG Booking"
+                            name="dow"
                             id="sts-booking"
-                            onChange={this.handleCheckbox}
+                            onChange={this.handleDow}
                           />
                           Dow
                         </label>
                         <label>
                           <input
                             type="checkbox"
-                            name="AG Booking"
+                            name="dupont"
                             id="sts-booking"
-                            onChange={this.handleCheckbox}
+                            onChange={this.handleDupont}
                           />
                           Dupont
                         </label>
@@ -367,18 +412,18 @@ class Operacional extends Component {
                         <label>
                           <input
                             type="checkbox"
-                            name="AG Booking"
+                            name="Atrasados"
                             id="sts-booking"
-                            onChange={this.handleCheckbox}
+                            onChange={this.handleAtrasados}
                           />
                           Atrasados
                         </label>
                         <label>
                           <input
                             type="checkbox"
-                            name="AG Booking"
+                            name="noPrazo"
                             id="sts-booking"
-                            onChange={this.handleCheckbox}
+                            onChange={this.handleNoPrazo}
                           />
                           No prazo
                         </label>
@@ -392,9 +437,9 @@ class Operacional extends Component {
                         <label>
                           <input
                             type="checkbox"
-                            name="AG Booking"
+                            name="criticos"
                             id="sts-booking"
-                            onChange={this.handleCheckbox}
+                            onChange={this.handleCriticos}
                           />
                           Sim
                         </label>
@@ -403,7 +448,7 @@ class Operacional extends Component {
                             type="checkbox"
                             name="AG Booking"
                             id="sts-booking"
-                            onChange={this.handleCheckbox}
+                            onChange={this.handleNaoCriticos}
                           />
                           Não
                         </label>
@@ -417,9 +462,9 @@ class Operacional extends Component {
                         <label>
                           <input
                             type="checkbox"
-                            name="AG Booking"
+                            name="todos"
                             id="sts-booking"
-                            onChange={this.handleCheckbox}
+                            onChange={this.handleTodos}
                           />
                           Liberar
                         </label>
