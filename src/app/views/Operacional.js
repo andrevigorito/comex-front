@@ -139,7 +139,7 @@ class Operacional extends Component {
     if (grEfetivoFim) {
       params.grAtualFim = format(grEfetivoFim, "yyyy-MM-dd'T'HH:mm:ss.SSSxxx");
     }
-    
+
     params.todos = todos;
 
     const response = await API.get(`poItems`, { params });
@@ -310,7 +310,11 @@ class Operacional extends Component {
               Operacional
             </h1>
             <div className="last-wrap">
-              <CSVLink data={csvData} separator={";"} filename="webcol-operacional.xls">
+              <CSVLink
+                data={csvData}
+                separator={';'}
+                filename="webcol-operacional.xls"
+              >
                 <ExportExcel />
               </CSVLink>
               <div
@@ -330,6 +334,99 @@ class Operacional extends Component {
           <div className={`filter-box ${filtroAtivo ? 'active' : ''}`}>
             <form className="formoperacional" onSubmit={this.handleFormSubit}>
               <Grid>
+                <Row>
+                  <Col xs={12} md={3}>
+                    <div className="item">
+                      <label>Empresa:</label>
+                      <div className="boxstatus jcfs">
+                        <label>
+                          <input
+                            type="checkbox"
+                            name="AG Booking"
+                            id="sts-booking"
+                            onChange={this.handleCheckbox}
+                          />
+                          Dow
+                        </label>
+                        <label>
+                          <input
+                            type="checkbox"
+                            name="AG Booking"
+                            id="sts-booking"
+                            onChange={this.handleCheckbox}
+                          />
+                          Dupont
+                        </label>
+                      </div>
+                    </div>
+                  </Col>
+                  <Col xs={12} md={3}>
+                    <div className="item">
+                      <label>Em andamento:</label>
+                      <div className="boxstatus jcfs">
+                        <label>
+                          <input
+                            type="checkbox"
+                            name="AG Booking"
+                            id="sts-booking"
+                            onChange={this.handleCheckbox}
+                          />
+                          Atrasados
+                        </label>
+                        <label>
+                          <input
+                            type="checkbox"
+                            name="AG Booking"
+                            id="sts-booking"
+                            onChange={this.handleCheckbox}
+                          />
+                          No prazo
+                        </label>
+                      </div>
+                    </div>
+                  </Col>
+                  <Col xs={12} md={2}>
+                    <div className="item">
+                      <label>Critico:</label>
+                      <div className="boxstatus jcfs">
+                        <label>
+                          <input
+                            type="checkbox"
+                            name="AG Booking"
+                            id="sts-booking"
+                            onChange={this.handleCheckbox}
+                          />
+                          Sim
+                        </label>
+                        <label>
+                          <input
+                            type="checkbox"
+                            name="AG Booking"
+                            id="sts-booking"
+                            onChange={this.handleCheckbox}
+                          />
+                          Não
+                        </label>
+                      </div>
+                    </div>
+                  </Col>
+                  <Col xs={12} md={4}>
+                    <div className="item">
+                      <label>POs arquivadas:</label>
+                      <div className="boxstatus jcfs">
+                        <label>
+                          <input
+                            type="checkbox"
+                            name="AG Booking"
+                            id="sts-booking"
+                            onChange={this.handleCheckbox}
+                          />
+                          Liberar
+                        </label>
+                      </div>
+                    </div>
+                  </Col>
+                </Row>
                 <Row>
                   <Col xs={12}>
                     <div className="item">
@@ -432,7 +529,18 @@ class Operacional extends Component {
                       />
                     </div>
                   </Col>
-                  <Col xs={12} md={6}>
+                  <Col xs={12} md={1}>
+                    <div className="item">
+                      <label>PO item:</label>
+                      <input
+                        type="text"
+                        id="idproduto"
+                        onChange={this.handleQueryInput}
+                        autoComplete="false"
+                      />
+                    </div>
+                  </Col>
+                  <Col xs={12} md={4}>
                     <div className="item">
                       <label>Produto:</label>
                       <input
@@ -442,7 +550,17 @@ class Operacional extends Component {
                       />
                     </div>
                   </Col>
-                  <Col xs={12} md={3}>
+                  <Col xs={12} md={2}>
+                    <div className="item">
+                      <label>Analista:</label>
+                      <input
+                        type="text"
+                        id="idproduto"
+                        onChange={this.handleProduto}
+                      />
+                    </div>
+                  </Col>
+                  <Col xs={12} md={2}>
                     <div className="item">
                       <label>Planta Destino:</label>
                       <input
@@ -510,7 +628,6 @@ class Operacional extends Component {
                       </span>
                     </div>
                   </Col>
-
                   <Col xs={12} md={3}>
                     <div className="item">
                       <label>GR Efetivo:</label>
@@ -571,9 +688,9 @@ class Operacional extends Component {
               operacional.map(ope => (
                 <Link to={`operacional/detalhe/${ope.uuid}`} key={ope.uuid}>
                   <div
-                    className={` ${
-                      ope.alert ? 'item yes' : 'item'
-                    } ${ope.channel === 'Red' ? 'red' : ''} `}
+                    className={` ${ope.alert ? 'item yes' : 'item'} ${
+                      ope.channel === 'Red' ? 'red' : ''
+                    } `}
                     key={ope.uuid}
                   >
                     <span className="critico" />

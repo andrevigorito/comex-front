@@ -221,6 +221,9 @@
 			align-items: center;
       justify-content: space-between;
       flex-wrap: wrap;
+      &.jcfs{
+        justify-content: flex-start;
+      }
 			label{
 				margin-bottom: 0;
 				display: flex;
