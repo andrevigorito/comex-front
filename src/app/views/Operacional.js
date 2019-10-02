@@ -45,6 +45,8 @@ class Operacional extends Component {
     naoCriticos: false,
     dupont: false,
     dow: false,
+    analista: '',
+    item: '', 
   };
 
   handleBefore = () => {
@@ -111,6 +113,8 @@ class Operacional extends Component {
       naoCriticos,
       dupont,
       dow,
+      analista,
+      item,
     } = this.state;
 
     const params = {
@@ -125,6 +129,8 @@ class Operacional extends Component {
       naoCriticos,
       dupont,
       dow,
+      analista,
+      item,
     };
 
     if (statusTimeLine.length !== 0) {
@@ -190,6 +196,14 @@ class Operacional extends Component {
 
   handlePlantaDestino = e => {
     this.setState({ plantaDestino: e.target.value });
+  };
+  
+  handleAnalista = async e => {
+    await this.setState({ analista: e.target.value });
+  };
+  
+  handleItem = async e => {
+    await this.setState({ item: e.target.value });
   };
 
   handleAtrasados = async e => {
@@ -563,7 +577,7 @@ class Operacional extends Component {
                   </Col>
                 </Row>
                 <Row>
-                  <Col xs={12} md={4}>
+                  <Col xs={12} md={3}>
                     <div className="item">
                       <label>PO:</label>
                       <input
@@ -574,18 +588,18 @@ class Operacional extends Component {
                       />
                     </div>
                   </Col>
-                  {/* <Col xs={12} md={1}>
+                  <Col xs={12} md={1}>
                     <div className="item">
                       <label>PO item:</label>
                       <input
                         type="text"
                         id="idproduto"
-                        onChange={this.handleQueryInput}
+                        onChange={this.handleItem}
                         autoComplete="false"
                       />
                     </div>
-                  </Col> */}
-                  <Col xs={12} md={5}>
+                  </Col>
+                  <Col xs={12} md={4}>
                     <div className="item">
                       <label>Produto:</label>
                       <input
@@ -595,17 +609,17 @@ class Operacional extends Component {
                       />
                     </div>
                   </Col>
-                  {/* <Col xs={12} md={2}>
+                  <Col xs={12} md={2}>
                     <div className="item">
                       <label>Analista:</label>
                       <input
                         type="text"
                         id="idproduto"
-                        onChange={this.handleProduto}
+                        onChange={this.handleAnalista}
                       />
                     </div>
-                  </Col> */}
-                  <Col xs={12} md={3}>
+                  </Col>
+                  <Col xs={12} md={2}>
                     <div className="item">
                       <label>Planta Destino:</label>
                       <input
