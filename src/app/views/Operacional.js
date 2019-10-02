@@ -191,31 +191,31 @@ class Operacional extends Component {
   handlePlantaDestino = e => {
     this.setState({ plantaDestino: e.target.value });
   };
-  
+
   handleAtrasados = async e => {
     await this.setState({ atrasados: e.target.checked });
   };
-  
+
   handleNoPrazo = async e => {
     await this.setState({ noPrazo: e.target.checked });
   };
-  
+
   handleTodos = async e => {
     await this.setState({ todos: e.target.checked });
   };
-  
+
   handleCriticos = async e => {
     await this.setState({ criticos: e.target.checked });
   };
-  
+
   handleNaoCriticos = async e => {
     await this.setState({ naoCriticos: e.target.checked });
   };
-  
+
   handleDow = async e => {
     await this.setState({ dow: e.target.checked });
   };
-  
+
   handleDupont = async e => {
     await this.setState({ dupont: e.target.checked });
   };
@@ -563,7 +563,7 @@ class Operacional extends Component {
                   </Col>
                 </Row>
                 <Row>
-                  <Col xs={12} md={3}>
+                  <Col xs={12} md={4}>
                     <div className="item">
                       <label>PO:</label>
                       <input
@@ -574,7 +574,7 @@ class Operacional extends Component {
                       />
                     </div>
                   </Col>
-                  <Col xs={12} md={1}>
+                  {/* <Col xs={12} md={1}>
                     <div className="item">
                       <label>PO item:</label>
                       <input
@@ -584,8 +584,8 @@ class Operacional extends Component {
                         autoComplete="false"
                       />
                     </div>
-                  </Col>
-                  <Col xs={12} md={4}>
+                  </Col> */}
+                  <Col xs={12} md={5}>
                     <div className="item">
                       <label>Produto:</label>
                       <input
@@ -595,7 +595,7 @@ class Operacional extends Component {
                       />
                     </div>
                   </Col>
-                  <Col xs={12} md={2}>
+                  {/* <Col xs={12} md={2}>
                     <div className="item">
                       <label>Analista:</label>
                       <input
@@ -604,8 +604,8 @@ class Operacional extends Component {
                         onChange={this.handleProduto}
                       />
                     </div>
-                  </Col>
-                  <Col xs={12} md={2}>
+                  </Col> */}
+                  <Col xs={12} md={3}>
                     <div className="item">
                       <label>Planta Destino:</label>
                       <input
