@@ -12,6 +12,7 @@ import 'react-datepicker/dist/react-datepicker.css';
 
 // Images
 import iconOperacional from '../img/icons/title-ope.png';
+import star from '../img/favourites.svg';
 
 // Components
 import Loading from './components/Loading';
@@ -46,7 +47,7 @@ class Operacional extends Component {
     dupont: false,
     dow: false,
     analista: '',
-    item: '', 
+    item: '',
   };
 
   handleBefore = () => {
@@ -197,11 +198,11 @@ class Operacional extends Component {
   handlePlantaDestino = e => {
     this.setState({ plantaDestino: e.target.value });
   };
-  
+
   handleAnalista = async e => {
     await this.setState({ analista: e.target.value });
   };
-  
+
   handleItem = async e => {
     await this.setState({ item: e.target.value });
   };
@@ -361,7 +362,7 @@ class Operacional extends Component {
     console.log(operacional);
 
     return (
-      <div>
+      <>
         <div className="center">
           <div className="page-header">
             <h1>
@@ -776,6 +777,7 @@ class Operacional extends Component {
                         : '-'}
                     </p>
                     <div className="status alert">
+                      {/* <img src={star} className="favorite not" alt="Favorito" /> */}
                       <p>{ope.status_time_line}</p>{' '}
                       {/* <div
                       onClick={this.openPopupbox}
@@ -797,7 +799,7 @@ class Operacional extends Component {
             />
           </div>
         </div>
-      </div>
+      </>
     );
   }
 }
