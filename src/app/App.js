@@ -240,8 +240,6 @@ class App extends Component {
               <Route
                 path="/alertas"
                 exact
-                // useruuid={useruuid}
-                // component={Alertas}
                 render={props => <Alertas {...props} useruuid={useruuid} />}
               />
             )}
@@ -264,7 +262,11 @@ class App extends Component {
               />
             )}
             {isAuth && (
-              <Route path="/operacional" exact component={Operacional} />
+              <Route
+                path="/operacional"
+                exact
+                render={props => <Operacional {...props} useruuid={useruuid} />}
+              />
             )}
             {isAuth && (
               <Route
