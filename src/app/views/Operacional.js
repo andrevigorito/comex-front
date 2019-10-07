@@ -85,6 +85,7 @@ class Operacional extends Component {
     if (page !== prevState.page) {
       this.getPoItems();
     }
+    
   }
 
   componentDidMount() {
@@ -131,6 +132,7 @@ class Operacional extends Component {
       dow,
       analista,
       item,
+      userUuid: this.props.userUuid,
     };
 
     if (statusTimeLine.length !== 0) {
