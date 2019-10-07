@@ -239,7 +239,7 @@ class Usuarios extends Component {
                 <p>Usuário</p>
                 <p>Acesso</p>
                 <p>Data Criação</p>
-                <p>Alterar</p>
+                <p></p>
               </div>
               {isLoading && <Loading />}
               {users.map(usuario => (
