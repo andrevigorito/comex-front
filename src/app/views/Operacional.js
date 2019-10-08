@@ -364,7 +364,7 @@ class Operacional extends Component {
     console.log(operacional);
 
     return (
-      <>
+     
         <div className="center">
           <div className="page-header">
             <h1>
@@ -690,7 +690,7 @@ class Operacional extends Component {
                       </span>
                     </div>
                   </Col>
-                  <Col xs={12} md={3}>
+                  <Col xs={12} md={3}> 
                     <div className="item">
                       <label>GR Efetivo:</label>
                       <span>
@@ -779,7 +779,7 @@ class Operacional extends Component {
                         : '-'}
                     </p>
                     <div className="status alert">
-                      {/* <img src={star} className="favorite not" alt="Favorito" /> */}
+                      <img src={star} className="favorite not" alt="Favorito" />
                       <p>{ope.status_time_line}</p>{' '}
                       {/* <div
                       onClick={this.openPopupbox}
@@ -801,7 +801,7 @@ class Operacional extends Component {
             />
           </div>
         </div>
-      </>
+
     );
   }
 }

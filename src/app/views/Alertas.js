@@ -3,6 +3,8 @@ import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { format } from 'date-fns';
 import API from '../services/api';
+import { Link,Redirect } from 'react-router-dom';
+import history from '../services/history';
 
 // Images
 import iconTitleAlert from '../img/icons/title-alert.png';
@@ -58,6 +60,11 @@ export default function Alertas({ useruuid }) {
 
     await getAlerts(data1);
   }
+  
+  async function redirecionar(poItemUuid){
+    alert("oi") 
+    return <Redirect to={`operacional/detalhe/${poItemUuid}`} />
+  }
 
   return (
     <div>
@@ -92,49 +99,59 @@ export default function Alertas({ useruuid }) {
           </div>
           {isLoading && <Loading />}
           {alerts.map(alerta => (
-            <div className="item" key={alerta.uuid}>
-              <p className="date current">
-                {new Date(alerta.createdAt).toLocaleString()}
-              </p>
-              <p className="responsible">
-                {alerta.po.csr_name.toLowerCase()}
-              </p>
-              <p className="po">{alerta.message}</p>
-              <p className="po">
-                {alerta.user_alerts[0]
-                  ? alerta.user_alerts[0].read
-                    ? 'Sim'
-                    : 'Não'
-                  : ''}
-              </p>
-              <p className="altered date">
-                {alerta.user_alerts[0]
-                  ? alerta.user_alerts[0].read
-                    ? new Date(
-                        alerta.user_alerts[0].updatedAt
-                      ).toLocaleString()
-                    : ''
-                  : ''}
-              </p>
-
-              <p>
-                {alerta.user_alerts[0] ? (
-                  alerta.user_alerts[0].read ? (
-                    ''
+            
+              <div 
+                className="item" 
+                key={alerta.uuid}
+                  onClick={() => { history.push(`operacional/detalhe/${alerta.poItemUuid}`)
+                }}
+              >
+                <p className="date current">
+                  {new Date(alerta.createdAt).toLocaleString()}
+                </p>
+                <p className="responsible">
+                  {alerta.po.csr_name.toLowerCase()}
+                </p>
+                <p className="po">{alerta.message}</p>
+                <p className="po">
+                  {alerta.user_alerts[0]
+                    ? alerta.user_alerts[0].read
+                      ? 'Sim'
+                      : 'Não'
+                    : ''}
+                </p>
+                <p className="altered date">
+                  {alerta.user_alerts[0]
+                    ? alerta.user_alerts[0].read
+                      ? new Date(
+                          alerta.user_alerts[0].updatedAt
+                        ).toLocaleString()
+                      : ''
+                    : ''}
+                </p>
+  
+                <p>
+                  {alerta.user_alerts[0] ? (
+                    alerta.user_alerts[0].read ? (
+                      ''
+                    ) : (
+                      <button
+                        type="button"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          markAlertAsRead(alerta.uuid);
+                        }}
+                        className="btn"
+                      >
+                        Marcar como lido
+                      </button>
+                    )
                   ) : (
-                    <button
-                      type="button"
-                      onClick={() => markAlertAsRead(alerta.uuid)}
-                      className="btn"
-                    >
-                      Marcar como lido
-                    </button>
-                  )
-                ) : (
-                  ''
-                )}
-              </p>
-            </div>
+                    ''
+                  )}
+                </p>
+              </div>
+              
           ))}
         </div>
       </div>
