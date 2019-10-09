@@ -103,8 +103,11 @@ export default function Alertas({ useruuid }) {
               <div 
                 className="item" 
                 key={alerta.uuid}
-                  onClick={() => { history.push(`operacional/detalhe/${alerta.poItemUuid}`)
-                }}
+                  onClick={() => {
+                    markAlertAsRead(alerta.uuid);
+                    history.push(`operacional/detalhe/${alerta.poItemUuid}`)
+                  }
+                }
               >
                 <p className="date current">
                   {new Date(alerta.createdAt).toLocaleString()}
