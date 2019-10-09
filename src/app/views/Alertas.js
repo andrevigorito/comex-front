@@ -63,12 +63,28 @@ export default function Alertas({ useruuid }) {
     await getAlerts(data1);
   }
   
-  async function redirecionar(poItemUuid){
-    alert("oi") 
-    return <Redirect to={`operacional/detalhe/${poItemUuid}`} />
-  }
   const arrayExcel = [];
   const csvData = arrayExcel;
+  
+  alerts.forEach(alert => {
+    const Data = alert.createdAt
+      ? new Date(alert.createdAt).toLocaleString()
+      : '-';
+    const Responsavel = alert.po.csr_name.toLowerCase()
+    const Mensagem = alert.message;
+    const Lido = alert.user_alerts[0].read
+      ? new Date(alert.user_alerts[0].updatedAt).toLocaleString()
+      : null;
+    const objeto = {
+      Data,
+      Responsavel,
+      Mensagem,
+      Lido,
+    };
+    
+    arrayExcel.push(objeto);
+    
+  });
 
   return (
     <div>
@@ -79,13 +95,13 @@ export default function Alertas({ useruuid }) {
             Alertas
           </h1>
           <div className="last-wrap">
-            {/* <CSVLink
+              <CSVLink
                 data={csvData}
                 separator={';'}
-                filename="webcol-operacional.xls"
+                filename="webcol-alertas.xls"
               >
                 <ExportExcel />
-              </CSVLink> */}
+              </CSVLink>
             <div className="btn-filter-nfs" onClick={btnFilter}>
               <div className="icon-filter">
                 <span />
