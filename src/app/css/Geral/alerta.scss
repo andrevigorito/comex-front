@@ -53,3 +53,23 @@
     }
   }
 }
+
+
+.result-alerts{
+  margin: -20px 0 20px;
+  font-size: 12px;
+  display: flex;
+  span{
+    padding: 0 20px;
+    border-right: solid 2px #ccc;
+    strong{
+      color: #e74c3c;
+    }
+    &:last-child{
+      border: 0;
+      strong{
+        color: #1abc9c;
+      }
+    }
+  }
+}

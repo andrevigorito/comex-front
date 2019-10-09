@@ -112,6 +112,10 @@ export default function Alertas({ useruuid }) {
             </div>
           </div>
         </div>
+        <div className="result-alerts">
+          <span>Críticos: <strong>45</strong></span>
+          <span>Favoritos: <strong>10</strong></span>
+        </div>
 
         <FilterAlert filtrar={filtrar} />
 
