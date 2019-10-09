@@ -1,6 +1,7 @@
 /* eslint-disable no-nested-ternary */
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
+import { CSVLink } from 'react-csv';
 import { format } from 'date-fns';
 import API from '../services/api';
 import { Link,Redirect } from 'react-router-dom';
@@ -12,6 +13,7 @@ import iconTitleAlert from '../img/icons/title-alert.png';
 // Components
 import Loading from './components/Loading';
 import FilterAlert from './components/FilterAlert';
+import ExportExcel from './components/ExportExcel';
 
 export default function Alertas({ useruuid }) {
   const [alerts, setalerts] = useState([]);
@@ -65,6 +67,8 @@ export default function Alertas({ useruuid }) {
     alert("oi") 
     return <Redirect to={`operacional/detalhe/${poItemUuid}`} />
   }
+  const arrayExcel = [];
+  const csvData = arrayExcel;
 
   return (
     <div>
@@ -75,6 +79,13 @@ export default function Alertas({ useruuid }) {
             Alertas
           </h1>
           <div className="last-wrap">
+            {/* <CSVLink
+                data={csvData}
+                separator={';'}
+                filename="webcol-operacional.xls"
+              >
+                <ExportExcel />
+              </CSVLink> */}
             <div className="btn-filter-nfs" onClick={btnFilter}>
               <div className="icon-filter">
                 <span />

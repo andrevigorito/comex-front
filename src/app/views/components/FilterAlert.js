@@ -48,6 +48,33 @@ class Filter extends Component {
       <div className="filter-box">
         <form className="filtealert" onSubmit={this.handleFilter}>
           <Grid>
+            {/* <Row>
+              <Col xs={12} md={3}>
+                <div className="item">
+                  <label>Empresa:</label>
+                  <div className="boxstatus jcfs">
+                    <label>
+                      <input
+                        type="checkbox"
+                        name="dow"
+                        id="sts-booking"
+                        onChange={this.handleDow}
+                      />
+                      Dow
+                    </label>
+                    <label>
+                      <input
+                        type="checkbox"
+                        name="dupont"
+                        id="sts-booking"
+                        onChange={this.handleDupont}
+                      />
+                      Dupont
+                    </label>
+                  </div>
+                </div>
+              </Col>
+            </Row> */}
             <Row>
               <Col xs={12} md={4}>
                 <div className="item">
