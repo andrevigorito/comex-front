@@ -23,13 +23,19 @@
   .item {
     background: #f7f7f7;
     padding: 10px 20px;
-    margin-bottom: 4px;
+    margin-bottom: 20px;
     font-size: 14px;
     display: grid;
     align-items: center;
     grid-template-columns: 1fr 1fr 3fr 1fr 1.5fr 1.5fr;
     grid-row-gap: 10px;
     grid-column-gap: 10px;
+    cursor: pointer;
+    transition: all ease 0.3s;
+    border-radius: 4px;
+    &:hover{
+      box-shadow: 1px 1px 10px rgba(0, 0, 0, 0.1);
+    }
     @media (max-width: 620px) {
       grid-template-columns: 1fr;
     }
@@ -44,6 +50,26 @@
 
     p.responsible {
       text-transform: capitalize;
+    }
+  }
+}
+
+
+.result-alerts{
+  margin: -20px 0 20px;
+  font-size: 12px;
+  display: flex;
+  span{
+    padding: 0 20px;
+    border-right: solid 2px #ccc;
+    strong{
+      color: #e74c3c;
+    }
+    &:last-child{
+      border: 0;
+      strong{
+        color: #1abc9c;
+      }
     }
   }
 }

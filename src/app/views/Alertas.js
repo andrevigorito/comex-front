@@ -17,7 +17,7 @@ import ExportExcel from './components/ExportExcel';
 
 export default function Alertas({ useruuid }) {
   const [alerts, setalerts] = useState([]);
-  const [isLoading, setisLoading] = useState(false);
+  const [isLoading, setisLoading] = useState(false)
 
   async function getAlerts(params = null) {
     // const useruuid = '12430f8a-e492-4efb-a8cd-bb2b2784567c';
@@ -63,14 +63,35 @@ export default function Alertas({ useruuid }) {
     await getAlerts(data1);
   }
   
-  async function redirecionar(poItemUuid){
-    alert("oi") 
-    return <Redirect to={`operacional/detalhe/${poItemUuid}`} />
-  }
   const arrayExcel = [];
   const csvData = arrayExcel;
-
+  
+  let contadorCriticos = 0
+  
+  alerts.forEach(alert => {
+    const Data = alert.createdAt
+      ? new Date(alert.createdAt).toLocaleString()
+      : '-';
+    const Responsavel = alert.po.csr_name.toLowerCase()
+    const Mensagem = alert.message;
+    const Lido = alert.user_alerts[0].read
+      ? new Date(alert.user_alerts[0].updatedAt).toLocaleString()
+      : null;
+    const objeto = {
+      Data,
+      Responsavel,
+      Mensagem,
+      Lido,
+    };
+    
+    arrayExcel.push(objeto);
+    
+    alert.po_item.process_critical === 'YES' && contadorCriticos++
+    
+  });
+  
   return (
+    <div>  
     <div>
       <div className="center">
         <div className="page-header">
@@ -79,13 +100,13 @@ export default function Alertas({ useruuid }) {
             Alertas
           </h1>
           <div className="last-wrap">
-            {/* <CSVLink
+              <CSVLink
                 data={csvData}
                 separator={';'}
-                filename="webcol-operacional.xls"
+                filename="webcol-alertas.xls"
               >
                 <ExportExcel />
-              </CSVLink> */}
+              </CSVLink>
             <div className="btn-filter-nfs" onClick={btnFilter}>
               <div className="icon-filter">
                 <span />
@@ -95,6 +116,10 @@ export default function Alertas({ useruuid }) {
               Filtrar
             </div>
           </div>
+        </div>
+        <div className="result-alerts">
+          <span>Críticos: <strong>{contadorCriticos}</strong></span>
+          <span>Favoritos: <strong>0</strong></span>
         </div>
 
         <FilterAlert filtrar={filtrar} />
@@ -110,13 +135,17 @@ export default function Alertas({ useruuid }) {
           </div>
           {isLoading && <Loading />}
           {alerts.map(alerta => (
-            
+              
               <div 
                 className="item" 
                 key={alerta.uuid}
-                  onClick={() => { history.push(`operacional/detalhe/${alerta.poItemUuid}`)
-                }}
+                  onClick={() => {
+                    markAlertAsRead(alerta.uuid);
+                    history.push(`operacional/detalhe/${alerta.poItemUuid}`)
+                  }
+                }
               >
+                
                 <p className="date current">
                   {new Date(alerta.createdAt).toLocaleString()}
                 </p>
@@ -162,10 +191,14 @@ export default function Alertas({ useruuid }) {
                   )}
                 </p>
               </div>
-              
+                
           ))}
         </div>
+        
       </div>
+      
+    </div>
+    
     </div>
   );
 }

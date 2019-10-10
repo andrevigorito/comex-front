@@ -13,6 +13,8 @@ class Filter extends Component {
     dataAte: new Date(),
     mensagem: '',
     status: '',
+    dow: false,
+    dupont: false,
   };
 
   handleFilter = async e => {
@@ -38,17 +40,24 @@ class Filter extends Component {
 
   handleSelect = e => {
     this.setState({ status: e.target.value });
-    console.log(this.state.status);
+  };
+  
+  handleDow = async e => {
+    await this.setState({ dow: e.target.checked });
+  };
+
+  handleDupont = async e => {
+    await this.setState({ dupont: e.target.checked });
   };
 
   render() {
-    const { dataDe, dataAte, status } = this.state;
+    const { dataDe, dataAte, status, dow, dupont } = this.state;
 
     return (
       <div className="filter-box">
         <form className="filtealert" onSubmit={this.handleFilter}>
           <Grid>
-            {/* <Row>
+            <Row>
               <Col xs={12} md={3}>
                 <div className="item">
                   <label>Empresa:</label>
@@ -57,6 +66,7 @@ class Filter extends Component {
                       <input
                         type="checkbox"
                         name="dow"
+                        value={dow}
                         id="sts-booking"
                         onChange={this.handleDow}
                       />
@@ -66,6 +76,7 @@ class Filter extends Component {
                       <input
                         type="checkbox"
                         name="dupont"
+                        value={dupont}
                         id="sts-booking"
                         onChange={this.handleDupont}
                       />
@@ -74,7 +85,7 @@ class Filter extends Component {
                   </div>
                 </div>
               </Col>
-            </Row> */}
+            </Row>
             <Row>
               <Col xs={12} md={4}>
                 <div className="item">
