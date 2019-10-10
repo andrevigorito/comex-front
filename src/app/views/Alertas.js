@@ -17,7 +17,7 @@ import ExportExcel from './components/ExportExcel';
 
 export default function Alertas({ useruuid }) {
   const [alerts, setalerts] = useState([]);
-  const [isLoading, setisLoading] = useState(false);
+  const [isLoading, setisLoading] = useState(false)
 
   async function getAlerts(params = null) {
     // const useruuid = '12430f8a-e492-4efb-a8cd-bb2b2784567c';
@@ -66,6 +66,8 @@ export default function Alertas({ useruuid }) {
   const arrayExcel = [];
   const csvData = arrayExcel;
   
+  let contadorCriticos = 0
+  
   alerts.forEach(alert => {
     const Data = alert.createdAt
       ? new Date(alert.createdAt).toLocaleString()
@@ -84,9 +86,12 @@ export default function Alertas({ useruuid }) {
     
     arrayExcel.push(objeto);
     
+    alert.po_item.process_critical === 'YES' && contadorCriticos++
+    
   });
-
+  
   return (
+    <div>  
     <div>
       <div className="center">
         <div className="page-header">
@@ -113,8 +118,8 @@ export default function Alertas({ useruuid }) {
           </div>
         </div>
         <div className="result-alerts">
-          <span>Críticos: <strong>45</strong></span>
-          <span>Favoritos: <strong>10</strong></span>
+          <span>Críticos: <strong>{contadorCriticos}</strong></span>
+          <span>Favoritos: <strong>0</strong></span>
         </div>
 
         <FilterAlert filtrar={filtrar} />
@@ -130,7 +135,7 @@ export default function Alertas({ useruuid }) {
           </div>
           {isLoading && <Loading />}
           {alerts.map(alerta => (
-            
+              
               <div 
                 className="item" 
                 key={alerta.uuid}
@@ -140,6 +145,7 @@ export default function Alertas({ useruuid }) {
                   }
                 }
               >
+                
                 <p className="date current">
                   {new Date(alerta.createdAt).toLocaleString()}
                 </p>
@@ -185,10 +191,14 @@ export default function Alertas({ useruuid }) {
                   )}
                 </p>
               </div>
-              
+                
           ))}
         </div>
+        
       </div>
+      
+    </div>
+    
     </div>
   );
 }
