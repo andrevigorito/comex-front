@@ -5,6 +5,7 @@ import { CSVLink } from 'react-csv';
 import DatePicker, { registerLocale } from 'react-datepicker';
 import ptBR from 'date-fns/locale/pt-BR';
 import history from '../services/history';
+import { toast } from 'react-toastify';
 
 import { format } from 'date-fns';
 
@@ -23,7 +24,7 @@ import ExportExcel from './components/ExportExcel';
 registerLocale('pt-BR', ptBR);
 // import FilterOperacional from './components/FilterOperacional';
 
-const favoriteUserUuid = 'a222bcd0-6e65-44dc-9e6b-62691d440305';
+const favoriteUserUuid = 'f4a25bfb-f6e2-4280-9f8e-cb3e14e39e9f';
 
 class Operacional extends Component {
   state = {
@@ -108,6 +109,8 @@ class Operacional extends Component {
       }).then(res => {
         this.getPoItems();
       })
+    }else{
+      this.notifyError("Você não tem permissão para executar esta função!")
     }
   }
   
@@ -121,8 +124,16 @@ class Operacional extends Component {
           this.getPoItems();
         }
       )
+    }else{
+      this.notifyError("Você não tem permissão para executar esta função!")
     }  
   }
+  
+  notifyError = msg => {
+    toast.error(msg, {
+      position: toast.POSITION.BOTTOM_RIGHT,
+    });
+  };
 
   componentDidMount() {
     this.getPoItems();
