@@ -38,6 +38,7 @@ class Operacional extends Component {
     grEfetivoFim: '',
     page: 1,
     totalPages: 1,
+    totalItems: 0,
     po: '',
     produto: '',
     plantaDestino: '',
@@ -203,12 +204,16 @@ class Operacional extends Component {
     }
 
     const response = await API.get(`poItems`, { params });
-    const { data: operacional, total: totalPages } = response.data;
+    console.log(response.data)
+    
+    const { data: operacional, total: totalPages, count: totalItems } = response.data;
+    
 
     this.setState({
       operacional,
       isLoading: false,
       totalPages,
+      totalItems,
     });
   }
 
@@ -339,6 +344,7 @@ class Operacional extends Component {
       grProgramadoFim,
       page,
       totalPages,
+      totalItems,
     } = this.state;
 
     const arrayExcel = [];
@@ -426,7 +432,7 @@ class Operacional extends Component {
               </div>
             </div>
           </div>
-          <p className="totalope">Total: <strong>118000</strong></p>
+          <p className="totalope">Total: <strong>{!isLoading && totalItems}</strong></p>
 
           <div className={`filter-box ${filtroAtivo ? 'active' : ''}`}>
             <form className="formoperacional" onSubmit={this.handleFormSubit}>
