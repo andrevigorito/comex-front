@@ -4,6 +4,7 @@ import { Grid, Row, Col } from 'react-flexbox-grid';
 import { CSVLink } from 'react-csv';
 import DatePicker, { registerLocale } from 'react-datepicker';
 import ptBR from 'date-fns/locale/pt-BR';
+import history from '../services/history';
 
 import { format } from 'date-fns';
 
@@ -87,6 +88,24 @@ class Operacional extends Component {
       this.getPoItems();
     }
     
+  }
+  
+  handleFavorite = (poItemUuid) => {
+     API.post(`userPoItems`, 
+     {
+       poItemUuid,
+       userUuid: this.props.useruuid, 
+     }, {
+      headers: { 'Content-Type': 'application/json' },
+    }).then(res => {
+      alert(res.data)
+    })
+  }
+  
+  handleUnFavorite = (favoriteUuid) => {
+     API.delete(`userPoItems/${favoriteUuid}`).then(res => {
+      alert(res.data)
+    })
   }
 
   componentDidMount() {
@@ -748,46 +767,58 @@ class Operacional extends Component {
               <Loading />
             ) : (
               operacional.map(ope => (
-                <Link to={`operacional/detalhe/${ope.uuid}`} key={ope.uuid}>
-                  <div
-                    className={` ${ope.alert ? 'item yes' : 'item'} ${
-                      ope.channel === 'Red' ? 'red' : ''
-                    } `}
-                    key={ope.uuid}
-                  >
-                    <span className="critico" />
-                    <p className="po">{`${ope.po.order_reference}-${ope.item}`}</p>
-                    <p className="produto">{ope.po.product.product_id}</p>
-                    <p className="descricao">
-                      {ope.po.product.product_description}
-                    </p>
-                    <p className="qtd">{ope.qty}</p>
-                    <p className="pd">{ope.plant_id}</p>
-                    <p className="ata">
-                      {ope.ata_date
-                        ? new Date(ope.ata_date).toLocaleDateString()
-                        : '-'}
-                    </p>
-                    <p className="grp">
-                      {ope.gr_original
-                        ? new Date(ope.gr_original).toLocaleDateString()
-                        : '-'}
-                    </p>
-                    <p className="gre">
-                      {ope.gr_actual
-                        ? new Date(ope.gr_actual).toLocaleDateString()
-                        : '-'}
-                    </p>
-                    <div className="status alert">
-                      <img src={star} className="favorite not" alt="Favorito" />
-                      <p>{ope.status_time_line}</p>{' '}
-                      {/* <div
-                      onClick={this.openPopupbox}
-                      className="icon-justificativa"
-                    /> */}
-                    </div>
+                
+                <div
+                  onClick={() => {
+                    history.push(`operacional/detalhe/${ope.uuid}`)
+                  }}
+                  className={` ${ope.alert ? 'item yes' : 'item'} ${
+                    ope.channel === 'Red' ? 'red' : ''
+                  } `}
+                  key={ope.uuid}
+                  
+                >
+                  <span className="critico" />
+                  <p className="po">{`${ope.po.order_reference}-${ope.item}`}</p>
+                  <p className="produto">{ope.po.product.product_id}</p>
+                  <p className="descricao">
+                    {ope.po.product.product_description}
+                  </p>
+                  <p className="qtd">{ope.qty}</p>
+                  <p className="pd">{ope.plant_id}</p>
+                  <p className="ata">
+                    {ope.ata_date
+                      ? new Date(ope.ata_date).toLocaleDateString()
+                      : '-'}
+                  </p>
+                  <p className="grp">
+                    {ope.gr_original
+                      ? new Date(ope.gr_original).toLocaleDateString()
+                      : '-'}
+                  </p>
+                  <p className="gre">
+                    {ope.gr_actual
+                      ? new Date(ope.gr_actual).toLocaleDateString()
+                      : '-'}
+                  </p>
+                  <div className="status alert">
+                    <img 
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        !ope.user_po_items[0] ? this.handleFavorite(ope.uuid) : this.handleUnFavorite(ope.user_po_items[0].uuid);
+                      }}
+                      src={star} 
+                      className={`favorite ${ope.user_po_items[0] ? '' : 'not'}`} 
+                      not alt="Favorito" 
+                    />
+                    <p>{ope.status_time_line}</p>{' '}
+                    {/* <div
+                    onClick={this.openPopupbox}
+                    className="icon-justificativa"
+                  /> */}
                   </div>
-                </Link>
+                </div>
+                
               ))
             )}
 
