@@ -23,6 +23,8 @@ import ExportExcel from './components/ExportExcel';
 registerLocale('pt-BR', ptBR);
 // import FilterOperacional from './components/FilterOperacional';
 
+const favoriteUserUuid = 'f4a25bfb-f6e2-4280-9f8e-cb3e14e39e9f';
+
 class Operacional extends Component {
   state = {
     operacional: [],
@@ -49,6 +51,7 @@ class Operacional extends Component {
     dow: false,
     analista: '',
     item: '',
+    
   };
 
   handleBefore = () => {
@@ -90,22 +93,34 @@ class Operacional extends Component {
     
   }
   
-  handleFavorite = (poItemUuid) => {
-     API.post(`userPoItems`, 
-     {
-       poItemUuid,
-       userUuid: this.props.useruuid, 
-     }, {
-      headers: { 'Content-Type': 'application/json' },
-    }).then(res => {
-      alert(res.data)
-    })
+  handleFavorite = async (poItemUuid) => {
+    if(this.props.useruuid === favoriteUserUuid){
+      await this.setState({
+        isLoading: true,
+      });  
+      await API.post(`userPoItems`, 
+       {
+         poItemUuid,
+         userUuid: this.props.useruuid, 
+       }, {
+        headers: { 'Content-Type': 'application/json' },
+      }).then(res => {
+        this.getPoItems();
+      })
+    }
   }
   
-  handleUnFavorite = (favoriteUuid) => {
-     API.delete(`userPoItems/${favoriteUuid}`).then(res => {
-      alert(res.data)
-    })
+  handleUnFavorite = async (favoriteUuid) => {
+    if(this.props.useruuid === favoriteUserUuid){
+      await this.setState({
+        isLoading: true,
+      }); 
+      await API.delete(`userPoItems/${favoriteUuid}`)
+      .then(res => {
+          this.getPoItems();
+        }
+      )
+    }  
   }
 
   componentDidMount() {
