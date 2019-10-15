@@ -426,6 +426,7 @@ class Operacional extends Component {
               </div>
             </div>
           </div>
+          <p className="totalope">Total: <strong>118000</strong></p>
 
           <div className={`filter-box ${filtroAtivo ? 'active' : ''}`}>
             <form className="formoperacional" onSubmit={this.handleFormSubit}>
