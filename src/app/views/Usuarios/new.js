@@ -7,12 +7,12 @@ import { NewUsuario, BtnMostrar } from './styles';
 import getCroppedImg from './cropImage';
 import api from '../../services/api';
 
-import swal from '@sweetalert/with-react';
+import iconBack from '../../img/icons/back.png';
 
 // eslint-disable-next-line react/prefer-stateless-function
 
 export default function NovoUsuario({ history }) {
-  const [newName, setNewName] = useState('');
+  const [name, setName] = useState('');
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [phone, setPhone] = useState('');
@@ -26,7 +26,7 @@ export default function NovoUsuario({ history }) {
 
   const [type, setType] = useState('password');
   const [crop, setCrop] = useState({ x: 0, y: 0 });
-  const [aspect, setAspect] = useState(4 / 4);
+  const [aspect] = useState(4 / 4);
 
   function getBase64(file, cb) {
     const reader = new FileReader();
@@ -42,7 +42,7 @@ export default function NovoUsuario({ history }) {
       user: {
         username,
         password,
-        name: newName,
+        name,
         phone, // Deixar apenas numeros inteiros
         admin: isAdmin,
         mailAlert,
@@ -56,10 +56,7 @@ export default function NovoUsuario({ history }) {
     // console.log(data);
     // verificar se deu tudo certo
     if (response.status === 200) {
-      swal('Concluído', 'Usuário criado com sucesso!', 'success');
       history.push('/usuarios');
-    } else {
-      swal('Erro', 'Não foi possível criar o usuário!', 'error');
     }
   }
 
@@ -82,6 +79,12 @@ export default function NovoUsuario({ history }) {
     <div className="center">
       <div className="page-header">
         <h1>Novo Usuário</h1>
+        <div className="last-wrap">
+          <div className="btnvoltar" onClick={() => history.goBack()}>
+            <img src={iconBack} alt="" />
+            <p>Voltar</p>
+          </div>
+        </div>
       </div>
       <NewUsuario>
         <form>
@@ -108,11 +111,10 @@ export default function NovoUsuario({ history }) {
                   <label>Nome:</label>
                   <input
                     type="text"
-                    value={newName}
-                    onChange={e => setNewName(e.target.value)}
+                    value={name}
+                    onChange={e => setName(e.target.value)}
                     placeholder="Digite o seu nome"
                     id="nu-name"
-                    autoComplete="off"
                   />
                 </div>
               </Col>

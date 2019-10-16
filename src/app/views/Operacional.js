@@ -4,6 +4,8 @@ import { Grid, Row, Col } from 'react-flexbox-grid';
 import { CSVLink } from 'react-csv';
 import DatePicker, { registerLocale } from 'react-datepicker';
 import ptBR from 'date-fns/locale/pt-BR';
+import history from '../services/history';
+import { toast } from 'react-toastify';
 
 import { format } from 'date-fns';
 
@@ -22,6 +24,8 @@ import ExportExcel from './components/ExportExcel';
 registerLocale('pt-BR', ptBR);
 // import FilterOperacional from './components/FilterOperacional';
 
+const favoriteUserUuid = 'f4a25bfb-f6e2-4280-9f8e-cb3e14e39e9f';
+
 class Operacional extends Component {
   state = {
     operacional: [],
@@ -35,6 +39,7 @@ class Operacional extends Component {
     grEfetivoFim: '',
     page: 1,
     totalPages: 1,
+    totalItems: 0,
     po: '',
     produto: '',
     plantaDestino: '',
@@ -48,6 +53,7 @@ class Operacional extends Component {
     dow: false,
     analista: '',
     item: '',
+    
   };
 
   handleBefore = () => {
@@ -88,6 +94,46 @@ class Operacional extends Component {
     }
     
   }
+  
+  handleFavorite = async (poItemUuid) => {
+    if(this.props.useruuid === favoriteUserUuid){
+      await this.setState({
+        isLoading: true,
+      });  
+      await API.post(`userPoItems`, 
+       {
+         poItemUuid,
+         userUuid: this.props.useruuid, 
+       }, {
+        headers: { 'Content-Type': 'application/json' },
+      }).then(res => {
+        this.getPoItems();
+      })
+    }else{
+      this.notifyError("Você não tem permissão para executar esta função!")
+    }
+  }
+  
+  handleUnFavorite = async (favoriteUuid) => {
+    if(this.props.useruuid === favoriteUserUuid){
+      await this.setState({
+        isLoading: true,
+      }); 
+      await API.delete(`userPoItems/${favoriteUuid}`)
+      .then(res => {
+          this.getPoItems();
+        }
+      )
+    }else{
+      this.notifyError("Você não tem permissão para executar esta função!")
+    }  
+  }
+  
+  notifyError = msg => {
+    toast.error(msg, {
+      position: toast.POSITION.BOTTOM_RIGHT,
+    });
+  };
 
   componentDidMount() {
     this.getPoItems();
@@ -169,12 +215,16 @@ class Operacional extends Component {
     }
 
     const response = await API.get(`poItems`, { params });
-    const { data: operacional, total: totalPages } = response.data;
+    console.log(response.data)
+    
+    const { data: operacional, total: totalPages, count: totalItems } = response.data;
+    
 
     this.setState({
       operacional,
       isLoading: false,
       totalPages,
+      totalItems,
     });
   }
 
@@ -305,6 +355,7 @@ class Operacional extends Component {
       grProgramadoFim,
       page,
       totalPages,
+      totalItems,
     } = this.state;
 
     const arrayExcel = [];
@@ -392,6 +443,7 @@ class Operacional extends Component {
               </div>
             </div>
           </div>
+          <p className="totalope">Total: <strong>{!isLoading && totalItems}</strong></p>
 
           <div className={`filter-box ${filtroAtivo ? 'active' : ''}`}>
             <form className="formoperacional" onSubmit={this.handleFormSubit}>
@@ -748,46 +800,58 @@ class Operacional extends Component {
               <Loading />
             ) : (
               operacional.map(ope => (
-                <Link to={`operacional/detalhe/${ope.uuid}`} key={ope.uuid}>
-                  <div
-                    className={` ${ope.alert ? 'item yes' : 'item'} ${
-                      ope.channel === 'Red' ? 'red' : ''
-                    } `}
-                    key={ope.uuid}
-                  >
-                    <span className="critico" />
-                    <p className="po">{`${ope.po.order_reference}-${ope.item}`}</p>
-                    <p className="produto">{ope.po.product.product_id}</p>
-                    <p className="descricao">
-                      {ope.po.product.product_description}
-                    </p>
-                    <p className="qtd">{ope.qty}</p>
-                    <p className="pd">{ope.plant_id}</p>
-                    <p className="ata">
-                      {ope.ata_date
-                        ? new Date(ope.ata_date).toLocaleDateString()
-                        : '-'}
-                    </p>
-                    <p className="grp">
-                      {ope.gr_original
-                        ? new Date(ope.gr_original).toLocaleDateString()
-                        : '-'}
-                    </p>
-                    <p className="gre">
-                      {ope.gr_actual
-                        ? new Date(ope.gr_actual).toLocaleDateString()
-                        : '-'}
-                    </p>
-                    <div className="status alert">
-                      <img src={star} className="favorite not" alt="Favorito" />
-                      <p>{ope.status_time_line}</p>{' '}
-                      {/* <div
-                      onClick={this.openPopupbox}
-                      className="icon-justificativa"
-                    /> */}
-                    </div>
+                
+                <div
+                  onClick={() => {
+                    history.push(`operacional/detalhe/${ope.uuid}`)
+                  }}
+                  className={` ${ope.alert ? 'item yes' : 'item'} ${
+                    ope.channel === 'Red' ? 'red' : ''
+                  } `}
+                  key={ope.uuid}
+                  
+                >
+                  <span className="critico" />
+                  <p className="po">{`${ope.po.order_reference}-${ope.item}`}</p>
+                  <p className="produto">{ope.po.product.product_id}</p>
+                  <p className="descricao">
+                    {ope.po.product.product_description}
+                  </p>
+                  <p className="qtd">{ope.qty}</p>
+                  <p className="pd">{ope.plant_id}</p>
+                  <p className="ata">
+                    {ope.ata_date
+                      ? new Date(ope.ata_date).toLocaleDateString()
+                      : '-'}
+                  </p>
+                  <p className="grp">
+                    {ope.gr_original
+                      ? new Date(ope.gr_original).toLocaleDateString()
+                      : '-'}
+                  </p>
+                  <p className="gre">
+                    {ope.gr_actual
+                      ? new Date(ope.gr_actual).toLocaleDateString()
+                      : '-'}
+                  </p>
+                  <div className="status alert">
+                    <img 
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        !ope.user_po_items[0] ? this.handleFavorite(ope.uuid) : this.handleUnFavorite(ope.user_po_items[0].uuid);
+                      }}
+                      src={star} 
+                      className={`favorite ${ope.user_po_items[0] ? '' : 'not'}`} 
+                      not alt="Favorito" 
+                    />
+                    <p>{ope.status_time_line}</p>{' '}
+                    {/* <div
+                    onClick={this.openPopupbox}
+                    className="icon-justificativa"
+                  /> */}
                   </div>
-                </Link>
+                </div>
+                
               ))
             )}
 

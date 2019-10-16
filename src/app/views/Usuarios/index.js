@@ -149,12 +149,9 @@ class Usuarios extends Component {
       isLoading,
       users,
       addUserForm,
-      newusername,
-      newname,
-      newtel,
+      newusername,      
       newpassword,
-      newadmin,
-      newfoto,
+      newadmin      
     } = this.state;
     return (
       <div>
@@ -239,7 +236,7 @@ class Usuarios extends Component {
                 <p>Usuário</p>
                 <p>Acesso</p>
                 <p>Data Criação</p>
-                <p></p>
+                <p>Alterar</p>
               </div>
               {isLoading && <Loading />}
               {users.map(usuario => (

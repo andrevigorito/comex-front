@@ -1,6 +1,7 @@
 import axios from 'axios';
+import Parameters from './parameters';
 
 export default axios.create({
-  baseURL: `https://webcol.herokuapp.com/`,
+  baseURL: Parameters.URL_API,
   // baseURL: `http://localhost:4000`,
 });
