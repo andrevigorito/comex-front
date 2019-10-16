@@ -375,7 +375,7 @@ class Operacional extends Component {
               <CSVLink
                 data={csvData}
                 separator={';'}
-                filename="webcol-operacional.xls"
+                filename="webcol-operacional.xlsx"
               >
                 <ExportExcel />
               </CSVLink>
