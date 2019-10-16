@@ -4,6 +4,7 @@ import { ToastContainer, toast } from 'react-toastify';
 import io from 'socket.io-client';
 import API from './services/api';
 import history from './services/history';
+import Parameters from './services/parameters';
 
 import 'react-toastify/dist/ReactToastify.css';
 
@@ -34,7 +35,7 @@ import Header from './views/components/Header/index';
 // Css
 import './css/main.scss';
 
-const socket = io('https://webcol.herokuapp.com');
+const socket = io(Parameters.URL_API);
 // para testes no localhost:
 // const socket = io('http://localhost:4000/');
 

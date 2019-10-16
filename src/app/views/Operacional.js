@@ -24,7 +24,7 @@ import ExportExcel from './components/ExportExcel';
 registerLocale('pt-BR', ptBR);
 // import FilterOperacional from './components/FilterOperacional';
 
-const favoriteUserUuid = 'f4a25bfb-f6e2-4280-9f8e-cb3e14e39e9f';
+const favoriteUserUuid = 'aa27133b-8f3f-49c9-a912-b8ccfa9aa4c6';
 
 class Operacional extends Component {
   state = {
