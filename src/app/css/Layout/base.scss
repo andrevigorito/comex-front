@@ -472,12 +472,3 @@ h1{
     }
   }
 }
-
-
-.favorite{
-  width: 20px;
-  &.not{
-    filter: grayscale(1);
-    opacity: 0.2;
-  }
-}
