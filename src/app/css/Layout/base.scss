@@ -191,7 +191,15 @@
 	form{
 		display: flex;
 		align-items: center;
-		justify-content: space-between;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    .status{
+      width: 100%;
+      margin-bottom: 20px;
+      .boxurgente{
+        justify-content: flex-start;
+      }
+    }
 		label{
 			display: block;
 			font-size: 14px;
