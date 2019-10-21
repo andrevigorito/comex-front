@@ -58,7 +58,7 @@ class Filter extends Component {
         <form className="filtealert" onSubmit={this.handleFilter}>
           <Grid>
             <Row>
-              <Col xs={12} md={3}>
+              <Col xs={12} md={2}>
                 <div className="item">
                   <label>Empresa:</label>
                   <div className="boxstatus jcfs">
@@ -85,7 +85,76 @@ class Filter extends Component {
                   </div>
                 </div>
               </Col>
+              
+              <Col xs={12} md={10}>
+                <div className="item">
+                  <label>Status:</label>
+                  <div className="boxstatus jcfs">
+                    <label>
+                      <input
+                        type="checkbox"
+                        name="dow"
+                        // value={}
+                        id="BOOK_ATRASO"
+                        // onChange={}
+                      />
+                      Booking em atraso
+                    </label>
+                    <label>
+                      <input
+                        type="checkbox"
+                        name="dupont"
+                        // value={}
+                        id="BOOK_PROX_VENCIMENTO"
+                        // onChange={}
+                      />
+                      Booking perto do vencimento.
+                    </label>
+                    <label>
+                      <input
+                        type="checkbox"
+                        name="dupont"
+                        // value={}
+                        id="GR_ALTERADA"
+                        // onChange={}
+                      />
+                      GR Atual c/ alteração
+                    </label>
+                    <label>
+                      <input
+                        type="checkbox"
+                        name="dupont"
+                        // value={}
+                        id="DIVERG_SAP_ATL"
+                        // onChange={}
+                      />
+                      Diverg. SAPxATL
+                    </label>
+                    <label>
+                      <input
+                        type="checkbox"
+                        name="dupont"
+                        // value={}
+                        id="DIVERG_SAP_ATL_SEM_ACAO"
+                        // onChange={}
+                      />
+                      Diverg. SAPxATL s/ ação conc.
+                    </label>
+                    <label>
+                      <input
+                        type="checkbox"
+                        name="dupont"
+                        // value={}
+                        id="CANAL_VERMELHO"
+                        // onChange={}
+                      />
+                      Canal Vermelho.
+                    </label>
+                  </div>
+                </div>
+              </Col>
             </Row>
+           
             <Row>
               <Col xs={12} md={4}>
                 <div className="item">

@@ -91,8 +91,7 @@ export default function Alertas({ useruuid }) {
   });
   
   return (
-    <div>  
-    <div>
+    <>
       <div className="center">
         <div className="page-header">
           <h1>
@@ -197,8 +196,7 @@ export default function Alertas({ useruuid }) {
         
       </div>
       
-    </div>
+    </>
     
-    </div>
   );
 }
