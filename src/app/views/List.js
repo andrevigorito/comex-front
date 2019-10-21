@@ -91,6 +91,7 @@ class List extends Component {
   };
 
   render() {
+    
     const { isLoading, products } = this.props;
     let total = 0;
 
@@ -101,6 +102,7 @@ class List extends Component {
     const zeraTotal = () => {
       total = 0;
     };
+    console.log(this.products)
 
     return (
       <div>
@@ -125,6 +127,31 @@ class List extends Component {
 
           <div className="filter-box">
             <form action="" onSubmit={this.handleFormSubit}>
+              <div className="status">
+              <div className="item">
+                <label>Processo Status:</label>
+                <div className="boxurgente">
+                  <label>
+                    <input type="checkbox" name="" id="" />Pré Embarque
+                  </label>
+                  <label>
+                    <input type="checkbox" name="" id="" />Em trânsito
+                  </label>
+                  <label>
+                    <input type="checkbox" name="" id="" />Nacionalização
+                  </label>
+                  <label>
+                    <input type="checkbox" name="" id="" />Faturamento
+                  </label>
+                  <label>
+                    <input type="checkbox" name="" id="" />Processo encerrado 
+                  </label>
+                  <label>
+                    <input type="checkbox" name="" id="" />Close financial item
+                  </label>
+                </div>
+              </div>
+              </div>
               <div className="nfs">
                 <label>
                   <input
@@ -154,7 +181,7 @@ class List extends Component {
                 />
               </div>
               <div className="item">
-                <label>Data início:</label>
+                <label>Data início GR Efetivo:</label>
                 {/* <input type="text" className="datepicker-here date" data-language="pt-BR" id="data-inicio" /> */}
                 <DatePicker
                   locale="pt-BR"
@@ -167,7 +194,7 @@ class List extends Component {
                 />
               </div>
               <div className="item">
-                <label>Data fim:</label>
+                <label>Data fim GR Efetivo:</label>
                 {/* <input type="text" className="datepicker-here date" data-language="pt-BR" id="data-fim" /> */}
                 <DatePicker
                   locale="pt-BR"
@@ -207,7 +234,7 @@ class List extends Component {
               <header className="headerlist">
                 <div className="first">
                   <p>ID / Produto</p>
-                  <p>GR Programado</p>
+                  <p>GR Atual</p>
                 </div>
 
               </header>
@@ -215,7 +242,7 @@ class List extends Component {
               {isLoading && <Loading />}
               {products.map(product => (
                 <div
-                  className="item"
+                  className={` ${product.product_id ? 'item urgent' : 'item'}`}
                   key={product.uuid}
                   // onClick={() => onDetail(product.uuid)}
                 >
@@ -237,9 +264,7 @@ class List extends Component {
                         >
                           <p>
                             <img src={iconRgc} alt="" />{' '}
-                            {new Date(
-                              po.gr_actual
-                            ).toLocaleDateString()}
+                            {new Date(po.gr_actual).toLocaleDateString()}
                           </p>
                           <p>
                             <img src={iconRgp} alt="" />{' '}
