@@ -19,12 +19,13 @@ export default function Alertas({ useruuid }) {
   const [alerts, setalerts] = useState([]);
   const [isLoading, setisLoading] = useState(false);
 
-  async function getAlerts(data = null) {
+  async function getAlerts(params = null) {
     // const useruuid = '12430f8a-e492-4efb-a8cd-bb2b2784567c';
     setisLoading(true);
 
-    // console.log('data param enviado ->', data);
-    const res = await API.get(`alerts/user/all/${useruuid}`, data);
+    console.log('data param enviado ->', params);
+    const res = await API.get(`alerts/user/all/${useruuid}`, { params });
+    // const res = await API.get(`alerts/user/all/${useruuid}`, params);
     // console.log('##################');
     console.log(res.data);
     console.log(res);
