@@ -15,6 +15,7 @@ class Filter extends Component {
     status: '',
     dow: false,
     dupont: false,
+    types: [],
   };
 
   handleFilter = async e => {
@@ -41,13 +42,26 @@ class Filter extends Component {
   handleSelect = e => {
     this.setState({ status: e.target.value });
   };
-  
+
   handleDow = async e => {
     await this.setState({ dow: e.target.checked });
   };
 
   handleDupont = async e => {
     await this.setState({ dupont: e.target.checked });
+  };
+
+  handleTypes = async e => {
+    const { value, checked } = e.target;
+    const { types: oldState } = this.state;
+    const index = oldState.indexOf(value);
+    if (index >= 0 && !checked) {
+      oldState.splice(index, 1);
+    } else if (checked) {
+      await this.setState({ types: [...oldState, value] });
+    }
+    // console.log(oldState, index, checked);
+    // console.log(this.state.types);
   };
 
   render() {
@@ -85,7 +99,7 @@ class Filter extends Component {
                   </div>
                 </div>
               </Col>
-              
+
               <Col xs={12} md={10}>
                 <div className="item">
                   <label>Status:</label>
@@ -93,60 +107,54 @@ class Filter extends Component {
                     <label>
                       <input
                         type="checkbox"
-                        name="dow"
-                        // value={}
+                        value="BOOK_ATRASO"
+                        onChange={this.handleTypes}
                         id="BOOK_ATRASO"
-                        // onChange={}
                       />
                       Booking em atraso
                     </label>
                     <label>
                       <input
                         type="checkbox"
-                        name="dupont"
-                        // value={}
+                        value="BOOK_PROX_VENCIMENTO"
+                        onChange={this.handleTypes}
                         id="BOOK_PROX_VENCIMENTO"
-                        // onChange={}
                       />
                       Booking perto do vencimento.
                     </label>
                     <label>
                       <input
                         type="checkbox"
-                        name="dupont"
-                        // value={}
+                        value="GR_ALTERADA"
+                        onChange={this.handleTypes}
                         id="GR_ALTERADA"
-                        // onChange={}
                       />
                       GR Atual c/ alteração
                     </label>
                     <label>
                       <input
                         type="checkbox"
-                        name="dupont"
-                        // value={}
+                        value="DIVERG_SAP_ATL"
+                        onChange={this.handleTypes}
                         id="DIVERG_SAP_ATL"
-                        // onChange={}
                       />
                       Diverg. SAPxATL
                     </label>
                     <label>
                       <input
                         type="checkbox"
-                        name="dupont"
-                        // value={}
+                        value="DIVERG_SAP_ATL_SEM_ACAO"
+                        onChange={this.handleTypes}
                         id="DIVERG_SAP_ATL_SEM_ACAO"
-                        // onChange={}
                       />
                       Diverg. SAPxATL s/ ação conc.
                     </label>
                     <label>
                       <input
                         type="checkbox"
-                        name="dupont"
-                        // value={}
+                        value="CANAL_VERMELHO"
+                        onChange={this.handleTypes}
                         id="CANAL_VERMELHO"
-                        // onChange={}
                       />
                       Canal Vermelho.
                     </label>
@@ -154,7 +162,7 @@ class Filter extends Component {
                 </div>
               </Col>
             </Row>
-           
+
             <Row>
               <Col xs={12} md={4}>
                 <div className="item">
