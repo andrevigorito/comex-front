@@ -89,7 +89,7 @@ export default function Alertas({ useruuid }) {
   });
 
   return (
-    <>
+   
       <div className="center">
         <div className="page-header">
           <h1>
@@ -145,7 +145,7 @@ export default function Alertas({ useruuid }) {
               </p>
               <p className="responsible">{alerta.po.csr_name.toLowerCase()}</p>
               <p className="po">
-                {alerta.message} <div className="box-count">33</div>
+                {alerta.message} {alerta.po_item && alerta.po_item.alert_count > 0 ? <div className="box-count">{alerta.po_item.alert_count}</div> : null}
               </p>
               {/* <p className="po">
                 {alerta.user_alerts[0]
@@ -185,6 +185,6 @@ export default function Alertas({ useruuid }) {
           ))}
         </div>
       </div>
-    </>
+    
   );
 }
