@@ -152,6 +152,15 @@ class Filter extends Component {
                     <label>
                       <input
                         type="checkbox"
+                        value="PO_SEM_DATA_GR_SAP"
+                        onChange={this.handleTypes}
+                        id="PO_SEM_DATA_GR_SAP"
+                      /> 
+                      PO s/ data de GR no SAP
+                    </label>
+                    <label>
+                      <input
+                        type="checkbox"
                         value="CANAL_VERMELHO"
                         onChange={this.handleTypes}
                         id="CANAL_VERMELHO"
