@@ -89,7 +89,7 @@ export default function Alertas({ useruuid }) {
   });
 
   return (
-    <>
+   
       <div className="center">
         <div className="page-header">
           <h1>
@@ -126,7 +126,7 @@ export default function Alertas({ useruuid }) {
             <p>Data Alerta</p>
             <p>Responsável</p>
             <p>Mensagem</p>
-            <p>Lido</p>
+            {/* <p>Lido</p> */}
             <p>Data Leitura</p>
             <p>Marcar como lido</p>
           </div>
@@ -144,14 +144,16 @@ export default function Alertas({ useruuid }) {
                 {new Date(alerta.createdAt).toLocaleString()}
               </p>
               <p className="responsible">{alerta.po.csr_name.toLowerCase()}</p>
-              <p className="po">{alerta.message}</p>
               <p className="po">
+                {alerta.message} {alerta.po_item && alerta.po_item.alert_count > 0 ? <div className="box-count">{alerta.po_item.alert_count}</div> : null}
+              </p>
+              {/* <p className="po">
                 {alerta.user_alerts[0]
                   ? alerta.user_alerts[0].read
                     ? 'Sim'
                     : 'Não'
                   : ''}
-              </p>
+              </p> */}
               <p className="altered date">
                 {alerta.user_alerts[0]
                   ? alerta.user_alerts[0].read
@@ -159,31 +161,30 @@ export default function Alertas({ useruuid }) {
                     : ''
                   : ''}
               </p>
-
               <p>
                 {alerta.user_alerts[0] ? (
                   alerta.user_alerts[0].read ? (
                     ''
                   ) : (
-                    <button
-                      type="button"
-                      onClick={e => {
-                        e.stopPropagation();
-                        markAlertAsRead(alerta.uuid);
-                      }}
-                      className="btn"
-                    >
-                      Marcar como lido
+                      <button
+                        type="button"
+                        onClick={e => {
+                          e.stopPropagation();
+                          markAlertAsRead(alerta.uuid);
+                        }}
+                        className="btn"
+                      >
+                        Marcar como lido
                     </button>
-                  )
+                    )
                 ) : (
-                  ''
-                )}
+                    ''
+                  )}
               </p>
             </div>
           ))}
         </div>
       </div>
-    </>
+    
   );
 }
