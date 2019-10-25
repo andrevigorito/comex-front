@@ -155,7 +155,7 @@ class Filter extends Component {
                         value="PO_SEM_DATA_GR_SAP"
                         onChange={this.handleTypes}
                         id="PO_SEM_DATA_GR_SAP"
-                      /> 
+                      />
                       PO s/ data de GR no SAP
                     </label>
                     <label>

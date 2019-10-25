@@ -27,10 +27,10 @@ export default function Alertas({ useruuid }) {
     const res = await API.get(`alerts/user/all/${useruuid}`, { params });
     // const res = await API.get(`alerts/user/all/${useruuid}`, params);
     // console.log('##################');
-    console.log(res.data);
-    console.log(res);
     setalerts(res.data);
     setisLoading(false);
+    console.log(res.data.length);
+    console.log(res);
   }
 
   async function markAlertAsRead(alertuuid) {
@@ -89,102 +89,103 @@ export default function Alertas({ useruuid }) {
   });
 
   return (
-   
-      <div className="center">
-        <div className="page-header">
-          <h1>
-            <img src={iconTitleAlert} alt="" />
-            Alertas
-          </h1>
-          <div className="last-wrap">
-            <CSVLink data={csvData} separator=";" filename="webcol-alertas.xls">
-              <ExportExcel />
-            </CSVLink>
-            <div className="btn-filter-nfs" onClick={btnFilter}>
-              <div className="icon-filter">
-                <span />
-                <span />
-                <span />
-              </div>
-              Filtrar
+    <div className="center">
+      <div className="page-header">
+        <h1>
+          <img src={iconTitleAlert} alt="" />
+          Alertas
+        </h1>
+        <div className="last-wrap">
+          <CSVLink data={csvData} separator=";" filename="webcol-alertas.xls">
+            <ExportExcel />
+          </CSVLink>
+          <div className="btn-filter-nfs" onClick={btnFilter}>
+            <div className="icon-filter">
+              <span />
+              <span />
+              <span />
             </div>
+            Filtrar
           </div>
         </div>
-        <div className="result-alerts">
-          <span>
-            Críticos: <strong>{contadorCriticos}</strong>
-          </span>
-          <span>
-            Favoritos: <strong>0</strong>
-          </span>
+      </div>
+      <div className="result-alerts">
+        <span>
+          Críticos: <strong>{contadorCriticos}</strong>
+        </span>
+        <span>
+          Favoritos: <strong>0</strong>
+        </span>
+      </div>
+
+      <FilterAlert filtrar={filtrar} />
+
+      <div className="list-alerts">
+        <div className="header">
+          <p>Data Alerta</p>
+          <p>Responsável</p>
+          <p>Mensagem</p>
+          {/* <p>Lido</p> */}
+          <p>Data Leitura</p>
+          <p>Marcar como lido</p>
         </div>
-
-        <FilterAlert filtrar={filtrar} />
-
-        <div className="list-alerts">
-          <div className="header">
-            <p>Data Alerta</p>
-            <p>Responsável</p>
-            <p>Mensagem</p>
-            {/* <p>Lido</p> */}
-            <p>Data Leitura</p>
-            <p>Marcar como lido</p>
-          </div>
-          {isLoading && <Loading />}
-          {alerts.map(alerta => (
-            <div
-              className="item"
-              key={alerta.uuid}
-              onClick={() => {
-                markAlertAsRead(alerta.uuid);
-                history.push(`operacional/detalhe/${alerta.poItemUuid}`);
-              }}
-            >
-              <p className="date current">
-                {new Date(alerta.createdAt).toLocaleString()}
-              </p>
-              <p className="responsible">{alerta.po.csr_name.toLowerCase()}</p>
-              <p className="po">
-                {alerta.message} {alerta.po_item && alerta.po_item.alert_count > 0 ? <div className="box-count">{alerta.po_item.alert_count}</div> : null}
-              </p>
-              {/* <p className="po">
+        {isLoading && <Loading />}
+        {alerts.map(alerta => (
+          <div
+            className="item"
+            key={alerta.uuid}
+            onClick={() => {
+              markAlertAsRead(alerta.uuid);
+              history.push(`operacional/detalhe/${alerta.poItemUuid}`);
+            }}
+          >
+            <p className="date current">
+              {new Date(alerta.createdAt).toLocaleString()}
+            </p>
+            <p className="responsible">{alerta.po.csr_name.toLowerCase()}</p>
+            <p className="po">
+              {alerta.message}{' '}
+              {alerta.po_item && alerta.po_item.alert_count > 0 ? (
+                <div className="box-count">{alerta.po_item.alert_count}</div>
+              ) : null}
+            </p>
+            {/* <p className="po">
                 {alerta.user_alerts[0]
                   ? alerta.user_alerts[0].read
                     ? 'Sim'
                     : 'Não'
                   : ''}
               </p> */}
-              <p className="altered date">
-                {alerta.user_alerts[0]
-                  ? alerta.user_alerts[0].read
-                    ? new Date(alerta.user_alerts[0].updatedAt).toLocaleString()
-                    : ''
-                  : ''}
-              </p>
-              <p>
-                {alerta.user_alerts[0] ? (
-                  alerta.user_alerts[0].read ? (
-                    ''
-                  ) : (
-                      <button
-                        type="button"
-                        onClick={e => {
-                          e.stopPropagation();
-                          markAlertAsRead(alerta.uuid);
-                        }}
-                        className="btn"
-                      >
-                        Marcar como lido
-                    </button>
-                    )
+            <p className="altered date">
+              {alerta.user_alerts[0]
+                ? alerta.user_alerts[0].read
+                  ? new Date(alerta.user_alerts[0].updatedAt).toLocaleString()
+                  : ''
+                : ''}
+            </p>
+            <p>
+              {alerta.user_alerts[0] ? (
+                alerta.user_alerts[0].read ? (
+                  ''
                 ) : (
-                    ''
-                  )}
-              </p>
-            </div>
-          ))}
-        </div>
+                  <button
+                    type="button"
+                    onClick={e => {
+                      e.stopPropagation();
+                      markAlertAsRead(alerta.uuid);
+                    }}
+                    className="btn"
+                  >
+                    Marcar como lido
+                  </button>
+                )
+              ) : (
+                ''
+              )}
+            </p>
+          </div>
+        ))}
       </div>
-    
+    </div>
   );
 }
