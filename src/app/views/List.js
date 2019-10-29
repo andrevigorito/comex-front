@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import DatePicker, { registerLocale } from 'react-datepicker';
+import DatePicker from 'react-datepicker';
 import { format } from 'date-fns';
 
 // Images
@@ -209,7 +209,6 @@ class List extends Component {
                   <p>ID / Produto</p>
                   <p>GR Programado</p>
                 </div>
-
               </header>
 
               {isLoading && <Loading />}
@@ -237,9 +236,7 @@ class List extends Component {
                         >
                           <p>
                             <img src={iconRgc} alt="" />{' '}
-                            {new Date(
-                              po.gr_actual
-                            ).toLocaleDateString()}
+                            {new Date(po.gr_actual).toLocaleDateString()}
                           </p>
                           <p>
                             <img src={iconRgp} alt="" />{' '}
