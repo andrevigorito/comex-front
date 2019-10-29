@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Grid, Row, Col } from 'react-flexbox-grid';
-import { Form, Formik, Field } from 'formik';
+import { Form, Formik } from 'formik';
 import swal from '@sweetalert/with-react';
 import styled from 'styled-components';
 import imgloading from '../../../img/load.gif';

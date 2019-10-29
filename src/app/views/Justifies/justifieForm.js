@@ -1,4 +1,4 @@
-import React,{ Fragment } from 'react';
+import React, { Fragment } from 'react';
 import { Form, Formik, Field } from 'formik';
 import styled from 'styled-components';
 import imgloading from '../../img/load.gif';
@@ -27,8 +27,8 @@ const handleSubmit = props => async (values, { setSubmitting, resetForm }) => {
 };
 
 const JustifieForm = props => {
-  const { classes,typesJustifies } = props;
-  
+  const { typesJustifies } = props;
+
   return (
     <Formik
       enableReinitialize
@@ -57,14 +57,15 @@ const JustifieForm = props => {
                 }}
               >
                 <option value="">Selecione um tipo</option>
-                {typesJustifies && typesJustifies.length > 0 && (
+                {typesJustifies &&
+                  typesJustifies.length > 0 &&
                   typesJustifies.map(typesJustifie => (
                     <Fragment>
-                      <option value={typesJustifie.name}>{typesJustifie.name}</option>
-                    </Fragment> 
-                  ))
-                  )
-                }  
+                      <option value={typesJustifie.name}>
+                        {typesJustifie.name}
+                      </option>
+                    </Fragment>
+                  ))}
               </Field>
               {props.errors.type && props.touched.type && (
                 <div className="erro">{props.errors.type}</div>

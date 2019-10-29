@@ -5,7 +5,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
 import { Route, Link } from 'react-router-dom';
-import imgUser from '../../../img/user-header.png';
+// import imgUser from '../../../img/user-header.png';
 import iconLogout from '../../../img/icons/icon-logout.png';
 
 import { UserImage } from './styles';
