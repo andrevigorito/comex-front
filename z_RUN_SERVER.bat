@@ -1,3 +1,0 @@
-
-yarn start
-pause
