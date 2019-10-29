@@ -1,9 +1,7 @@
 /* eslint-disable no-nested-ternary */
 import React, { useState, useEffect } from 'react';
-import PropTypes from 'prop-types';
+// import PropTypes from 'prop-types';
 import { CSVLink } from 'react-csv';
-import { format } from 'date-fns';
-import { Link, Redirect } from 'react-router-dom';
 import API from '../services/api';
 import history from '../services/history';
 
@@ -30,7 +28,6 @@ export default function Alertas({ useruuid }) {
     setalerts(res.data);
     setisLoading(false);
     console.log(res.data.length);
-    console.log(res);
   }
 
   async function markAlertAsRead(alertuuid) {
@@ -41,9 +38,11 @@ export default function Alertas({ useruuid }) {
     await getAlerts();
   }
 
-  useEffect(() => {
-    getAlerts();
-  }, []);
+  // useEffect(() => {
+  //   // o fetch de dados não ta sendo feito aqui mais
+  //   // pq vai ser feito no componente de FILTRO
+  //   // getAlerts();
+  // }, []);
 
   function btnFilter() {
     const filter = document.querySelector('.filter-box');
@@ -57,8 +56,6 @@ export default function Alertas({ useruuid }) {
       ...data,
       date: new Date(),
     };
-    console.log(data1.date);
-
     await getAlerts(data1);
   }
 
