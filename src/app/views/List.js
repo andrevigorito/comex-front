@@ -25,6 +25,7 @@ class List extends Component {
     produto: '',
     startDate: '',
     endDate: '',
+    types: [],
   };
 
   btnFilter = () => {
@@ -61,9 +62,23 @@ class List extends Component {
     this.setState({ produto: e.target.value });
   };
 
+  handleTypes = async e => {
+    // console.log(e.target.value);
+
+    const { value, checked } = e.target;
+    const { types: oldStateTypes } = this.state;
+    const index = oldStateTypes.indexOf(value);
+    if (index >= 0 && !checked) {
+      oldStateTypes.splice(index, 1);
+      await this.setState({ types: [...oldStateTypes] });
+    } else if (checked) {
+      await this.setState({ types: [...oldStateTypes, value] });
+    }
+  };
+
   handleFormSubit = e => {
     e.preventDefault();
-    const { produto, dow, dupont, startDate, endDate } = this.state;
+    const { produto, dow, dupont, startDate, endDate, types } = this.state;
 
     const { onFilter } = this.props;
 
@@ -87,12 +102,16 @@ class List extends Component {
       params.dataAte = format(endDate, "yyyy-MM-dd'T'HH:mm:ss.SSSxxx");
     }
 
+    if (types) {
+      params.types = types;
+    }
+
     onFilter(params);
   };
 
   render() {
-    
     const { isLoading, products } = this.props;
+    const { types } = this.state;
     let total = 0;
 
     // const adicionaTotal = valor => {
@@ -102,7 +121,6 @@ class List extends Component {
     const zeraTotal = () => {
       total = 0;
     };
-    console.log(this.products)
 
     return (
       <div>
@@ -128,29 +146,65 @@ class List extends Component {
           <div className="filter-box">
             <form action="" onSubmit={this.handleFormSubit}>
               <div className="status">
-              <div className="item">
-                <label>Processo Status:</label>
-                <div className="boxurgente">
-                  <label>
-                    <input type="checkbox" name="" id="" />Pré Embarque
-                  </label>
-                  <label>
-                    <input type="checkbox" name="" id="" />Em trânsito
-                  </label>
-                  <label>
-                    <input type="checkbox" name="" id="" />Nacionalização
-                  </label>
-                  <label>
-                    <input type="checkbox" name="" id="" />Faturamento
-                  </label>
-                  <label>
-                    <input type="checkbox" name="" id="" />Processo encerrado 
-                  </label>
-                  <label>
-                    <input type="checkbox" name="" id="" />Close financial item
-                  </label>
+                <div className="item">
+                  <label>Processo Status:</label>
+                  <div className="boxurgente">
+                    <label>
+                      <input
+                        type="checkbox"
+                        value="1 - PRE-Embarque"
+                        checked={!!types.includes('1 - PRE-Embarque')}
+                        onChange={this.handleTypes}
+                      />
+                      Pré Embarque
+                    </label>
+                    <label>
+                      <input
+                        type="checkbox"
+                        value="2 - Em Transito"
+                        checked={!!types.includes('2 - Em Transito')}
+                        onChange={this.handleTypes}
+                      />
+                      Em trânsito
+                    </label>
+                    <label>
+                      <input
+                        type="checkbox"
+                        value="3 - Nacionalização"
+                        checked={!!types.includes('3 - Nacionalização')}
+                        onChange={this.handleTypes}
+                      />
+                      Nacionalização
+                    </label>
+                    <label>
+                      <input
+                        type="checkbox"
+                        value="4 - Faturamento"
+                        checked={!!types.includes('4 - Faturamento')}
+                        onChange={this.handleTypes}
+                      />
+                      Faturamento
+                    </label>
+                    <label>
+                      <input
+                        type="checkbox"
+                        value="5 - Processo Encerrado"
+                        checked={!!types.includes('5 - Processo Encerrado')}
+                        onChange={this.handleTypes}
+                      />
+                      Processo encerrado
+                    </label>
+                    <label>
+                      <input
+                        type="checkbox"
+                        value="8 - Close Financial Item"
+                        checked={!!types.includes('8 - Close Financial Item')}
+                        onChange={this.handleTypes}
+                      />
+                      Close financial item
+                    </label>
+                  </div>
                 </div>
-              </div>
               </div>
               <div className="nfs">
                 <label>
@@ -263,7 +317,9 @@ class List extends Component {
                         >
                           <p>
                             <img src={iconRgc} alt="" />{' '}
-                            {new Date(po.gr_actual).toLocaleDateString()}
+                            <strong>
+                              {new Date(po.gr_actual).toLocaleDateString()}
+                            </strong>
                           </p>
                           <p>
                             <img src={iconRgp} alt="" />{' '}
