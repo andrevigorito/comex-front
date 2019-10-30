@@ -36,8 +36,6 @@ import Header from './views/components/Header/index';
 import './css/main.scss';
 
 const socket = io(Parameters.URL_API);
-// para testes no localhost:
-// const socket = io('http://localhost:4000/');
 
 class App extends Component {
   state = {
@@ -48,6 +46,8 @@ class App extends Component {
   };
 
   componentDidMount() {
+    console.log('componentDidMount');
+    
     const username = localStorage.getItem('USER_USERNAME');
     const useruuid = localStorage.getItem('USER_UUID');
     const photo = localStorage.getItem('USER_PHOTO');
@@ -57,6 +57,14 @@ class App extends Component {
         username,
         useruuid,
         photo,
+      });
+    } else {
+      console.log('passou no else');
+      this.setState({
+        isAuth: false,
+        username: '',
+        useruuid: '',
+        photo: '',
       });
     }
 

@@ -1,10 +1,8 @@
 /* eslint-disable no-nested-ternary */
 import React, { useState, useEffect } from 'react';
-import PropTypes from 'prop-types';
+// import PropTypes from 'prop-types';
 import { CSVLink } from 'react-csv';
-import { format } from 'date-fns';
 import API from '../services/api';
-import { Link,Redirect } from 'react-router-dom';
 import history from '../services/history';
 
 // Images
@@ -17,17 +15,19 @@ import ExportExcel from './components/ExportExcel';
 
 export default function Alertas({ useruuid }) {
   const [alerts, setalerts] = useState([]);
-  const [isLoading, setisLoading] = useState(false)
+  const [isLoading, setisLoading] = useState(false);
 
   async function getAlerts(params = null) {
     // const useruuid = '12430f8a-e492-4efb-a8cd-bb2b2784567c';
     setisLoading(true);
 
+    console.log('data param enviado ->', params);
     const res = await API.get(`alerts/user/all/${useruuid}`, { params });
+    // const res = await API.get(`alerts/user/all/${useruuid}`, params);
     // console.log('##################');
-    console.log(res.data);
     setalerts(res.data);
     setisLoading(false);
+    console.log(res.data.length);
   }
 
   async function markAlertAsRead(alertuuid) {
@@ -38,9 +38,11 @@ export default function Alertas({ useruuid }) {
     await getAlerts();
   }
 
-  useEffect(() => {
-    getAlerts();
-  }, []);
+  // useEffect(() => {
+  //   // o fetch de dados não ta sendo feito aqui mais
+  //   // pq vai ser feito no componente de FILTRO
+  //   // getAlerts();
+  // }, []);
 
   function btnFilter() {
     const filter = document.querySelector('.filter-box');
@@ -50,29 +52,23 @@ export default function Alertas({ useruuid }) {
   }
 
   async function filtrar(data) {
-
-    const teste = format(new Date(), "yyyy-MM-dd'T'HH:mm:ss.SSSxxx")
-    console.log(teste)
-
     const data1 = {
       ...data,
-      date: new Date()
-    }
-    console.log(data1.date)
-
+      date: new Date(),
+    };
     await getAlerts(data1);
   }
-  
+
   const arrayExcel = [];
   const csvData = arrayExcel;
-  
-  let contadorCriticos = 0
-  
+
+  let contadorCriticos = 0;
+
   alerts.forEach(alert => {
     const Data = alert.createdAt
       ? new Date(alert.createdAt).toLocaleString()
       : '-';
-    const Responsavel = alert.po.csr_name.toLowerCase()
+    const Responsavel = alert.po.csr_name.toLowerCase();
     const Mensagem = alert.message;
     const Lido = alert.user_alerts[0].read
       ? new Date(alert.user_alerts[0].updatedAt).toLocaleString()
@@ -83,122 +79,110 @@ export default function Alertas({ useruuid }) {
       Mensagem,
       Lido,
     };
-    
+
     arrayExcel.push(objeto);
-    
-    alert.po_item.process_critical === 'YES' && contadorCriticos++
-    
+
+    alert.po_item.process_critical === 'YES' && contadorCriticos++;
   });
-  
+
   return (
-    <div>  
-    <div>
-      <div className="center">
-        <div className="page-header">
-          <h1>
-            <img src={iconTitleAlert} alt="" />
-            Alertas
-          </h1>
-          <div className="last-wrap">
-              <CSVLink
-                data={csvData}
-                separator={';'}
-                filename="webcol-alertas.xls"
-              >
-                <ExportExcel />
-              </CSVLink>
-            <div className="btn-filter-nfs" onClick={btnFilter}>
-              <div className="icon-filter">
-                <span />
-                <span />
-                <span />
-              </div>
-              Filtrar
+    <div className="center">
+      <div className="page-header">
+        <h1>
+          <img src={iconTitleAlert} alt="" />
+          Alertas
+        </h1>
+        <div className="last-wrap">
+          <CSVLink data={csvData} separator=";" filename="webcol-alertas.xls">
+            <ExportExcel />
+          </CSVLink>
+          <div className="btn-filter-nfs" onClick={btnFilter}>
+            <div className="icon-filter">
+              <span />
+              <span />
+              <span />
             </div>
+            Filtrar
           </div>
         </div>
-        <div className="result-alerts">
-          <span>Críticos: <strong>{contadorCriticos}</strong></span>
-          <span>Favoritos: <strong>0</strong></span>
-        </div>
-
-        <FilterAlert filtrar={filtrar} />
-
-        <div className="list-alerts">
-          <div className="header">
-            <p>Data Alerta</p>
-            <p>Responsável</p>
-            <p>Mensagem</p>
-            <p>Lido</p>
-            <p>Data Leitura</p>
-            <p>Marcar como lido</p>
-          </div>
-          {isLoading && <Loading />}
-          {alerts.map(alerta => (
-              
-              <div 
-                className="item" 
-                key={alerta.uuid}
-                  onClick={() => {
-                    markAlertAsRead(alerta.uuid);
-                    history.push(`operacional/detalhe/${alerta.poItemUuid}`)
-                  }
-                }
-              >
-                
-                <p className="date current">
-                  {new Date(alerta.createdAt).toLocaleString()}
-                </p>
-                <p className="responsible">
-                  {alerta.po.csr_name.toLowerCase()}
-                </p>
-                <p className="po">{alerta.message}</p>
-                <p className="po">
-                  {alerta.user_alerts[0]
-                    ? alerta.user_alerts[0].read
-                      ? 'Sim'
-                      : 'Não'
-                    : ''}
-                </p>
-                <p className="altered date">
-                  {alerta.user_alerts[0]
-                    ? alerta.user_alerts[0].read
-                      ? new Date(
-                          alerta.user_alerts[0].updatedAt
-                        ).toLocaleString()
-                      : ''
-                    : ''}
-                </p>
-  
-                <p>
-                  {alerta.user_alerts[0] ? (
-                    alerta.user_alerts[0].read ? (
-                      ''
-                    ) : (
-                      <button
-                        type="button"
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          markAlertAsRead(alerta.uuid);
-                        }}
-                        className="btn"
-                      >
-                        Marcar como lido
-                      </button>
-                    )
-                  ) : (
-                    ''
-                  )}
-                </p>
-              </div>
-                
-          ))}
-        </div>
-        
       </div>
-      
-    </div>
-    
+      <div className="result-alerts">
+        <span>
+          Críticos: <strong>{contadorCriticos}</strong>
+        </span>
+        <span>
+          Favoritos: <strong>0</strong>
+        </span>
+      </div>
+
+      <FilterAlert filtrar={filtrar} />
+
+      <div className="list-alerts">
+        <div className="header">
+          <p>Data Alerta</p>
+          <p>Responsável</p>
+          <p>Mensagem</p>
+          {/* <p>Lido</p> */}
+          <p>Data Leitura</p>
+          <p>Marcar como lido</p>
+        </div>
+        {isLoading && <Loading />}
+        {alerts.map(alerta => (
+          <div
+            className="item"
+            key={alerta.uuid}
+            onClick={() => {
+              markAlertAsRead(alerta.uuid);
+              history.push(`operacional/detalhe/${alerta.poItemUuid}`);
+            }}
+          >
+            <p className="date current">
+              {new Date(alerta.createdAt).toLocaleString()}
+            </p>
+            <p className="responsible">{alerta.po.csr_name.toLowerCase()}</p>
+            <p className="po">
+              {alerta.message}{' '}
+              {alerta.po_item && alerta.po_item.alert_count > 0 ? (
+                <div className="box-count">{alerta.po_item.alert_count}</div>
+              ) : null}
+            </p>
+            {/* <p className="po">
+                {alerta.user_alerts[0]
+                  ? alerta.user_alerts[0].read
+                    ? 'Sim'
+                    : 'Não'
+                  : ''}
+              </p> */}
+            <p className="altered date">
+              {alerta.user_alerts[0]
+                ? alerta.user_alerts[0].read
+                  ? new Date(alerta.user_alerts[0].updatedAt).toLocaleString()
+                  : ''
+                : ''}
+            </p>
+            <p>
+              {alerta.user_alerts[0] ? (
+                alerta.user_alerts[0].read ? (
+                  ''
+                ) : (
+                  <button
+                    type="button"
+                    onClick={e => {
+                      e.stopPropagation();
+                      markAlertAsRead(alerta.uuid);
+                    }}
+                    className="btn"
+                  >
+                    Marcar como lido
+                  </button>
+                )
+              ) : (
+                ''
+              )}
+            </p>
+          </div>
+        ))}
+      </div>
     </div>
   );
 }

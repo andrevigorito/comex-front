@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import DatePicker, { registerLocale } from 'react-datepicker';
+import DatePicker from 'react-datepicker';
 import { format } from 'date-fns';
 
 // Images
@@ -236,7 +236,6 @@ class List extends Component {
                   <p>ID / Produto</p>
                   <p>GR Atual</p>
                 </div>
-
               </header>
 
               {isLoading && <Loading />}
