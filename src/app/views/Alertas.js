@@ -7,27 +7,29 @@ import history from '../services/history';
 
 // Images
 import iconTitleAlert from '../img/icons/title-alert.png';
-
 // Components
 import Loading from './components/Loading';
 import FilterAlert from './components/FilterAlert';
 import ExportExcel from './components/ExportExcel';
 
-export default function Alertas({ useruuid }) {
+export default function Alertas({ useruuid, location }) {
   const [alerts, setalerts] = useState([]);
   const [isLoading, setisLoading] = useState(false);
 
   async function getAlerts(params = null) {
-    // const useruuid = '12430f8a-e492-4efb-a8cd-bb2b2784567c';
     setisLoading(true);
+
+    // se houver filtros, exibir o componente filtro
+    // nao vai funcionar por causa da gambiarra do querySelector que
+    // deveria ser um STATE
+    // if (params) btnFilter();
 
     console.log('data param enviado ->', params);
     const res = await API.get(`alerts/user/all/${useruuid}`, { params });
-    // const res = await API.get(`alerts/user/all/${useruuid}`, params);
-    // console.log('##################');
+
     setalerts(res.data);
     setisLoading(false);
-    console.log(res.data.length);
+    console.log('qtd de alertas:', res.data.length);
   }
 
   async function markAlertAsRead(alertuuid) {
@@ -38,12 +40,14 @@ export default function Alertas({ useruuid }) {
     await getAlerts();
   }
 
+  // o fetch de dados agora é feito APENAS pelo FilterAlert
   // useEffect(() => {
-  //   // o fetch de dados não ta sendo feito aqui mais
-  //   // pq vai ser feito no componente de FILTRO
   //   // getAlerts();
   // }, []);
 
+  // favor, futuramente deixar de usar querySelector
+  // que não é o ideal num framework como o React.
+  // na pagina operacional tem isso feito com states.
   function btnFilter() {
     const filter = document.querySelector('.filter-box');
     filter.classList.toggle('active');
@@ -52,11 +56,7 @@ export default function Alertas({ useruuid }) {
   }
 
   async function filtrar(data) {
-    const data1 = {
-      ...data,
-      date: new Date(),
-    };
-    await getAlerts(data1);
+    await getAlerts(data);
   }
 
   const arrayExcel = [];
@@ -115,7 +115,7 @@ export default function Alertas({ useruuid }) {
         </span>
       </div>
 
-      <FilterAlert filtrar={filtrar} />
+      <FilterAlert filtrar={filtrar} location={location} />
 
       <div className="list-alerts">
         <div className="header">
