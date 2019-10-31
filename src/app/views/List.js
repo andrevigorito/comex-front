@@ -258,7 +258,7 @@ class List extends Component {
                   startDate={this.state.startDate}
                   endDate={this.state.endDate}
                   dateFormat="dd/MM/yyyy"
-                  // minDate={this.state.startDate}
+                // minDate={this.state.startDate}
                 />
               </div>
               <div className="item">
@@ -297,7 +297,7 @@ class List extends Component {
                 <div
                   className={` ${product.product_id ? 'item urgent' : 'item'}`}
                   key={product.uuid}
-                  // onClick={() => onDetail(product.uuid)}
+                // onClick={() => onDetail(product.uuid)}
                 >
                   <div className="main-info">
                     <p className="emp">{product.consignee.split(' ')[0]}</p>
