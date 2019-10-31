@@ -29,8 +29,8 @@ export default function Alertas({ useruuid }) {
     // console.log('##################');
     setalerts(res.data);
     setisLoading(false);
-    console.log(res.data.length);
-    console.log(res);
+    console.log('Alertas:', res.data.length);
+    // console.log(res);
   }
 
   async function markAlertAsRead(alertuuid) {
@@ -57,7 +57,7 @@ export default function Alertas({ useruuid }) {
       ...data,
       date: new Date(),
     };
-    console.log(data1.date);
+    // console.log(data1.date);
 
     await getAlerts(data1);
   }
@@ -71,7 +71,10 @@ export default function Alertas({ useruuid }) {
     const Data = alert.createdAt
       ? new Date(alert.createdAt).toLocaleString()
       : '-';
-    const Responsavel = alert.po.csr_name.toLowerCase();
+
+    const Responsavel = alert.po.csr_name
+      ? alert.po.csr_name.toLowerCase()
+      : '';
     const Mensagem = alert.message;
     const Lido = alert.user_alerts[0].read
       ? new Date(alert.user_alerts[0].updatedAt).toLocaleString()
@@ -142,7 +145,7 @@ export default function Alertas({ useruuid }) {
             <p className="date current">
               {new Date(alerta.createdAt).toLocaleString()}
             </p>
-            <p className="responsible">{alerta.po.csr_name.toLowerCase()}</p>
+            <p className="responsible">{alerta.po.csr_name}</p>
             <p className="po">
               {alerta.message}{' '}
               {alerta.po_item && alerta.po_item.alert_count > 0 ? (
