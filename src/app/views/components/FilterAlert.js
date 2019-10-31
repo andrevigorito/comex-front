@@ -30,12 +30,15 @@ class Filter extends Component {
   };
 
   getFilters = () => {
-    const filtersObj = JSON.parse(localStorage.getItem('@alertFilters'));
-
-    filtersObj.dataDe = new Date(filtersObj.dataDe);
-    filtersObj.dataAte = new Date(filtersObj.dataAte);
-
-    this.setState(filtersObj);
+    const rawFilters = localStorage.getItem('@alertFilters');
+    if (rawFilters) {
+      const filtersObj = JSON.parse(rawFilters);
+      const url = encodeURI(rawFilters);
+      console.log(url);
+      filtersObj.dataDe = new Date(filtersObj.dataDe);
+      filtersObj.dataAte = new Date(filtersObj.dataAte);
+      this.setState(filtersObj);
+    }
   };
 
   handleFilter = async e => {
