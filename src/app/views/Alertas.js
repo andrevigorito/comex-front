@@ -72,7 +72,10 @@ export default function Alertas({ useruuid, location }) {
     const Data = alert.createdAt
       ? new Date(alert.createdAt).toLocaleString()
       : '-';
-    const Responsavel = alert.po.csr_name.toLowerCase();
+
+    const Responsavel = alert.po.csr_name
+      ? alert.po.csr_name.toLowerCase()
+      : '';
     const Mensagem = alert.message;
     const Lido = alert.user_alerts[0].read
       ? new Date(alert.user_alerts[0].updatedAt).toLocaleString()
@@ -146,7 +149,7 @@ export default function Alertas({ useruuid, location }) {
             <p className="date current">
               {new Date(alerta.createdAt).toLocaleString()}
             </p>
-            <p className="responsible">{alerta.po.csr_name.toLowerCase()}</p>
+            <p className="responsible">{alerta.po.csr_name}</p>
             <p className="po">
               {alerta.message}{' '}
               {alerta.po_item && alerta.po_item.alert_count > 0 ? (
@@ -172,20 +175,20 @@ export default function Alertas({ useruuid, location }) {
                 alerta.user_alerts[0].read ? (
                   ''
                 ) : (
-                  <button
-                    type="button"
-                    onClick={e => {
-                      e.stopPropagation();
-                      markAlertAsRead(alerta.uuid);
-                    }}
-                    className="btn"
-                  >
-                    Marcar como lido
+                    <button
+                      type="button"
+                      onClick={e => {
+                        e.stopPropagation();
+                        markAlertAsRead(alerta.uuid);
+                      }}
+                      className="btn"
+                    >
+                      Marcar como lido
                   </button>
-                )
+                  )
               ) : (
-                ''
-              )}
+                  ''
+                )}
             </p>
           </div>
         ))}
