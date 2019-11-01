@@ -3,8 +3,9 @@ import DatePicker, { registerLocale } from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import { Grid, Row, Col } from 'react-flexbox-grid';
 import { subDays } from 'date-fns';
-
 import ptBR from 'date-fns/locale/pt-BR';
+
+import history from '../../services/history';
 
 registerLocale('pt-BR', ptBR);
 
@@ -23,28 +24,42 @@ class Filter extends Component {
 
   state = this.initialState;
 
+  /**
+   * salva o state no `localStorage`
+   */
   saveFilters = (stateObj = null) => {
-    if (!stateObj) stateObj = this.state;
-    // console.log(JSON.stringify(stateObj));
-    localStorage.setItem('@alertFilters', JSON.stringify(stateObj));
+    const filtros = this.state;
+    const newStateObj = { ...filtros, ...stateObj };
+
+    localStorage.setItem('@alertFilters', JSON.stringify(newStateObj));
   };
 
+  /**
+   * pega o `localStorage` e salva no state
+   */
   getFilters = () => {
     const rawFilters = localStorage.getItem('@alertFilters');
+
     if (rawFilters) {
       const filtersObj = JSON.parse(rawFilters);
-      const url = encodeURI(rawFilters);
-      console.log(url);
-      filtersObj.dataDe = new Date(filtersObj.dataDe);
-      filtersObj.dataAte = new Date(filtersObj.dataAte);
-      this.setState(filtersObj);
+
+      if (filtersObj.dataDe) filtersObj.dataDe = new Date(filtersObj.dataDe);
+      if (filtersObj.dataAte) filtersObj.dataAte = new Date(filtersObj.dataAte);
+
+      this.setState({ ...filtersObj });
+      return filtersObj;
     }
+    return null;
   };
 
   handleFilter = async e => {
     e.preventDefault();
     this.saveFilters();
-    await this.props.filtrar(this.state);
+    if (!this.props.location.search) {
+      await this.props.filtrar(this.state);
+    } else {
+      history.push('/alertas');
+    }
   };
 
   handleChangeDateAta = date => {
@@ -68,36 +83,57 @@ class Filter extends Component {
   };
 
   handleDow = async e => {
-    await this.setState({ dow: e.target.checked });
+    this.setState({ dow: e.target.checked });
   };
 
   handleDupont = async e => {
-    await this.setState({ dupont: e.target.checked });
+    this.setState({ dupont: e.target.checked });
   };
 
   handleTypes = async e => {
-    // console.log(e.target.value);
-
     const { value, checked } = e.target;
     const { types: oldStateTypes } = this.state;
     const index = oldStateTypes.indexOf(value);
     if (index >= 0 && !checked) {
       oldStateTypes.splice(index, 1);
-      await this.setState({ types: [...oldStateTypes] });
+      this.setState({ types: [...oldStateTypes] });
     } else if (checked) {
-      await this.setState({ types: [...oldStateTypes, value] });
+      this.setState({ types: [...oldStateTypes, value] });
     }
   };
 
   clearFilter = async () => {
     this.saveFilters(this.initialState);
     this.getFilters();
-    await this.props.filtrar(this.state);
+    // await this.props.filtrar(this.state);
+  };
+
+  getQueryParam = async () => {
+    // queryParam de teste:
+    // ?%7B%22dataDe%22:%222019-10-29T19:16:46.827Z%22,%22dataAte%22:%222019-10-30T19:16:46.827Z%22,%22mensagem%22:%22teste%20msg%22,%22status%22:%22true%22,%22responsible%22:%22resp%22,%22dow%22:true,%22dupont%22:true,%22types%22:%5B%22DIVERG_SAP_ATL%22,%22DIVERG_SAP_ATL_SEM_ACAO%22,%22PO_SEM_DATA_GR_SAP%22%5D%7D
+    const { location } = this.props;
+    if (location.search) {
+      try {
+        const queryParam = JSON.parse(
+          String(decodeURI(location.search)).replace('?', '')
+        );
+
+        this.saveFilters(queryParam);
+        this.getFilters();
+        await this.props.filtrar(queryParam);
+      } catch (error) {
+        this.getFilters();
+        console.log('error');
+        console.log(error);
+      }
+    } else {
+      const filt = this.getFilters();
+      await this.props.filtrar(filt);
+    }
   };
 
   async componentDidMount() {
-    this.getFilters();
-    await this.props.filtrar(this.state);
+    await this.getQueryParam();
   }
 
   render() {
@@ -116,7 +152,7 @@ class Filter extends Component {
     } = this.state;
 
     return (
-      <div className="filter-box">
+      <div className="filter-box active">
         <form className="filtealert" onSubmit={this.handleFilter}>
           <Grid>
             <Row>

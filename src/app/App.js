@@ -46,8 +46,6 @@ class App extends Component {
   };
 
   componentDidMount() {
-    console.log('componentDidMount');
-    
     const username = localStorage.getItem('USER_USERNAME');
     const useruuid = localStorage.getItem('USER_UUID');
     const photo = localStorage.getItem('USER_PHOTO');
@@ -59,7 +57,6 @@ class App extends Component {
         photo,
       });
     } else {
-      console.log('passou no else');
       this.setState({
         isAuth: false,
         username: '',
