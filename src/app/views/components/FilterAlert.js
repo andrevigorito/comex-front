@@ -28,8 +28,10 @@ class Filter extends Component {
    * salva o state no `localStorage`
    */
   saveFilters = (stateObj = null) => {
-    if (!stateObj) stateObj = this.state;
-    localStorage.setItem('@alertFilters', JSON.stringify(stateObj));
+    const filtros = this.state;
+    const newStateObj = { ...filtros, ...stateObj };
+
+    localStorage.setItem('@alertFilters', JSON.stringify(newStateObj));
   };
 
   /**
@@ -45,8 +47,6 @@ class Filter extends Component {
       if (filtersObj.dataAte) filtersObj.dataAte = new Date(filtersObj.dataAte);
 
       this.setState({ ...filtersObj });
-      // console.log('setou state no getFilters->', filtersObj, this.state);
-      // console.log('************************');
       return filtersObj;
     }
     return null;
@@ -91,8 +91,6 @@ class Filter extends Component {
   };
 
   handleTypes = async e => {
-    // console.log(e.target.value);
-
     const { value, checked } = e.target;
     const { types: oldStateTypes } = this.state;
     const index = oldStateTypes.indexOf(value);
@@ -122,8 +120,6 @@ class Filter extends Component {
 
         this.saveFilters(queryParam);
         this.getFilters();
-        console.log('queryParam');
-        console.log(queryParam);
         await this.props.filtrar(queryParam);
       } catch (error) {
         this.getFilters();
@@ -132,7 +128,6 @@ class Filter extends Component {
       }
     } else {
       const filt = this.getFilters();
-      console.log('filtrou aqui: ', filt);
       await this.props.filtrar(filt);
     }
   };
@@ -157,7 +152,7 @@ class Filter extends Component {
     } = this.state;
 
     return (
-      <div className="filter-box">
+      <div className="filter-box active">
         <form className="filtealert" onSubmit={this.handleFilter}>
           <Grid>
             <Row>

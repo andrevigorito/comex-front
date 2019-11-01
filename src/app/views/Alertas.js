@@ -15,6 +15,7 @@ import ExportExcel from './components/ExportExcel';
 export default function Alertas({ useruuid, location }) {
   const [alerts, setalerts] = useState([]);
   const [isLoading, setisLoading] = useState(false);
+  const [contadorAlertas, setContadorAlertas] = useState(0);
 
   async function getAlerts(params = null) {
     setisLoading(true);
@@ -25,9 +26,12 @@ export default function Alertas({ useruuid, location }) {
     // if (params) btnFilter();
 
     console.log('data param enviado ->', params);
-    const res = await API.get(`alerts/user/all/${useruuid}`, { params });
+    const res = await API.get(`/alerts/user/all/${useruuid}`, { params });
+    // console.log(`alerts/user/all/${useruuid}`);
+    // console.log(res.data);
 
     setalerts(res.data);
+    setContadorAlertas(res.data.length);
     setisLoading(false);
     console.log('qtd de alertas:', res.data.length);
   }
@@ -107,6 +111,9 @@ export default function Alertas({ useruuid, location }) {
         </div>
       </div>
       <div className="result-alerts">
+        <span>
+          Todos: <strong>{contadorAlertas}</strong>
+        </span>
         <span>
           Críticos: <strong>{contadorCriticos}</strong>
         </span>
