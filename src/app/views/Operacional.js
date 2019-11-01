@@ -68,7 +68,7 @@ class Operacional extends Component {
   saveFilters = (stateObj = {}) => {
     const { filtros } = this.state;
     const newStateObj = { ...filtros, ...stateObj };
-    
+
     localStorage.setItem('@operacionalFilters', JSON.stringify(newStateObj));
   };
 
@@ -82,8 +82,8 @@ class Operacional extends Component {
       this.setState({ filtroAtivo: true });
       const filtersObj = JSON.parse(rawFilters);
 
-      console.log('filtersObj');
-      console.log(filtersObj);
+      // console.log('filtersObj');
+      // console.log(filtersObj);
 
       if (filtersObj.ataDateIncio)
         filtersObj.ataDateIncio = new Date(filtersObj.ataDateIncio);
@@ -311,7 +311,7 @@ class Operacional extends Component {
       count: totalItems,
     } = response.data;
 
-    console.log('registros:', totalItems);
+    // console.log('registros:', totalItems);
     this.setState({
       operacional,
       isLoading: false,
@@ -379,7 +379,7 @@ class Operacional extends Component {
    * usar apenas para Datepicker
    */
   handleDatePicker = (date, stateName) => {
-    console.log(date, stateName);
+    // console.log(date, stateName);
 
     const stateFilters = { ...this.state.filtros };
     stateFilters[stateName] = date;
