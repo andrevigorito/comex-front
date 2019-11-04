@@ -1,36 +1,39 @@
 /* eslint-disable no-nested-ternary */
 import React, { useState, useEffect } from 'react';
-import PropTypes from 'prop-types';
+// import PropTypes from 'prop-types';
 import { CSVLink } from 'react-csv';
-import { format } from 'date-fns';
-import { Link, Redirect } from 'react-router-dom';
 import API from '../services/api';
 import history from '../services/history';
 
 // Images
 import iconTitleAlert from '../img/icons/title-alert.png';
-
 // Components
 import Loading from './components/Loading';
 import FilterAlert from './components/FilterAlert';
 import ExportExcel from './components/ExportExcel';
 
-export default function Alertas({ useruuid }) {
+export default function Alertas({ useruuid, location }) {
   const [alerts, setalerts] = useState([]);
   const [isLoading, setisLoading] = useState(false);
+  const [contadorAlertas, setContadorAlertas] = useState(0);
 
   async function getAlerts(params = null) {
-    // const useruuid = '12430f8a-e492-4efb-a8cd-bb2b2784567c';
     setisLoading(true);
 
+    // se houver filtros, exibir o componente filtro
+    // nao vai funcionar por causa da gambiarra do querySelector que
+    // deveria ser um STATE
+    // if (params) btnFilter();
+
     console.log('data param enviado ->', params);
-    const res = await API.get(`alerts/user/all/${useruuid}`, { params });
-    // const res = await API.get(`alerts/user/all/${useruuid}`, params);
-    // console.log('##################');
+    const res = await API.get(`/alerts/user/all/${useruuid}`, { params });
+    // console.log(`alerts/user/all/${useruuid}`);
+    // console.log(res.data);
+
     setalerts(res.data);
+    setContadorAlertas(res.data.length);
     setisLoading(false);
-    console.log('Alertas:', res.data.length);
-    // console.log(res);
+    console.log('qtd de alertas:', res.data.length);
   }
 
   async function markAlertAsRead(alertuuid) {
@@ -41,10 +44,14 @@ export default function Alertas({ useruuid }) {
     await getAlerts();
   }
 
-  useEffect(() => {
-    getAlerts();
-  }, []);
+  // o fetch de dados agora é feito APENAS pelo FilterAlert
+  // useEffect(() => {
+  //   // getAlerts();
+  // }, []);
 
+  // favor, futuramente deixar de usar querySelector
+  // que não é o ideal num framework como o React.
+  // na pagina operacional tem isso feito com states.
   function btnFilter() {
     const filter = document.querySelector('.filter-box');
     filter.classList.toggle('active');
@@ -53,13 +60,7 @@ export default function Alertas({ useruuid }) {
   }
 
   async function filtrar(data) {
-    const data1 = {
-      ...data,
-      date: new Date(),
-    };
-    // console.log(data1.date);
-
-    await getAlerts(data1);
+    await getAlerts(data);
   }
 
   const arrayExcel = [];
@@ -114,6 +115,9 @@ export default function Alertas({ useruuid }) {
       </div>
       <div className="result-alerts">
         <span>
+          Todos: <strong>{contadorAlertas}</strong>
+        </span>
+        <span>
           Críticos: <strong>{contadorCriticos}</strong>
         </span>
         <span>
@@ -121,7 +125,7 @@ export default function Alertas({ useruuid }) {
         </span>
       </div>
 
-      <FilterAlert filtrar={filtrar} />
+      <FilterAlert filtrar={filtrar} location={location} />
 
       <div className="list-alerts">
         <div className="header">
@@ -171,20 +175,20 @@ export default function Alertas({ useruuid }) {
                 alerta.user_alerts[0].read ? (
                   ''
                 ) : (
-                  <button
-                    type="button"
-                    onClick={e => {
-                      e.stopPropagation();
-                      markAlertAsRead(alerta.uuid);
-                    }}
-                    className="btn"
-                  >
-                    Marcar como lido
+                    <button
+                      type="button"
+                      onClick={e => {
+                        e.stopPropagation();
+                        markAlertAsRead(alerta.uuid);
+                      }}
+                      className="btn"
+                    >
+                      Marcar como lido
                   </button>
-                )
+                  )
               ) : (
-                ''
-              )}
+                  ''
+                )}
             </p>
           </div>
         ))}

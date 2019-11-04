@@ -2,25 +2,64 @@ import React, { Component } from 'react';
 import DatePicker, { registerLocale } from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import { Grid, Row, Col } from 'react-flexbox-grid';
-
+import { subDays } from 'date-fns';
 import ptBR from 'date-fns/locale/pt-BR';
+
+import history from '../../services/history';
 
 registerLocale('pt-BR', ptBR);
 
 class Filter extends Component {
-  state = {
-    dataDe: new Date(),
+  // estado inicial usado pra resetar o filtro
+  initialState = {
+    dataDe: subDays(new Date(), 1),
     dataAte: new Date(),
     mensagem: '',
     status: '',
+    responsible: '',
     dow: false,
     dupont: false,
     types: [],
   };
 
+  state = this.initialState;
+
+  /**
+   * salva o state no `localStorage`
+   */
+  saveFilters = (stateObj = null) => {
+    const filtros = this.state;
+    const newStateObj = { ...filtros, ...stateObj };
+
+    localStorage.setItem('@alertFilters', JSON.stringify(newStateObj));
+  };
+
+  /**
+   * pega o `localStorage` e salva no state
+   */
+  getFilters = () => {
+    const rawFilters = localStorage.getItem('@alertFilters');
+
+    if (rawFilters) {
+      const filtersObj = JSON.parse(rawFilters);
+
+      if (filtersObj.dataDe) filtersObj.dataDe = new Date(filtersObj.dataDe);
+      if (filtersObj.dataAte) filtersObj.dataAte = new Date(filtersObj.dataAte);
+
+      this.setState({ ...filtersObj });
+      return filtersObj;
+    }
+    return null;
+  };
+
   handleFilter = async e => {
     e.preventDefault();
-    await this.props.filtrar(this.state);
+    this.saveFilters();
+    if (!this.props.location.search) {
+      await this.props.filtrar(this.state);
+    } else {
+      history.push('/alertas');
+    }
   };
 
   handleChangeDateAta = date => {
@@ -44,31 +83,76 @@ class Filter extends Component {
   };
 
   handleDow = async e => {
-    await this.setState({ dow: e.target.checked });
+    this.setState({ dow: e.target.checked });
   };
 
   handleDupont = async e => {
-    await this.setState({ dupont: e.target.checked });
+    this.setState({ dupont: e.target.checked });
   };
 
   handleTypes = async e => {
     const { value, checked } = e.target;
-    const { types: oldState } = this.state;
-    const index = oldState.indexOf(value);
+    const { types: oldStateTypes } = this.state;
+    const index = oldStateTypes.indexOf(value);
     if (index >= 0 && !checked) {
-      oldState.splice(index, 1);
+      oldStateTypes.splice(index, 1);
+      this.setState({ types: [...oldStateTypes] });
     } else if (checked) {
-      await this.setState({ types: [...oldState, value] });
+      this.setState({ types: [...oldStateTypes, value] });
     }
-    // console.log(oldState, index, checked);
-    // console.log(this.state.types);
   };
 
+  clearFilter = async () => {
+    this.saveFilters(this.initialState);
+    this.getFilters();
+    // await this.props.filtrar(this.state);
+  };
+
+  getQueryParam = async () => {
+    // queryParam de teste:
+    // ?%7B%22dataDe%22:%222019-10-29T19:16:46.827Z%22,%22dataAte%22:%222019-10-30T19:16:46.827Z%22,%22mensagem%22:%22teste%20msg%22,%22status%22:%22true%22,%22responsible%22:%22resp%22,%22dow%22:true,%22dupont%22:true,%22types%22:%5B%22DIVERG_SAP_ATL%22,%22DIVERG_SAP_ATL_SEM_ACAO%22,%22PO_SEM_DATA_GR_SAP%22%5D%7D
+    const { location } = this.props;
+    if (location.search) {
+      try {
+        const queryParam = JSON.parse(
+          String(decodeURI(location.search)).replace('?', '')
+        );
+
+        this.saveFilters(queryParam);
+        this.getFilters();
+        await this.props.filtrar(queryParam);
+      } catch (error) {
+        this.getFilters();
+        console.log('error');
+        console.log(error);
+      }
+    } else {
+      const filt = this.getFilters();
+      await this.props.filtrar(filt);
+    }
+  };
+
+  async componentDidMount() {
+    await this.getQueryParam();
+  }
+
   render() {
-    const { dataDe, dataAte, status, dow, dupont } = this.state;
+    // é preciso colocar o 'value={stateVar}' nos campos pra fazer o bind
+    // dos values certo. ao adicionar state novo, seguir o padrão pra não
+    // bugar o salvamento dos filtros.
+    const {
+      dataDe,
+      dataAte,
+      status,
+      dow,
+      dupont,
+      mensagem,
+      responsible,
+      types,
+    } = this.state;
 
     return (
-      <div className="filter-box">
+      <div className="filter-box active">
         <form className="filtealert" onSubmit={this.handleFilter}>
           <Grid>
             <Row>
@@ -81,6 +165,7 @@ class Filter extends Component {
                         type="checkbox"
                         name="dow"
                         value={dow}
+                        checked={dow}
                         id="sts-booking"
                         onChange={this.handleDow}
                       />
@@ -91,6 +176,7 @@ class Filter extends Component {
                         type="checkbox"
                         name="dupont"
                         value={dupont}
+                        checked={dupont}
                         id="sts-booking"
                         onChange={this.handleDupont}
                       />
@@ -100,7 +186,7 @@ class Filter extends Component {
                 </div>
               </Col>
 
-              <Col xs={12} md={10}>
+              <Col xs={12} md={9}>
                 <div className="item">
                   <label>Status:</label>
                   <div className="boxstatus jcfs">
@@ -108,8 +194,9 @@ class Filter extends Component {
                       <input
                         type="checkbox"
                         value="BOOK_ATRASO"
+                        checked={!!types.includes('BOOK_ATRASO')}
                         onChange={this.handleTypes}
-                        id="BOOK_ATRASO"
+                        // id="BOOK_ATRASO"
                       />
                       Booking em atraso
                     </label>
@@ -118,7 +205,7 @@ class Filter extends Component {
                         type="checkbox"
                         value="BOOK_PROX_VENCIMENTO"
                         onChange={this.handleTypes}
-                        id="BOOK_PROX_VENCIMENTO"
+                        checked={!!types.includes('BOOK_PROX_VENCIMENTO')}
                       />
                       Booking perto do vencimento.
                     </label>
@@ -127,7 +214,7 @@ class Filter extends Component {
                         type="checkbox"
                         value="GR_ALTERADA"
                         onChange={this.handleTypes}
-                        id="GR_ALTERADA"
+                        checked={!!types.includes('GR_ALTERADA')}
                       />
                       GR Atual c/ alteração
                     </label>
@@ -136,7 +223,7 @@ class Filter extends Component {
                         type="checkbox"
                         value="DIVERG_SAP_ATL"
                         onChange={this.handleTypes}
-                        id="DIVERG_SAP_ATL"
+                        checked={!!types.includes('DIVERG_SAP_ATL')}
                       />
                       Diverg. SAPxATL
                     </label>
@@ -145,7 +232,7 @@ class Filter extends Component {
                         type="checkbox"
                         value="DIVERG_SAP_ATL_SEM_ACAO"
                         onChange={this.handleTypes}
-                        id="DIVERG_SAP_ATL_SEM_ACAO"
+                        checked={!!types.includes('DIVERG_SAP_ATL_SEM_ACAO')}
                       />
                       Diverg. SAPxATL s/ ação conc.
                     </label>
@@ -154,7 +241,7 @@ class Filter extends Component {
                         type="checkbox"
                         value="PO_SEM_DATA_GR_SAP"
                         onChange={this.handleTypes}
-                        id="PO_SEM_DATA_GR_SAP"
+                        checked={!!types.includes('PO_SEM_DATA_GR_SAP')}
                       />
                       PO s/ data de GR no SAP
                     </label>
@@ -163,12 +250,22 @@ class Filter extends Component {
                         type="checkbox"
                         value="CANAL_VERMELHO"
                         onChange={this.handleTypes}
-                        id="CANAL_VERMELHO"
+                        checked={!!types.includes('CANAL_VERMELHO')}
                       />
                       Canal Vermelho.
                     </label>
                   </div>
                 </div>
+              </Col>
+              <Col xs={12} md={1}>
+                <label> &nbsp; </label>
+                <button
+                  type="button"
+                  className="btn"
+                  onClick={this.clearFilter}
+                >
+                  X
+                </button>
               </Col>
             </Row>
 
@@ -206,6 +303,7 @@ class Filter extends Component {
                 <div className="item">
                   <label>Mensagem:</label>
                   <input
+                    value={mensagem}
                     type="text"
                     id="idproduto"
                     onChange={this.handleQueryInput}
@@ -217,6 +315,7 @@ class Filter extends Component {
                 <div className="item">
                   <label>Responsável:</label>
                   <input
+                    value={responsible}
                     type="text"
                     id="idproduto"
                     onChange={this.handleResponsibleInput}

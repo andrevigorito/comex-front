@@ -36,8 +36,6 @@ import Header from './views/components/Header/index';
 import './css/main.scss';
 
 const socket = io(Parameters.URL_API);
-// para testes no localhost:
-// const socket = io('http://localhost:4000/');
 
 class App extends Component {
   state = {
@@ -57,6 +55,13 @@ class App extends Component {
         username,
         useruuid,
         photo,
+      });
+    } else {
+      this.setState({
+        isAuth: false,
+        username: '',
+        useruuid: '',
+        photo: '',
       });
     }
 

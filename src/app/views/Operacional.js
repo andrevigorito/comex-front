@@ -1,13 +1,12 @@
 import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
 import { Grid, Row, Col } from 'react-flexbox-grid';
 import { CSVLink } from 'react-csv';
 import DatePicker, { registerLocale } from 'react-datepicker';
 import ptBR from 'date-fns/locale/pt-BR';
-import history from '../services/history';
 import { toast } from 'react-toastify';
 
 import { format } from 'date-fns';
+import history from '../services/history';
 
 import API from '../services/api';
 import 'react-datepicker/dist/react-datepicker.css';
@@ -27,23 +26,13 @@ registerLocale('pt-BR', ptBR);
 const favoriteUserUuid = 'f4a25bfb-f6e2-4280-9f8e-cb3e14e39e9f';
 
 class Operacional extends Component {
-  state = {
-    operacional: [],
-    isLoading: false,
-    filtroAtivo: false,
+  initialStateFilters = {
     ataDateIncio: '',
     ataDateFim: '',
     grProgramado: '',
     grProgramadoFim: '',
     grEfetivo: '',
     grEfetivoFim: '',
-    page: 1,
-    totalPages: 1,
-    totalItems: 0,
-    po: '',
-    produto: '',
-    plantaDestino: '',
-    statusTimeLine: [],
     todos: false,
     atrasados: false,
     noPrazo: false,
@@ -51,10 +40,105 @@ class Operacional extends Component {
     naoCriticos: false,
     dupont: false,
     dow: false,
+    po: '',
+    produto: '',
+    plantaDestino: '',
     analista: '',
     item: '',
-    
+    statusTimeLine: [],
   };
+
+  state = {
+    operacional: [],
+    isLoading: false,
+    filtroAtivo: false,
+    page: 1,
+    totalPages: 1,
+    totalItems: 0,
+    filtros: this.initialStateFilters,
+  };
+
+  // *********** inicio de salvamento de filtros *************
+  // *********** inicio de salvamento de filtros *************
+  // *********** inicio de salvamento de filtros *************
+
+  /**
+   * salva o state no `localStorage`
+   */
+  saveFilters = (stateObj = {}) => {
+    const { filtros } = this.state;
+    const newStateObj = { ...filtros, ...stateObj };
+
+    localStorage.setItem('@operacionalFilters', JSON.stringify(newStateObj));
+  };
+
+  /**
+   * pega o `localStorage` e salva no state
+   */
+  getFilters = () => {
+    const rawFilters = localStorage.getItem('@operacionalFilters');
+
+    if (rawFilters) {
+      this.setState({ filtroAtivo: true });
+      const filtersObj = JSON.parse(rawFilters);
+
+      // console.log('filtersObj');
+      // console.log(filtersObj);
+
+      if (filtersObj.ataDateIncio)
+        filtersObj.ataDateIncio = new Date(filtersObj.ataDateIncio);
+      if (filtersObj.ataDateFim)
+        filtersObj.ataDateFim = new Date(filtersObj.ataDateFim);
+      if (filtersObj.grProgramado)
+        filtersObj.grProgramado = new Date(filtersObj.grProgramado);
+      if (filtersObj.grProgramadoFim)
+        filtersObj.grProgramadoFim = new Date(filtersObj.grProgramadoFim);
+      if (filtersObj.grEfetivo)
+        filtersObj.grEfetivo = new Date(filtersObj.grEfetivo);
+      if (filtersObj.grEfetivoFim)
+        filtersObj.grEfetivoFim = new Date(filtersObj.grEfetivoFim);
+
+      this.setState({ filtros: filtersObj });
+      // console.log('setou state no getFilters->', filtersObj, this.state);
+      // console.log('************************');
+      return filtersObj;
+    }
+    return null;
+  };
+
+  clearFilter = async () => {
+    this.saveFilters(this.initialStateFilters);
+    this.getFilters();
+    // await this.getPoItems(this.state);
+  };
+
+  getQueryParam = async () => {
+    // queryParam de teste:
+    // d
+    const { location } = this.props;
+    if (location.search) {
+      try {
+        const queryParam = JSON.parse(
+          String(decodeURI(location.search)).replace('?', '')
+        );
+
+        this.saveFilters(queryParam);
+        this.getFilters();
+        await this.getPoItems(queryParam);
+      } catch (error) {
+        this.getFilters();
+        console.log('error:');
+        console.log(error);
+      }
+    } else {
+      const filt = this.getFilters();
+      await this.getPoItems(filt);
+    }
+  };
+
+  // *********** fim de salvamento de filtros *************
+  // *********** fim de salvamento de filtros *************
+  // *********** fim de salvamento de filtros *************
 
   handleBefore = () => {
     const { page } = this.state;
@@ -86,74 +170,74 @@ class Operacional extends Component {
     });
   };
 
-  componentDidUpdate(prevProps, prevState) {
-    const { page } = this.state;
-
-    if (page !== prevState.page) {
-      this.getPoItems();
-    }
-    
-  }
-  
-  handleFavorite = async (poItemUuid) => {
-    if(this.props.useruuid === favoriteUserUuid){
-      await this.setState({
+  handleFavorite = async poItemUuid => {
+    if (this.props.useruuid === favoriteUserUuid) {
+      this.setState({
         isLoading: true,
-      });  
-      await API.post(`userPoItems`, 
-       {
-         poItemUuid,
-         userUuid: this.props.useruuid, 
-       }, {
-        headers: { 'Content-Type': 'application/json' },
-      }).then(res => {
-        this.getPoItems();
-      })
-    }else{
-      this.notifyError("Você não tem permissão para executar esta função!")
-    }
-  }
-  
-  handleUnFavorite = async (favoriteUuid) => {
-    if(this.props.useruuid === favoriteUserUuid){
-      await this.setState({
-        isLoading: true,
-      }); 
-      await API.delete(`userPoItems/${favoriteUuid}`)
-      .then(res => {
-          this.getPoItems();
+      });
+      await API.post(
+        `userPoItems`,
+        {
+          poItemUuid,
+          userUuid: this.props.useruuid,
+        },
+        {
+          headers: { 'Content-Type': 'application/json' },
         }
-      )
-    }else{
-      this.notifyError("Você não tem permissão para executar esta função!")
-    }  
-  }
-  
+      ).then(res => {
+        this.getPoItems();
+      });
+    } else {
+      this.notifyError('Você não tem permissão para executar esta função!');
+    }
+  };
+
+  handleUnFavorite = async favoriteUuid => {
+    if (this.props.useruuid === favoriteUserUuid) {
+      this.setState({
+        isLoading: true,
+      });
+      await API.delete(`userPoItems/${favoriteUuid}`).then(res => {
+        this.getPoItems();
+      });
+    } else {
+      this.notifyError('Você não tem permissão para executar esta função!');
+    }
+  };
+
   notifyError = msg => {
     toast.error(msg, {
       position: toast.POSITION.BOTTOM_RIGHT,
     });
   };
 
-  componentDidMount() {
-    this.getPoItems();
+  componentDidUpdate(prevProps, prevState) {
+    const { page } = this.state;
+
+    if (page !== prevState.page) {
+      this.getPoItems();
+    }
   }
 
-  async getPoItems() {
+  async componentDidMount() {
+    // this.getPoItems();
+    // console.log('estado inicial:', this.initialStateFilters);
+
+    await this.getQueryParam();
+  }
+
+  async getPoItems(filtroStateObj = null) {
     this.setState({ isLoading: true });
 
+    const { page, filtros } = this.state;
+
     const {
-      po,
-      page,
-      produto,
-      plantaDestino,
       ataDateIncio,
       ataDateFim,
       grProgramado,
       grProgramadoFim,
       grEfetivo,
       grEfetivoFim,
-      statusTimeLine,
       todos,
       atrasados,
       noPrazo,
@@ -161,9 +245,13 @@ class Operacional extends Component {
       naoCriticos,
       dupont,
       dow,
+      po,
+      produto,
+      plantaDestino,
       analista,
       item,
-    } = this.state;
+      statusTimeLine,
+    } = filtroStateObj || filtros;
 
     const params = {
       page,
@@ -182,7 +270,7 @@ class Operacional extends Component {
       userUuid: this.props.userUuid,
     };
 
-    if (statusTimeLine.length !== 0) {
+    if (statusTimeLine && statusTimeLine.length !== 0) {
       params.statusTimeLine = JSON.stringify(statusTimeLine);
     }
 
@@ -214,12 +302,16 @@ class Operacional extends Component {
       params.grAtualFim = format(grEfetivoFim, "yyyy-MM-dd'T'HH:mm:ss.SSSxxx");
     }
 
+    // console.log('params get poItems:', params);
     const response = await API.get(`poItems`, { params });
-    console.log(response.data)
-    
-    const { data: operacional, total: totalPages, count: totalItems } = response.data;
-    
 
+    const {
+      data: operacional,
+      total: totalPages,
+      count: totalItems,
+    } = response.data;
+
+    // console.log('registros:', totalItems);
     this.setState({
       operacional,
       isLoading: false,
@@ -228,10 +320,14 @@ class Operacional extends Component {
     });
   }
 
-  handleFormSubit = async e => {
+  handleFormSubmit = async e => {
     e.preventDefault();
-
-    this.getPoItems();
+    this.saveFilters();
+    if (!this.props.location.search) {
+      await this.getPoItems();
+    } else {
+      history.push('/operacional');
+    }
   };
 
   btnFilter = () => {
@@ -239,107 +335,55 @@ class Operacional extends Component {
     this.setState({ filtroAtivo: !filtroAtivo });
   };
 
-  handleQueryInput = e => {
-    this.setState({ po: e.target.value });
+  /**
+   * usar apenas para campos texto
+   */
+  handleTextInput = (e, stateName) => {
+    const stateFilters = { ...this.state.filtros };
+    stateFilters[stateName] = e.target.value;
+    this.setState({ filtros: stateFilters });
   };
 
-  handleProduto = e => {
-    this.setState({ produto: e.target.value });
+  /**
+   * usar apenas para checkboxs
+   */
+  handleCheckboxGeral = (e, stateName) => {
+    const stateFilters = { ...this.state.filtros };
+    stateFilters[stateName] = e.target.checked;
+    this.setState({ filtros: stateFilters });
   };
 
-  handlePlantaDestino = e => {
-    this.setState({ plantaDestino: e.target.value });
-  };
-
-  handleAnalista = async e => {
-    await this.setState({ analista: e.target.value });
-  };
-
-  handleItem = async e => {
-    await this.setState({ item: e.target.value });
-  };
-
-  handleAtrasados = async e => {
-    await this.setState({ atrasados: e.target.checked });
-  };
-
-  handleNoPrazo = async e => {
-    await this.setState({ noPrazo: e.target.checked });
-  };
-
-  handleTodos = async e => {
-    await this.setState({ todos: e.target.checked });
-  };
-
-  handleCriticos = async e => {
-    await this.setState({ criticos: e.target.checked });
-  };
-
-  handleNaoCriticos = async e => {
-    await this.setState({ naoCriticos: e.target.checked });
-  };
-
-  handleDow = async e => {
-    await this.setState({ dow: e.target.checked });
-  };
-
-  handleDupont = async e => {
-    await this.setState({ dupont: e.target.checked });
-  };
-
-  handleCheckbox = e => {
-    const { statusTimeLine } = this.state;
+  handleCheckboxStatus = e => {
+    const { filtros } = this.state;
+    let { statusTimeLine } = filtros;
 
     if (e.target.checked) {
       const statusTimeLineExiste = statusTimeLine.find(
         s => s === e.target.name
       );
-
       if (!statusTimeLineExiste) {
-        // const data = [];
-
-        this.setState({ statusTimeLine: [...statusTimeLine, e.target.name] });
+        statusTimeLine = [...statusTimeLine, e.target.name];
       }
     } else {
       const statusTimeLineIndex = statusTimeLine.findIndex(
         s => s === e.target.name
       );
-
       statusTimeLine.splice(statusTimeLineIndex, 1);
-      this.setState({ statusTimeLine });
     }
+
+    filtros.statusTimeLine = statusTimeLine;
+    this.setState({ filtros });
   };
 
-  handleChangeDateAta = date => {
-    this.setState({ ataDateIncio: date });
-  };
+  /**
+   * usar apenas para Datepicker
+   */
+  handleDatePicker = (date, stateName) => {
+    // console.log(date, stateName);
 
-  handleChangeDateAtaFim = date => {
-    this.setState({ ataDateFim: date });
-  };
-
-  handleChangeGrProgramado = date => {
-    this.setState({
-      grProgramado: date,
-    });
-  };
-
-  handleChangeGrProgramadoFim = date => {
-    this.setState({
-      grProgramadoFim: date,
-    });
-  };
-
-  handleChangeGrEfetivo = date => {
-    this.setState({
-      grEfetivo: date,
-    });
-  };
-
-  handleChangeGrEfetivoFim = date => {
-    this.setState({
-      grEfetivoFim: date,
-    });
+    const stateFilters = { ...this.state.filtros };
+    stateFilters[stateName] = date;
+    this.setState({ filtros: stateFilters });
   };
 
   render() {
@@ -347,18 +391,43 @@ class Operacional extends Component {
       isLoading,
       operacional,
       filtroAtivo,
-      grEfetivo,
-      grEfetivoFim,
+      page,
+      totalPages,
+      totalItems,
+      filtros,
+    } = this.state;
+
+    const {
       ataDateIncio,
       ataDateFim,
       grProgramado,
       grProgramadoFim,
-      page,
-      totalPages,
-      totalItems,
-    } = this.state;
+      grEfetivo,
+      grEfetivoFim,
+      todos,
+      atrasados,
+      noPrazo,
+      criticos,
+      naoCriticos,
+      dupont,
+      dow,
+      po,
+      produto,
+      plantaDestino,
+      analista,
+      item,
+      statusTimeLine,
+    } = filtros;
+    // console.log('filtros->', filtros);
 
     const arrayExcel = [];
+
+    /**
+     * o loop á seguir é executado a cada mudança de state,
+     * causando um gasto de memória desnecessário.
+     * Favor, futuramente otimizar esse processo de montagem do CSV
+     * ou acionar um membro da equipe pra fazer essa modificação.
+     */
 
     operacional.forEach(op => {
       const Item = op.item;
@@ -412,460 +481,502 @@ class Operacional extends Component {
     });
 
     const csvData = arrayExcel;
-    console.log(operacional);
 
     return (
-     
-        <div className="center">
-          <div className="page-header">
-            <h1>
-              <img src={iconOperacional} alt="" />
-              Operacional
-            </h1>
-            <div className="last-wrap">
-              <CSVLink
-                data={csvData}
-                separator={';'}
-                filename="webcol-operacional.xlsx"
-              >
-                <ExportExcel />
-              </CSVLink>
-              <div
-                className={`btn-filter-nfs ${filtroAtivo ? 'active' : ''}`}
-                onClick={this.btnFilter}
-              >
-                <div className="icon-filter">
-                  <span />
-                  <span />
-                  <span />
-                </div>
-                Filtrar
+      <div className="center">
+        <div className="page-header">
+          <h1>
+            <img src={iconOperacional} alt="" />
+            Operacional
+          </h1>
+          <div className="last-wrap">
+            <CSVLink
+              data={csvData}
+              separator=";"
+              filename="webcol-operacional.xlsx"
+            >
+              <ExportExcel />
+            </CSVLink>
+            <div
+              className={`btn-filter-nfs ${filtroAtivo ? 'active' : ''}`}
+              onClick={this.btnFilter}
+            >
+              <div className="icon-filter">
+                <span />
+                <span />
+                <span />
               </div>
+              Filtrar
             </div>
           </div>
-          <p className="totalope">Total: <strong>{!isLoading && totalItems}</strong></p>
+        </div>
+        <p className="totalope">
+          Total: <strong>{!isLoading && totalItems}</strong>
+        </p>
 
-          <div className={`filter-box ${filtroAtivo ? 'active' : ''}`}>
-            <form className="formoperacional" onSubmit={this.handleFormSubit}>
-              <Grid>
-                <Row>
-                  <Col xs={12} md={3}>
-                    <div className="item">
-                      <label>Empresa:</label>
-                      <div className="boxstatus jcfs">
-                        <label>
-                          <input
-                            type="checkbox"
-                            name="dow"
-                            id="sts-booking"
-                            onChange={this.handleDow}
-                          />
-                          Dow
-                        </label>
-                        <label>
-                          <input
-                            type="checkbox"
-                            name="dupont"
-                            id="sts-booking"
-                            onChange={this.handleDupont}
-                          />
-                          Dupont
-                        </label>
-                      </div>
-                    </div>
-                  </Col>
-                  <Col xs={12} md={3}>
-                    <div className="item">
-                      <label>Em andamento:</label>
-                      <div className="boxstatus jcfs">
-                        <label>
-                          <input
-                            type="checkbox"
-                            name="Atrasados"
-                            id="sts-booking"
-                            onChange={this.handleAtrasados}
-                          />
-                          Atrasados
-                        </label>
-                        <label>
-                          <input
-                            type="checkbox"
-                            name="noPrazo"
-                            id="sts-booking"
-                            onChange={this.handleNoPrazo}
-                          />
-                          No prazo
-                        </label>
-                      </div>
-                    </div>
-                  </Col>
-                  <Col xs={12} md={2}>
-                    <div className="item">
-                      <label>Critico:</label>
-                      <div className="boxstatus jcfs">
-                        <label>
-                          <input
-                            type="checkbox"
-                            name="criticos"
-                            id="sts-booking"
-                            onChange={this.handleCriticos}
-                          />
-                          Sim
-                        </label>
-                        <label>
-                          <input
-                            type="checkbox"
-                            name="AG Booking"
-                            id="sts-booking"
-                            onChange={this.handleNaoCriticos}
-                          />
-                          Não
-                        </label>
-                      </div>
-                    </div>
-                  </Col>
-                  <Col xs={12} md={4}>
-                    <div className="item">
-                      <label>POs arquivadas:</label>
-                      <div className="boxstatus jcfs">
-                        <label>
-                          <input
-                            type="checkbox"
-                            name="todos"
-                            id="sts-booking"
-                            onChange={this.handleTodos}
-                          />
-                          Liberar
-                        </label>
-                      </div>
-                    </div>
-                  </Col>
-                </Row>
-                <Row>
-                  <Col xs={12}>
-                    <div className="item">
-                      <label>Status:</label>
-                      <div className="boxstatus">
-                        <label>
-                          <input
-                            type="checkbox"
-                            name="AG Booking"
-                            id="sts-booking"
-                            onChange={this.handleCheckbox}
-                          />
-                          Booking
-                        </label>
-                        <label>
-                          <input
-                            type="checkbox"
-                            name="AG. ATD"
-                            id="sts-atd"
-                            onChange={this.handleCheckbox}
-                          />
-                          ATD
-                        </label>
-                        <label>
-                          <input
-                            type="checkbox"
-                            name="AG. ATA"
-                            id="sts-ata"
-                            onChange={this.handleCheckbox}
-                          />
-                          ATA
-                        </label>
-                        <label>
-                          <input
-                            type="checkbox"
-                            name="AG. PORTY ENTRY"
-                            id="sts-porty-entry"
-                            onChange={this.handleCheckbox}
-                          />
-                          Porty Entry
-                        </label>
-                        <label>
-                          <input
-                            type="checkbox"
-                            name="AG. DI"
-                            id="sts-registro-di"
-                            onChange={this.handleCheckbox}
-                          />
-                          Registro DI
-                        </label>
-                        <label>
-                          <input
-                            type="checkbox"
-                            name="AG. NF"
-                            id="sts-ag-nf"
-                            onChange={this.handleCheckbox}
-                          />
-                          AG. NF
-                        </label>
-                        <label>
-                          <input
-                            type="checkbox"
-                            name="EM TRÂNSITO"
-                            id="sts-loading-terminal"
-                            onChange={this.handleCheckbox}
-                          />
-                          Loading Terminal
-                        </label>
-                        <label>
-                          <input
-                            type="checkbox"
-                            name="AG. CHEGADA PLANTA"
-                            id="sts-planta"
-                            onChange={this.handleCheckbox}
-                          />
-                          Planta
-                        </label>
-                        <label>
-                          <input
-                            type="checkbox"
-                            name="AG. GR"
-                            id="sts-gr-efetivo"
-                            onChange={this.handleCheckbox}
-                          />
-                          GR Efetivo
-                        </label>
-                      </div>
-                    </div>
-                  </Col>
-                </Row>
-                <Row>
-                  <Col xs={12} md={3}>
-                    <div className="item">
-                      <label>PO:</label>
-                      <input
-                        type="text"
-                        id="idproduto"
-                        onChange={this.handleQueryInput}
-                        autoComplete="false"
-                      />
-                    </div>
-                  </Col>
-                  <Col xs={12} md={1}>
-                    <div className="item">
-                      <label>PO item:</label>
-                      <input
-                        type="text"
-                        id="idproduto"
-                        onChange={this.handleItem}
-                        autoComplete="false"
-                      />
-                    </div>
-                  </Col>
-                  <Col xs={12} md={4}>
-                    <div className="item">
-                      <label>Produto:</label>
-                      <input
-                        type="text"
-                        id="idproduto"
-                        onChange={this.handleProduto}
-                      />
-                    </div>
-                  </Col>
-                  <Col xs={12} md={2}>
-                    <div className="item">
-                      <label>Analista:</label>
-                      <input
-                        type="text"
-                        id="idproduto"
-                        onChange={this.handleAnalista}
-                      />
-                    </div>
-                  </Col>
-                  <Col xs={12} md={2}>
-                    <div className="item">
-                      <label>Planta Destino:</label>
-                      <input
-                        type="text"
-                        id="idproduto"
-                        onChange={this.handlePlantaDestino}
-                      />
-                    </div>
-                  </Col>
-                </Row>
-
-                <Row>
-                  <Col xs={12} md={3}>
-                    <div className="item">
-                      <label>ATA:</label>
-                      <span>
-                        <DatePicker
-                          locale="pt-BR"
-                          selected={ataDateIncio}
-                          selectsStart
-                          startDate={ataDateIncio}
-                          endDate={ataDateFim}
-                          onChange={this.handleChangeDateAta}
-                          dateFormat="dd/MM/yyyy"
-                          placeholderText="De"
+        <div className={`filter-box ${filtroAtivo ? 'active' : ''}`}>
+          <form className="formoperacional" onSubmit={this.handleFormSubmit}>
+            <Grid>
+              <Row>
+                <Col xs={12} md={3}>
+                  <div className="item">
+                    <label>Empresa:</label>
+                    <div className="boxstatus jcfs">
+                      <label>
+                        <input
+                          type="checkbox"
+                          name="dow"
+                          checked={dow}
+                          id="sts-booking"
+                          onChange={e => this.handleCheckboxGeral(e, 'dow')}
                         />
-
-                        <DatePicker
-                          locale="pt-BR"
-                          selected={ataDateFim}
-                          selectsEnd
-                          startDate={ataDateIncio}
-                          endDate={ataDateFim}
-                          onChange={this.handleChangeDateAtaFim}
-                          dateFormat="dd/MM/yyyy"
-                          placeholderText="Até"
+                        Dow
+                      </label>
+                      <label>
+                        <input
+                          type="checkbox"
+                          name="dupont"
+                          checked={dupont}
+                          id="sts-booking"
+                          onChange={e => this.handleCheckboxGeral(e, 'dupont')}
                         />
-                      </span>
+                        Dupont
+                      </label>
                     </div>
-                  </Col>
-                  <Col xs={12} md={3}>
-                    <div className="item">
-                      <label>GR Programado:</label>
-                      <span>
-                        <DatePicker
-                          locale="pt-BR"
-                          selected={grProgramado}
-                          selectsStart
-                          onChange={this.handleChangeGrProgramado}
-                          startDate={grProgramado}
-                          endDate={grProgramadoFim}
-                          dateFormat="dd/MM/yyyy"
-                          placeholderText="De"
+                  </div>
+                </Col>
+                <Col xs={12} md={3}>
+                  <div className="item">
+                    <label>Em andamento:</label>
+                    <div className="boxstatus jcfs">
+                      <label>
+                        <input
+                          type="checkbox"
+                          name="Atrasados"
+                          id="sts-booking"
+                          checked={atrasados}
+                          onChange={e =>
+                            this.handleCheckboxGeral(e, 'atrasados')
+                          }
                         />
-                        <DatePicker
-                          locale="pt-BR"
-                          selected={grProgramadoFim}
-                          selectsEnd
-                          onChange={this.handleChangeGrProgramadoFim}
-                          startDate={grProgramado}
-                          endDate={grProgramadoFim}
-                          dateFormat="dd/MM/yyyy"
-                          placeholderText="Até"
+                        Atrasados
+                      </label>
+                      <label>
+                        <input
+                          type="checkbox"
+                          name="noPrazo"
+                          checked={noPrazo}
+                          id="sts-booking"
+                          onChange={e => this.handleCheckboxGeral(e, 'noPrazo')}
                         />
-                      </span>
+                        No prazo
+                      </label>
                     </div>
-                  </Col>
-                  <Col xs={12} md={3}> 
-                    <div className="item">
-                      <label>GR Efetivo:</label>
-                      <span>
-                        <DatePicker
-                          locale="pt-BR"
-                          selected={grEfetivo}
-                          selectsEnd
-                          onChange={this.handleChangeGrEfetivo}
-                          startDate={grEfetivo}
-                          endDate={grEfetivoFim}
-                          dateFormat="dd/MM/yyyy"
-                          placeholderText="De"
+                  </div>
+                </Col>
+                <Col xs={12} md={2}>
+                  <div className="item">
+                    <label>Critico:</label>
+                    <div className="boxstatus jcfs">
+                      <label>
+                        <input
+                          type="checkbox"
+                          name="criticos"
+                          id="sts-booking"
+                          checked={criticos}
+                          onChange={e =>
+                            this.handleCheckboxGeral(e, 'criticos')
+                          }
                         />
-                        <DatePicker
-                          locale="pt-BR"
-                          selected={grEfetivoFim}
-                          selectsEnd
-                          onChange={this.handleChangeGrEfetivoFim}
-                          startDate={grEfetivo}
-                          endDate={grEfetivoFim}
-                          dateFormat="dd/MM/yyyy"
-                          placeholderText="Até"
+                        Sim
+                      </label>
+                      <label>
+                        <input
+                          type="checkbox"
+                          name="AG Booking"
+                          id="sts-booking"
+                          checked={naoCriticos}
+                          onChange={e =>
+                            this.handleCheckboxGeral(e, 'naoCriticos')
+                          }
                         />
-                      </span>
+                        Não
+                      </label>
                     </div>
-                  </Col>
-                  <Col xs={12} md={3}>
-                    <div className="item">
-                      <label> &nbsp; </label>
-                      <button type="submit" className="btn">
-                        Filtrar
-                      </button>
+                  </div>
+                </Col>
+                <Col xs={12} md={4}>
+                  <div className="item">
+                    <label>POs arquivadas:</label>
+                    <div className="boxstatus jcfs">
+                      <label>
+                        <input
+                          type="checkbox"
+                          name="todos"
+                          id="sts-booking"
+                          checked={todos}
+                          onChange={e => this.handleCheckboxGeral(e, 'todos')}
+                        />
+                        Liberar
+                      </label>
                     </div>
-                  </Col>
-                </Row>
-              </Grid>
-            </form>
-          </div>
-
-          <div className="list-ope">
-            <header className="header-list-ope">
-              <p className="critico"></p>
-              <p className="po">PO</p>
-              <p className="produto">Produto</p>
-              <p className="descricao">Descrição</p>
-              <p className="qtd">Qtd.</p>
-              <p className="pd">P. Destino</p>
-              <p className="ata">ATA</p>
-              <p className="grp">GR Original</p>
-              <p className="gre">GR Atual</p>
-              <p className="status">Status</p>
-            </header>
-
-            {isLoading ? (
-              <Loading />
-            ) : (
-              operacional.map(ope => (
-                
-                <div
-                  onClick={() => {
-                    history.push(`operacional/detalhe/${ope.uuid}`)
-                  }}
-                  className={` ${ope.alert ? 'item yes' : 'item'} ${
-                    ope.channel === 'Red' ? 'red' : ''
-                  } `}
-                  key={ope.uuid}
-                  
-                >
-                  <span className="critico" />
-                  <p className="po">{`${ope.po.order_reference}-${ope.item}`}</p>
-                  <p className="produto">{ope.po.product.product_id}</p>
-                  <p className="descricao">
-                    {ope.po.product.product_description}
-                  </p>
-                  <p className="qtd">{ope.qty}</p>
-                  <p className="pd">{ope.plant_id}</p>
-                  <p className="ata">
-                    {ope.ata_date
-                      ? new Date(ope.ata_date).toLocaleDateString()
-                      : '-'}
-                  </p>
-                  <p className="grp">
-                    {ope.gr_original
-                      ? new Date(ope.gr_original).toLocaleDateString()
-                      : '-'}
-                  </p>
-                  <p className="gre">
-                    {ope.gr_actual
-                      ? new Date(ope.gr_actual).toLocaleDateString()
-                      : '-'}
-                  </p>
-                  <div className="status alert">
-                    <img 
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        !ope.user_po_items[0] ? this.handleFavorite(ope.uuid) : this.handleUnFavorite(ope.user_po_items[0].uuid);
-                      }}
-                      src={star} 
-                      className={`favorite ${ope.user_po_items[0] ? '' : 'not'}`} 
-                      not alt="Favorito" 
+                  </div>
+                </Col>
+              </Row>
+              <Row>
+                <Col xs={12}>
+                  <div className="item">
+                    <label>Status:</label>
+                    <div className="boxstatus">
+                      <label>
+                        <input
+                          type="checkbox"
+                          name="AG Booking"
+                          id="sts-booking"
+                          checked={!!statusTimeLine.includes('AG Booking')}
+                          onChange={this.handleCheckboxStatus}
+                        />
+                        Booking
+                      </label>
+                      <label>
+                        <input
+                          type="checkbox"
+                          name="AG. ATD"
+                          id="sts-atd"
+                          checked={!!statusTimeLine.includes('AG. ATD')}
+                          onChange={this.handleCheckboxStatus}
+                        />
+                        ATD
+                      </label>
+                      <label>
+                        <input
+                          type="checkbox"
+                          name="AG. ATA"
+                          id="sts-ata"
+                          checked={!!statusTimeLine.includes('AG. ATA')}
+                          onChange={this.handleCheckboxStatus}
+                        />
+                        ATA
+                      </label>
+                      <label>
+                        <input
+                          type="checkbox"
+                          name="AG. PORTY ENTRY"
+                          id="sts-porty-entry"
+                          checked={!!statusTimeLine.includes('AG. PORTY ENTRY')}
+                          onChange={this.handleCheckboxStatus}
+                        />
+                        Porty Entry
+                      </label>
+                      <label>
+                        <input
+                          type="checkbox"
+                          name="AG. DI"
+                          id="sts-registro-di"
+                          checked={!!statusTimeLine.includes('AG. DI')}
+                          onChange={this.handleCheckboxStatus}
+                        />
+                        Registro DI
+                      </label>
+                      <label>
+                        <input
+                          type="checkbox"
+                          name="AG. NF"
+                          id="sts-ag-nf"
+                          checked={!!statusTimeLine.includes('AG. NF')}
+                          onChange={this.handleCheckboxStatus}
+                        />
+                        AG. NF
+                      </label>
+                      <label>
+                        <input
+                          type="checkbox"
+                          name="EM TRÂNSITO"
+                          id="sts-loading-terminal"
+                          checked={!!statusTimeLine.includes('EM TRÂNSITO')}
+                          onChange={this.handleCheckboxStatus}
+                        />
+                        Loading Terminal
+                      </label>
+                      <label>
+                        <input
+                          type="checkbox"
+                          name="AG. CHEGADA PLANTA"
+                          id="sts-planta"
+                          checked={
+                            !!statusTimeLine.includes('AG. CHEGADA PLANTA')
+                          }
+                          onChange={this.handleCheckboxStatus}
+                        />
+                        Planta
+                      </label>
+                      <label>
+                        <input
+                          type="checkbox"
+                          name="AG. GR"
+                          id="sts-gr-efetivo"
+                          checked={!!statusTimeLine.includes('AG. GR')}
+                          onChange={this.handleCheckboxStatus}
+                        />
+                        GR Efetivo
+                      </label>
+                    </div>
+                  </div>
+                </Col>
+              </Row>
+              <Row>
+                <Col xs={12} md={3}>
+                  <div className="item">
+                    <label>PO:</label>
+                    <input
+                      type="text"
+                      id="idproduto"
+                      value={po}
+                      onChange={e => this.handleTextInput(e, 'po')}
+                      autoComplete="false"
                     />
-                    <p>{ope.status_time_line}</p>{' '}
-                    {/* <div
+                  </div>
+                </Col>
+                <Col xs={12} md={1}>
+                  <div className="item">
+                    <label>PO item:</label>
+                    <input
+                      type="text"
+                      id="idproduto"
+                      value={item}
+                      onChange={e => this.handleTextInput(e, 'item')}
+                      autoComplete="false"
+                    />
+                  </div>
+                </Col>
+                <Col xs={12} md={4}>
+                  <div className="item">
+                    <label>Produto:</label>
+                    <input
+                      type="text"
+                      id="idproduto"
+                      value={produto}
+                      onChange={e => this.handleTextInput(e, 'produto')}
+                    />
+                  </div>
+                </Col>
+                <Col xs={12} md={2}>
+                  <div className="item">
+                    <label>Analista:</label>
+                    <input
+                      type="text"
+                      id="idproduto"
+                      value={analista}
+                      onChange={e => this.handleTextInput(e, 'analista')}
+                    />
+                  </div>
+                </Col>
+                <Col xs={12} md={2}>
+                  <div className="item">
+                    <label>Planta Destino:</label>
+                    <input
+                      type="text"
+                      id="idproduto"
+                      value={plantaDestino}
+                      onChange={e => this.handleTextInput(e, 'plantaDestino')}
+                    />
+                  </div>
+                </Col>
+              </Row>
+
+              <Row>
+                <Col xs={12} md={3}>
+                  <div className="item">
+                    <label>ATA:</label>
+                    <span>
+                      <DatePicker
+                        locale="pt-BR"
+                        selected={ataDateIncio}
+                        selectsStart
+                        startDate={ataDateIncio}
+                        endDate={ataDateFim}
+                        onChange={e => this.handleDatePicker(e, 'ataDateIncio')}
+                        dateFormat="dd/MM/yyyy"
+                        placeholderText="De"
+                      />
+
+                      <DatePicker
+                        locale="pt-BR"
+                        selected={ataDateFim}
+                        selectsEnd
+                        startDate={ataDateIncio}
+                        endDate={ataDateFim}
+                        onChange={e => this.handleDatePicker(e, 'ataDateFim')}
+                        dateFormat="dd/MM/yyyy"
+                        placeholderText="Até"
+                      />
+                    </span>
+                  </div>
+                </Col>
+                <Col xs={12} md={3}>
+                  <div className="item">
+                    <label>GR Programado:</label>
+                    <span>
+                      <DatePicker
+                        locale="pt-BR"
+                        selected={grProgramado}
+                        selectsStart
+                        onChange={e => this.handleDatePicker(e, 'grProgramado')}
+                        startDate={grProgramado}
+                        endDate={grProgramadoFim}
+                        dateFormat="dd/MM/yyyy"
+                        placeholderText="De"
+                      />
+                      <DatePicker
+                        locale="pt-BR"
+                        selected={grProgramadoFim}
+                        selectsEnd
+                        onChange={e =>
+                          this.handleDatePicker(e, 'grProgramadoFim')
+                        }
+                        startDate={grProgramado}
+                        endDate={grProgramadoFim}
+                        dateFormat="dd/MM/yyyy"
+                        placeholderText="Até"
+                      />
+                    </span>
+                  </div>
+                </Col>
+                <Col xs={12} md={3}>
+                  <div className="item">
+                    <label>GR Efetivo:</label>
+                    <span>
+                      <DatePicker
+                        locale="pt-BR"
+                        selected={grEfetivo}
+                        selectsEnd
+                        onChange={e => this.handleDatePicker(e, 'grEfetivo')}
+                        startDate={grEfetivo}
+                        endDate={grEfetivoFim}
+                        dateFormat="dd/MM/yyyy"
+                        placeholderText="De"
+                      />
+                      <DatePicker
+                        locale="pt-BR"
+                        selected={grEfetivoFim}
+                        selectsEnd
+                        onChange={e => this.handleDatePicker(e, 'grEfetivoFim')}
+                        startDate={grEfetivo}
+                        endDate={grEfetivoFim}
+                        dateFormat="dd/MM/yyyy"
+                        placeholderText="Até"
+                      />
+                    </span>
+                  </div>
+                </Col>
+                <Col xs={12} md={2}>
+                  <div className="item">
+                    <label> &nbsp; </label>
+                    <button type="submit" className="btn">
+                      Filtrar
+                    </button>
+                  </div>
+                </Col>
+                <Col xs={12} md={1}>
+                  <div className="item">
+                    <label> &nbsp; </label>
+                    <button
+                      type="button"
+                      className="btn"
+                      onClick={this.clearFilter}
+                    >
+                      X
+                    </button>
+                  </div>
+                </Col>
+              </Row>
+            </Grid>
+          </form>
+        </div>
+
+        <div className="list-ope">
+          <header className="header-list-ope">
+            <p className="critico" />
+            <p className="po">PO</p>
+            <p className="produto">Produto</p>
+            <p className="descricao">Descrição</p>
+            <p className="qtd">Qtd.</p>
+            <p className="pd">P. Destino</p>
+            <p className="ata">ATA</p>
+            <p className="grp">GR Original</p>
+            <p className="gre">GR Atual</p>
+            <p className="status">Status</p>
+          </header>
+
+          {isLoading ? (
+            <Loading />
+          ) : (
+            operacional.map(ope => (
+              <div
+                onClick={() => {
+                  history.push(`operacional/detalhe/${ope.uuid}`);
+                }}
+                className={` ${ope.alert ? 'item yes' : 'item'} ${
+                  ope.channel === 'Red' ? 'red' : ''
+                } `}
+                key={ope.uuid}
+              >
+                <span className="critico" />
+                <p className="po">{`${ope.po.order_reference}-${ope.item}`}</p>
+                <p className="produto">{ope.po.product.product_id}</p>
+                <p className="descricao">
+                  {ope.po.product.product_description}
+                </p>
+                <p className="qtd">{ope.qty}</p>
+                <p className="pd">{ope.plant_id}</p>
+                <p className="ata">
+                  {ope.ata_date
+                    ? new Date(ope.ata_date).toLocaleDateString()
+                    : '-'}
+                </p>
+                <p className="grp">
+                  {ope.gr_original
+                    ? new Date(ope.gr_original).toLocaleDateString()
+                    : '-'}
+                </p>
+                <p className="gre">
+                  {ope.gr_actual
+                    ? new Date(ope.gr_actual).toLocaleDateString()
+                    : '-'}
+                </p>
+                <div className="status alert">
+                  <img
+                    onClick={e => {
+                      e.stopPropagation();
+                      !ope.user_po_items[0]
+                        ? this.handleFavorite(ope.uuid)
+                        : this.handleUnFavorite(ope.user_po_items[0].uuid);
+                    }}
+                    src={star}
+                    className={`favorite ${ope.user_po_items[0] ? '' : 'not'}`}
+                    not
+                    alt="Favorito"
+                  />
+                  <p>{ope.status_time_line}</p>{' '}
+                  {/* <div
                     onClick={this.openPopupbox}
                     className="icon-justificativa"
                   /> */}
-                  </div>
                 </div>
-                
-              ))
-            )}
+              </div>
+            ))
+          )}
 
-            <Pagination
-              page={page}
-              onAfter={() => this.handleAfter}
-              onBefore={() => this.handleBefore}
-              onFirst={() => this.handleFirst}
-              onLast={() => this.handleLast}
-              totalPages={totalPages}
-            />
-          </div>
+          <Pagination
+            page={page}
+            onAfter={() => this.handleAfter}
+            onBefore={() => this.handleBefore}
+            onFirst={() => this.handleFirst}
+            onLast={() => this.handleLast}
+            totalPages={totalPages}
+          />
         </div>
-
+      </div>
     );
   }
 }
