@@ -3,7 +3,7 @@ import XLSX from 'xlsx';
 import io from 'socket.io-client';
 import { toast } from 'react-toastify';
 import API from '../services/api';
-import Parameters from '../services/parameters';
+import env from '../helpers/envConfig';
 
 // Images
 import iconTitleDash from '../img/icons/title-dash.png';
@@ -12,7 +12,7 @@ import iconTitleDash from '../img/icons/title-dash.png';
 import Loading from './components/Loading';
 import DragAndDrop from './components/DragAndDrop';
 
-const socket = io(Parameters.URL_API);
+const socket = io(env.URL_API);
 
 class Import extends Component {
   state = {
