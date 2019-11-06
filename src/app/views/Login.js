@@ -15,7 +15,6 @@ class Login extends Component {
   state = {
     email: '',
     passwd: '',
-    lembrar: true,
     errorMsg: '',
   };
 
@@ -25,30 +24,26 @@ class Login extends Component {
     });
   };
 
-  handleChangeLembrar = e => {
-    this.setState({
-      lembrar: e.target.checked,
-    });
-  };
-
   login = async () => {
+    let errorMsg = '';
+    this.setState({ errorMsg });
+
     const { handleLogin } = this.props;
-    const { email, passwd, lembrar } = this.state;
-    const response = await handleLogin(email, passwd, lembrar);
-    // alert(response);
-    if (response !== true) {
-      this.setState({
-        errorMsg: 'Usuário ou senha incorreta!',
-      });
+    const { email, passwd } = this.state;
+    const response = await handleLogin(email, passwd);
+
+    if (response.status >= 500) {
+      errorMsg = `Erro interno (${response.status})`;
+    } else if (response.status >= 400) {
+      errorMsg = 'Usuário ou senha incorreto';
     } else {
-      this.setState({
-        errorMsg: '',
-      });
+      errorMsg = `Erro (${response.status})`;
     }
+    this.setState({ errorMsg });
   };
 
   render() {
-    const { errorMsg, lembrar } = this.state;
+    const { errorMsg } = this.state;
     return (
       <section className="login">
         <div className="content-login">
@@ -72,7 +67,7 @@ class Login extends Component {
               />
 
               <div className="row">
-                <label htmlFor="lembrame">
+                {/* <label htmlFor="lembrame">
                   <input
                     type="checkbox"
                     id="lembrame"
@@ -80,7 +75,7 @@ class Login extends Component {
                     onChange={this.handleChangeLembrar}
                   />
                   Lembrar-me
-                </label>
+                </label> */}
                 <div className="esqueciminhasenha">Esqueci minha senha</div>
               </div>
               <div className="row">

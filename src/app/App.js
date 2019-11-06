@@ -1,12 +1,15 @@
+/* eslint-disable import/first */
+
+// eslint-disable-next-line import/newline-after-import
+// require('dotenv').config();
 import React, { Component } from 'react';
 import { Router, Route, Switch } from 'react-router-dom';
 import { ToastContainer, toast } from 'react-toastify';
 import io from 'socket.io-client';
-import API from './services/api';
-import history from './services/history';
-import Parameters from './services/parameters';
-
 import 'react-toastify/dist/ReactToastify.css';
+
+import history from './services/history';
+import env from './helpers/envConfig';
 
 // Views
 import Detalhe from './views/Detalhe';
@@ -34,8 +37,10 @@ import Header from './views/components/Header/index';
 
 // Css
 import './css/main.scss';
+import * as authHelper from './helpers/authHelper';
+import { loginUserAPI } from './helpers/apiHelper';
 
-const socket = io(Parameters.URL_API);
+const socket = io(env.URL_API);
 
 class App extends Component {
   state = {
@@ -45,15 +50,23 @@ class App extends Component {
     photo: '',
   };
 
-  componentDidMount() {
-    const username = localStorage.getItem('USER_USERNAME');
-    const useruuid = localStorage.getItem('USER_UUID');
-    const photo = localStorage.getItem('USER_PHOTO');
-    if (username && useruuid) {
+  async componentDidMount() {
+    if (!(await authHelper.verifyLoggedUserIsValid())) {
+      this.handleLogout();
+      return;
+    }
+
+    const { name, uuid } = authHelper.getTokenData().user;
+
+    const photo = localStorage.getItem('USER_PHOTO')
+      ? localStorage.getItem('USER_PHOTO')
+      : '';
+
+    if (name && uuid) {
       this.setState({
         isAuth: true,
-        username,
-        useruuid,
+        username: name,
+        useruuid: uuid,
         photo,
       });
     } else {
@@ -96,14 +109,6 @@ class App extends Component {
     socket.on('newAlertText', textMessage => {
       this.notifyErrorTextOnClick(textMessage, '/alertas');
     });
-    // socket.on('newAlertText', newAlert => {
-    //   // alerta com objeto ALERTA completo
-    //   const useruuid = this.getUserUuidFromState();
-
-    //   if (newAlert.toAllUsers || newAlert.userUuid === useruuid) {
-    //     this.notifySucess(newAlert);
-    //   }
-    // });
   };
 
   unregisterToSocket = () => {
@@ -140,69 +145,18 @@ class App extends Component {
     });
   };
 
-  handleLogin = async (email, passwd, lembrar = false) => {
-    try {
-      const logado = await API.post(
-        `auth/login`,
-        { username: email, password: passwd },
-        { headers: { 'Content-Type': 'application/json' } }
-      );
+  handleLogin = async (username, password) => {
+    const response = await loginUserAPI(username, password);
 
-      console.log(logado);
-
-      if (lembrar) {
-        this.saveLocalStorage(
-          logado.data.name,
-          logado.data.uuid,
-          logado.data.photo
-        );
-      }
-
-      this.setState({
-        isAuth: true,
-        username: logado.data.name,
-        useruuid: logado.data.uuid,
-        photo: logado.data.photo,
-      });
-      // console.log('logado.data', logado.data);
-    } catch (err) {
-      // console.log(err);
-      return err.response.status;
-    }
-    return true;
+    if (response.isAuth) this.setState({ ...response });
+    // retorna para a view Login
+    return response;
   };
 
   handleLogout = () => {
     history.push('/');
-
-    this.setState({
-      isAuth: false,
-    });
-
-    localStorage.removeItem('USER_USERNAME');
-    localStorage.removeItem('USER_UUID');
-    localStorage.removeItem('USER_PHOTO');
-    localStorage.removeItem('USER');
-  };
-
-  /**
-   * Esse método de login DEVE SER MELHORADO, pois esta solução é temporária
-   * e abre brechas de segurança.
-   */
-  saveLocalStorage = (USERNAME, UUID, PHOTO) => {
-    localStorage.setItem('USER_USERNAME', USERNAME);
-    localStorage.setItem('USER_UUID', UUID);
-    localStorage.setItem('USER_PHOTO', PHOTO);
-  };
-
-  /**
-   * Essa função foi criada para que o `useruuid` mais recente e atualizado
-   * do state seja buscado sem risco de pegar um valor vazio ou desatualizado.
-   * Sem isso, ao buscar no componentDidMout, vinha vazio o state.
-   */
-  getUserUuidFromState = () => {
-    const { useruuid } = this.state;
-    return useruuid;
+    this.setState({ isAuth: false });
+    localStorage.clear();
   };
 
   render() {
