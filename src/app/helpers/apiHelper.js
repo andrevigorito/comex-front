@@ -1,9 +1,6 @@
-// import jwt from 'jsonwebtoken';
-// import cryptoJS from 'crypto-js';
-// import env from './envConfig';
-import history from '../services/history';
+/* eslint-disable class-methods-use-this */
 import API from '../services/api';
-import * as authHelper from './authHelper';
+import UserAuthenticated, * as authHelper from './authHelper';
 
 export async function loginUserAPI(username, password) {
   try {
@@ -24,13 +21,14 @@ export async function loginUserAPI(username, password) {
 
     if (authHelper.verifyTokenIsValid()) {
       const tokenDecrypted = authHelper.getTokenData();
-      console.log(tokenDecrypted);
+      // console.log(tokenDecrypted);
 
       return {
         isAuth: true,
         username: tokenDecrypted.user.name,
         useruuid: tokenDecrypted.user.uuid,
         photo,
+        status: authData.status,
       };
     }
     return { isAuth: false, status: authData.status };
@@ -43,9 +41,15 @@ export async function loginUserAPI(username, password) {
   }
 }
 
+//  O history.push('/') esta sendo usado por conta da falta de
+//  padrao no projeto, que dificulta a realização de um procedimento de segurança
+//  e autenticação decente. Por isso, o push é feito para que a rota '/'
+//  gerencie essa parte de fazer logout se necessário, pois lá que fica a função
+
+// wrappers de funcoes da api
 export async function APIget(url, config = null) {
   if (!(await authHelper.verifyLoggedUserIsValid())) {
-    history.push('/');
+    UserAuthenticated.userLogged = false;
     return false;
   }
 
@@ -54,7 +58,7 @@ export async function APIget(url, config = null) {
 
 export async function APIpost(url, data = null, config = null) {
   if (!(await authHelper.verifyLoggedUserIsValid())) {
-    history.push('/');
+    UserAuthenticated.userLogged = false;
     return false;
   }
 
@@ -63,7 +67,7 @@ export async function APIpost(url, data = null, config = null) {
 
 export async function APIput(url, data = null, config = null) {
   if (!(await authHelper.verifyLoggedUserIsValid())) {
-    history.push('/');
+    UserAuthenticated.userLogged = false;
     return false;
   }
 
@@ -72,7 +76,7 @@ export async function APIput(url, data = null, config = null) {
 
 export async function APIdelete(url, config = null) {
   if (!(await authHelper.verifyLoggedUserIsValid())) {
-    history.push('/');
+    UserAuthenticated.userLogged = false;
     return false;
   }
 
