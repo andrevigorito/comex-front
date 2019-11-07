@@ -37,20 +37,20 @@ import Header from './views/components/Header/index';
 
 // Css
 import './css/main.scss';
-import * as authHelper from './helpers/authHelper';
-import { loginUserAPI } from './helpers/apiHelper';
+import UserAuthenticated, * as authHelper from './helpers/authHelper';
 
 const socket = io(env.URL_API);
 
 class App extends Component {
   state = {
-    isAuth: false,
     username: '',
     useruuid: '',
     photo: '',
   };
 
   async componentDidMount() {
+    UserAuthenticated.Component = this;
+
     if (!(await authHelper.verifyLoggedUserIsValid())) {
       this.handleLogout();
       return;
@@ -63,15 +63,15 @@ class App extends Component {
       : '';
 
     if (name && uuid) {
+      UserAuthenticated.isAuth = true;
       this.setState({
-        isAuth: true,
         username: name,
         useruuid: uuid,
         photo,
       });
     } else {
+      UserAuthenticated.isAuth = false;
       this.setState({
-        isAuth: false,
         username: '',
         useruuid: '',
         photo: '',
@@ -145,43 +145,22 @@ class App extends Component {
     });
   };
 
-  handleLogin = async (username, password) => {
-    const response = await loginUserAPI(username, password);
-
-    if (response.isAuth) this.setState({ ...response });
-    // retorna para a view Login
-    return response;
-  };
-
   handleLogout = () => {
-    history.push('/');
-    this.setState({ isAuth: false });
-    localStorage.clear();
+    UserAuthenticated.userLogged = false;
   };
 
   render() {
-    const { isAuth, username, useruuid, photo } = this.state;
+    const { username, useruuid, photo } = this.state;
+    const { isAuth } = UserAuthenticated;
 
     return (
       <div className="App">
         <Router history={history}>
-          {!isAuth && (
-            <Route
-              path="*"
-              render={props => (
-                <Login {...props} handleLogin={this.handleLogin} />
-              )}
-            />
-          )}
+          {!isAuth && <Route path="*" render={props => <Login {...props} />} />}
 
           {isAuth ? (
             <div>
-              <Menu
-                onLogout={this.handleLogout}
-                username={username}
-                empresa=""
-                photo={photo}
-              />
+              <Menu username={username} empresa="" photo={photo} />
               <Header />
               <ToastContainer hideProgressBar autoClose={false} />
             </div>
