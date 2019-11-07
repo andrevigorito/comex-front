@@ -49,7 +49,7 @@ export function saveToken(token) {
  */
 export function getTokenData() {
   const jwtObject = getTokenDecrypted();
-  console.log(jwt.decode(jwtObject));
+  // console.log(jwt.decode(jwtObject));
 
   return jwt.decode(jwtObject);
   // payload do token:
@@ -77,3 +77,18 @@ export async function verifyLoggedUserIsValid() {
     return false;
   }
 }
+
+class UserAuthenticated {
+  constructor(Component, isAuth = false) {
+    this.isAuth = isAuth;
+    this.Component = Component;
+  }
+
+  set userLogged(isAuth) {
+    this.isAuth = isAuth;
+    if (!isAuth) localStorage.clear();
+    this.Component.forceUpdate();
+  }
+}
+
+export default new UserAuthenticated();
