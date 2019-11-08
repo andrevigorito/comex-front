@@ -1,20 +1,18 @@
 import React, { Component } from 'react';
-import PropTypes from 'prop-types';
 
 // Images
 import logoLogin from '../img/logologin.png';
 
 // Css
 import '../css/Layout/login.scss';
+import UserAuthenticated from '../helpers/authHelper';
+import { loginUserAPI } from '../helpers/apiHelper';
 
 class Login extends Component {
-  static propTypes = {
-    handleLogin: PropTypes.func.isRequired,
-  };
 
   state = {
-    email: '',
-    passwd: '',
+    username: '',
+    password: '',
     errorMsg: '',
   };
 
@@ -24,20 +22,27 @@ class Login extends Component {
     });
   };
 
-  login = async () => {
+  handleLogin = async () => {
     let errorMsg = '';
     this.setState({ errorMsg });
+    const { username, password } = this.state;
 
-    const { handleLogin } = this.props;
-    const { email, passwd } = this.state;
-    const response = await handleLogin(email, passwd);
+    const response = await loginUserAPI(username, password);
+    UserAuthenticated.userLogged = response.isAuth;
+    // console.log(response);
 
-    if (response.status >= 500) {
-      errorMsg = `Erro interno (${response.status})`;
-    } else if (response.status >= 400) {
-      errorMsg = 'Usuário ou senha incorreto';
-    } else {
-      errorMsg = `Erro (${response.status})`;
+    switch (response.status) {
+      case response.status >= 500:
+        errorMsg = `Erro interno (${response.status})`;
+        break;
+      case response.status >= 400:
+        errorMsg = 'Usuário ou senha incorreto';
+        break;
+      case response.status >= 300:
+        errorMsg = `Erro (${response.status})`;
+        break;
+      default:
+        break;
     }
     this.setState({ errorMsg });
   };
@@ -55,14 +60,14 @@ class Login extends Component {
               <input
                 type="text"
                 name="username"
-                onChange={this.handleChange('email')}
+                onChange={this.handleChange('username')}
                 className="first"
                 placeholder="E-mail"
               />
               <input
                 type="password"
                 name="password"
-                onChange={this.handleChange('passwd')}
+                onChange={this.handleChange('password')}
                 placeholder="Senha de Acesso"
               />
 
@@ -81,7 +86,7 @@ class Login extends Component {
               <div className="row">
                 <p className="redText">{errorMsg}</p>
               </div>
-              <button type="button" onClick={this.login}>
+              <button type="button" onClick={this.handleLogin}>
                 Entrar
               </button>
             </div>

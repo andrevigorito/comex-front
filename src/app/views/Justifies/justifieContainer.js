@@ -1,5 +1,5 @@
 import React, { Component, Fragment } from 'react';
-import API from '../../services/api';
+import * as API from '../../helpers/apiHelper';
 
 // Components
 import JustifieForm from './justifieForm';
@@ -11,7 +11,6 @@ class justifieContainer extends Component {
     modalJust: false,
     modalAddJust: true,
     isLoading: true,
-    isLoadingTypes: true,
     justifies: null,
     typesJustifies: {},
     checkedJustifies: [],
@@ -23,40 +22,30 @@ class justifieContainer extends Component {
   }
 
   async getJustifies(uuid) {
-    this.setState({
-      isLoading: true,
-    });
-    API.get(`justifies/${uuid}`).then(res => {
-      const justifies = res.data;
-      this.setState({
-        justifies,
-        isLoading: false,
-      });
-    });
+    this.setState({ isLoading: true });
+    const response = await API.APIget(`justifies/${uuid}`);
+
+    if (response) this.setState({ justifies: response.data });
+
+    this.setState({ isLoading: false });
   }
-  
-  async getTypesJustifies(uuid) {
-    this.setState({
-      isLoadingTypes: true,
-    });
-    API.get(`typesJustification`).then(res => {
-      const typesJustifies = res.data;
-      this.setState({
-        typesJustifies,
-        isLoadingTypes: false,
-      });
-    });
+
+  async getTypesJustifies() {
+    const response = await API.APIget(`typesJustification`);
+
+    if (response) this.setState({ typesJustifies: response.data });
+
+    this.setState({ isLoading: false });
   }
 
   handleJustifieDelete = async uuid => {
-    API.delete(`justifies/${uuid}`).then(res => {
-      this.getJustifies(this.props.uuid);
-    });
+    await API.APIdelete(`justifies/${uuid}`);
+    this.getJustifies(this.props.uuid);
   };
 
   handleJustifieCreation = async justifie => {
     try {
-      const rawResponse = await API.post(
+      await API.APIpost(
         'justifies',
         {
           description: justifie.description,
@@ -67,11 +56,7 @@ class justifieContainer extends Component {
         {
           headers: { 'Content-Type': 'application/json' },
         }
-      ).catch(error => {
-        throw error;
-      });
-
-      const content = await rawResponse;
+      );
 
       this.getJustifies(this.props.uuid);
 
@@ -80,11 +65,11 @@ class justifieContainer extends Component {
       alert(err);
     }
   };
-  
+
   handlePoItemWarrant = async () => {
-    if(this.state.checkedJustifies.length > 0){
+    if (this.state.checkedJustifies.length > 0) {
       try {
-        const rawResponse = await API.post(
+        await API.APIpost(
           'poItems/warrant',
           {
             uuid: this.props.uuid,
@@ -93,35 +78,30 @@ class justifieContainer extends Component {
           {
             headers: { 'Content-Type': 'application/json' },
           }
-        ).catch(error => {
-          throw error;
-        });
-  
-        const content = await rawResponse;
-        
-        this.props.getPoItem()
-  
+        );
+
+        await this.props.getPoItem();
+
         this.setState({ modalJust: true, modalAddJust: false });
       } catch (err) {
         alert(err);
       }
-    }else{
-      alert("Nenhuma justificativa selecionada!")
+    } else {
+      alert('Nenhuma justificativa selecionada!');
     }
   };
-  
-  handleJustifieChecked = async (checked,uuid) => {
-      if(checked){
-        await this.setState(prevState => ({
-              checkedJustifies: [...prevState.checkedJustifies,{uuid}]
-          })
-        )
-        console.log(this.state.checkedJustifies)
-      }else{
-        delete this.state.checkedJustifies[uuid]
-        console.log(this.state.checkedJustifies)
-      }
-  }
+
+  handleJustifieChecked = async (checked, uuid) => {
+    if (checked) {
+      await this.setState(prevState => ({
+        checkedJustifies: [...prevState.checkedJustifies, { uuid }],
+      }));
+      console.log(this.state.checkedJustifies);
+    } else {
+      delete this.state.checkedJustifies[uuid];
+      console.log(this.state.checkedJustifies);
+    }
+  };
 
   render() {
     const { deop } = this.props;
@@ -130,9 +110,9 @@ class justifieContainer extends Component {
         <div className="content">
           <h2>Justificativas {deop.warranted && 'Abonadas'}</h2>
           {this.state.modalAddJust && !deop.warranted && (
-            <JustifieForm 
-              onJustifieCreation={this.handleJustifieCreation} 
-              typesJustifies={this.state.typesJustifies}  
+            <JustifieForm
+              onJustifieCreation={this.handleJustifieCreation}
+              typesJustifies={this.state.typesJustifies}
             />
           )}
 
@@ -144,17 +124,15 @@ class justifieContainer extends Component {
               warranted={deop.warranted}
               justifies={this.state.justifies}
             />
-          ):null}
+          ) : null}
         </div>
         <div className="wrap-btns">
-          {!deop.warranted ?
+          {!deop.warranted ? (
             <Fragment>
-              <button 
-                type="button" 
+              <button
+                type="button"
                 className="btn abonar"
-                onClick={() =>
-                  this.handlePoItemWarrant()
-                }
+                onClick={() => this.handlePoItemWarrant()}
               >
                 Abonar
               </button>
@@ -167,10 +145,9 @@ class justifieContainer extends Component {
               >
                 Adicionar
               </button>
-            </Fragment>  
-            : null
-          }
-          
+            </Fragment>
+          ) : null}
+
           <button
             type="button"
             className="btn"

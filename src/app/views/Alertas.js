@@ -2,7 +2,8 @@
 import React, { useState, useEffect } from 'react';
 // import PropTypes from 'prop-types';
 import { CSVLink } from 'react-csv';
-import API from '../services/api';
+// import API from '../services/api';
+import * as API from '../helpers/apiHelper';
 import history from '../services/history';
 
 // Images
@@ -26,18 +27,19 @@ export default function Alertas({ useruuid, location }) {
     // if (params) btnFilter();
 
     console.log('data param enviado ->', params);
-    const res = await API.get(`/alerts/user/all/${useruuid}`, { params });
+    const res = await API.APIget(`/alerts/user/all/${useruuid}`, { params });
     // console.log(`alerts/user/all/${useruuid}`);
     // console.log(res.data);
-
-    setalerts(res.data);
-    setContadorAlertas(res.data.length);
+    const data = res.data ? res.data : [];
+    const qtd = res.data ? res.data.length : 0;
+    setalerts(data);
+    setContadorAlertas(qtd);
     setisLoading(false);
-    console.log('qtd de alertas:', res.data.length);
+    console.log('qtd de alertas:', qtd);
   }
 
   async function markAlertAsRead(alertuuid) {
-    await API.put(`alerts/read/`, {
+    await API.APIput(`alerts/read/`, {
       useruuid,
       alertuuid,
     });
@@ -47,6 +49,7 @@ export default function Alertas({ useruuid, location }) {
   // o fetch de dados agora é feito APENAS pelo FilterAlert
   // useEffect(() => {
   //   // getAlerts();
+  //   console.log('passou no didmount effect');
   // }, []);
 
   // favor, futuramente deixar de usar querySelector
@@ -89,7 +92,7 @@ export default function Alertas({ useruuid, location }) {
 
     arrayExcel.push(objeto);
 
-    alert.po_item.process_critical === 'YES' && contadorCriticos++;
+    if (alert.po_item.process_critical === 'YES') contadorCriticos += 1;
   });
 
   return (
@@ -175,20 +178,20 @@ export default function Alertas({ useruuid, location }) {
                 alerta.user_alerts[0].read ? (
                   ''
                 ) : (
-                    <button
-                      type="button"
-                      onClick={e => {
-                        e.stopPropagation();
-                        markAlertAsRead(alerta.uuid);
-                      }}
-                      className="btn"
-                    >
-                      Marcar como lido
+                  <button
+                    type="button"
+                    onClick={e => {
+                      e.stopPropagation();
+                      markAlertAsRead(alerta.uuid);
+                    }}
+                    className="btn"
+                  >
+                    Marcar como lido
                   </button>
-                  )
+                )
               ) : (
-                  ''
-                )}
+                ''
+              )}
             </p>
           </div>
         ))}

@@ -133,6 +133,8 @@ class Filter extends Component {
   };
 
   async componentDidMount() {
+    console.log('passou no didmount');
+
     await this.getQueryParam();
   }
 

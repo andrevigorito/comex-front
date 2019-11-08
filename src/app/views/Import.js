@@ -1,8 +1,10 @@
+/* eslint-disable class-methods-use-this */
 import React, { Component, Fragment } from 'react';
 import XLSX from 'xlsx';
 import io from 'socket.io-client';
 import { toast } from 'react-toastify';
-import API from '../services/api';
+// import API from '../services/api';
+import * as API from '../helpers/apiHelper';
 import env from '../helpers/envConfig';
 
 // Images
@@ -68,7 +70,7 @@ class Import extends Component {
 
   sendImportATL(data) {
     this.setState({ isSending: true });
-    API.post(`products`, data, {
+    API.APIpost(`products`, data, {
       headers: { 'Content-Type': 'application/json' },
     })
       .then(res => {
@@ -83,7 +85,7 @@ class Import extends Component {
 
   sendImportSAPDow(data) {
     this.setState({ isSending: true });
-    API.post(`products/importSapDow`, data, {
+    API.APIpost(`products/importSapDow`, data, {
       headers: { 'Content-Type': 'application/json' },
     })
       .then(res => {
@@ -98,7 +100,7 @@ class Import extends Component {
 
   sendImportSAPDupont(data) {
     this.setState({ isSending: true });
-    API.post(`products/importSapDupont`, data, {
+    API.APIpost(`products/importSapDupont`, data, {
       headers: { 'Content-Type': 'application/json' },
     })
       .then(res => {
