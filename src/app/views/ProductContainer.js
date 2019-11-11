@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import API from '../services/api';
+import * as API from '../helpers/apiHelper';
 import List from './List';
 import Detalhe from './Detalhe';
 
@@ -8,7 +8,6 @@ class ProductContainer extends Component {
     products: [],
     product: null,
     isLoading: false,
-    title: 'Gerencial',
   };
 
   componentDidMount() {
@@ -16,24 +15,17 @@ class ProductContainer extends Component {
   }
 
   async getProduct(uuid) {
-    API.get(`products/${uuid}`).then(res => {
-      const product = res.data;
-      console.log(product);
-      this.setState({
-        product,
-      });
-    });
+    const { data: product } = await API.APIget(`products/${uuid}`);
+
+    if (product) this.setState({ product });
   }
 
   async getProducts() {
     this.setState({ isLoading: true });
-    API.get(`products`).then(res => {
-      const products = res.data;
-      this.setState({
-        products,
-        isLoading: false,
-      });
-    });
+    const { data: products } = await API.APIget(`products`);
+
+    if (products) this.setState({ products });
+    this.setState({ isLoading: false });
   }
 
   handleRemoveProduct = () => {
@@ -52,14 +44,12 @@ class ProductContainer extends Component {
     // const params = {
     //   produto: 'D12768664',
     // };
-    const response = await API.get(`products`, { params });
+    const response = await API.APIget(`products`, { params });
 
     const products = response.data;
 
-    this.setState({
-      products,
-      isLoading: false,
-    });
+    if (products) this.setState({ products });
+    this.setState({ isLoading: false });
   }
 
   render() {

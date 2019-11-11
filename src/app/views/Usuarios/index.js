@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 // import { PopupboxManager, PopupboxContainer } from 'react-popupbox';
 import swal from '@sweetalert/with-react';
 
-import API from '../../services/api';
+import * as API from '../../helpers/apiHelper';
 
 // Components
 import Loading from '../components/Loading';
@@ -89,7 +89,7 @@ class Usuarios extends Component {
   addUser = async () => {
     const { newusername, newpassword, newadmin } = this.state;
 
-    const newUser = await API.post(`users`, {
+    const newUser = await API.APIpost(`users`, {
       user: {
         username: newusername,
         password: newpassword,
@@ -105,7 +105,7 @@ class Usuarios extends Component {
   deleteUser = async uuid => {
     console.log(uuid);
 
-    await API.delete(`users/${uuid}`);
+    await API.APIdelete(`users/${uuid}`);
 
     window.location.reload();
   };
@@ -131,12 +131,9 @@ class Usuarios extends Component {
   async loadUserList() {
     // tem que buscar os USUARIOS
     this.setState({ isLoading: true });
-    const users = await API.get(`users`);
-    console.log(users.data);
-    this.setState({
-      users: users.data,
-      isLoading: false,
-    });
+    const users = await API.APIget(`users`);
+    if (users) this.setState({ users: users.data });
+    this.setState({ isLoading: false });
   }
 
   render() {
@@ -149,9 +146,9 @@ class Usuarios extends Component {
       isLoading,
       users,
       addUserForm,
-      newusername,      
+      newusername,
       newpassword,
-      newadmin      
+      newadmin,
     } = this.state;
     return (
       <div>

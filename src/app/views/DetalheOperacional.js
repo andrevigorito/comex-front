@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import API from '../services/api';
+import * as API from '../helpers/apiHelper';
 
 // Components
 import Loading from './components/Loading';
@@ -32,37 +32,36 @@ class DetalheOperacional extends Component {
   }
 
   getPoItem = async () => {
-    this.setState({
-      isLoading: true,
-    });
+    this.setState({ isLoading: true });
     const { uuid } = this.props.match.params;
-    const res = await API.get(`poItems/${uuid}`);
-    const deop = res.data;
-    console.log(deop);
-    this.setState({
-      deop,
-      isLoading: false,
-      uuid,
-    });
+    const response = await API.APIget(`poItems/${uuid}`);
+    if (response) {
+      const deop = response.data;
+      console.log(deop);
+      this.setState({
+        deop,
+        uuid,
+      });
+    }
+
+    this.setState({ isLoading: false });
   };
 
   render() {
     const { deop, uuid } = this.state;
     return (
       <div>
-        <div className="center" >
-          <div className="page-header" >
+        <div className="center">
+          <div className="page-header">
             <h1>
               <img src={iconOperacional} alt="" />
               Operacional
             </h1>
             <div className="last-wrap">
-              
               <div className="btnvoltar" onClick={() => history.goBack()}>
                 <img src={iconBack} alt="" />
                 <p>Voltar</p>
               </div>
-              
             </div>
           </div>
           {this.state.isLoading ? (

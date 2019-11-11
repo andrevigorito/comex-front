@@ -8,7 +8,7 @@ import { toast } from 'react-toastify';
 import { format } from 'date-fns';
 import history from '../services/history';
 
-import API from '../services/api';
+import * as API from '../helpers/apiHelper';
 import 'react-datepicker/dist/react-datepicker.css';
 
 // Images
@@ -175,7 +175,7 @@ class Operacional extends Component {
       this.setState({
         isLoading: true,
       });
-      await API.post(
+      await API.APIpost(
         `userPoItems`,
         {
           poItemUuid,
@@ -184,9 +184,9 @@ class Operacional extends Component {
         {
           headers: { 'Content-Type': 'application/json' },
         }
-      ).then(res => {
-        this.getPoItems();
-      });
+      );
+
+      await this.getPoItems();
     } else {
       this.notifyError('Você não tem permissão para executar esta função!');
     }
@@ -197,9 +197,8 @@ class Operacional extends Component {
       this.setState({
         isLoading: true,
       });
-      await API.delete(`userPoItems/${favoriteUuid}`).then(res => {
-        this.getPoItems();
-      });
+      await API.APIdelete(`userPoItems/${favoriteUuid}`);
+      await this.getPoItems();
     } else {
       this.notifyError('Você não tem permissão para executar esta função!');
     }
@@ -303,21 +302,22 @@ class Operacional extends Component {
     }
 
     // console.log('params get poItems:', params);
-    const response = await API.get(`poItems`, { params });
-
-    const {
-      data: operacional,
-      total: totalPages,
-      count: totalItems,
-    } = response.data;
+    const response = await API.APIget(`poItems`, { params });
+    
+    const { data: operacional, total: totalPages, count: totalItems } = response
+      ? response.data
+      : {};
 
     // console.log('registros:', totalItems);
-    this.setState({
-      operacional,
-      isLoading: false,
-      totalPages,
-      totalItems,
-    });
+    if (operacional && totalPages && totalItems) {
+      this.setState({
+        operacional,
+        totalPages,
+        totalItems,
+      });
+    }
+
+    this.setState({ isLoading: false });
   }
 
   handleFormSubmit = async e => {
