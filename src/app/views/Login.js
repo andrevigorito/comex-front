@@ -9,7 +9,6 @@ import UserAuthenticated from '../helpers/authHelper';
 import { loginUserAPI } from '../helpers/apiHelper';
 
 class Login extends Component {
-
   state = {
     username: '',
     password: '',
@@ -29,21 +28,13 @@ class Login extends Component {
 
     const response = await loginUserAPI(username, password);
     UserAuthenticated.userLogged = response.isAuth;
-    // console.log(response);
+    console.log('response');
+    console.log(response);
 
-    switch (response.status) {
-      case response.status >= 500:
-        errorMsg = `Erro interno (${response.status})`;
-        break;
-      case response.status >= 400:
-        errorMsg = 'Usuário ou senha incorreto';
-        break;
-      case response.status >= 300:
-        errorMsg = `Erro (${response.status})`;
-        break;
-      default:
-        break;
-    }
+    if (response.status >= 300) errorMsg = `Erro (${response.status})`;
+    if (response.status >= 400) errorMsg = 'Usuário ou senha incorreto';
+    if (response.status >= 500) errorMsg = `Erro interno (${response.status})`;
+
     this.setState({ errorMsg });
   };
 
