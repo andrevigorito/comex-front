@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Route, Link } from 'react-router-dom';
 import { toast } from 'react-toastify';
+import { getTokenData } from '../../../helpers/authHelper';
 import * as API from '../../../helpers/apiHelper';
 import history from '../../../services/history';
 
@@ -10,7 +11,7 @@ import imgUser from '../../../img/user-header.png';
 import { UserImage } from './styles';
 
 export default function Header() {
-  const [useruuid, setUserUuid] = useState(localStorage.getItem('USER_UUID'));
+  const [useruuid, setUserUuid] = useState(getTokenData().user.uuid);
   const [userPhoto, setUserPhoto] = useState(imgUser);
 
   async function notifyErr(message) {

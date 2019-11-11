@@ -28,8 +28,8 @@ class Login extends Component {
 
     const response = await loginUserAPI(username, password);
     UserAuthenticated.userLogged = response.isAuth;
-    console.log('response');
-    console.log(response);
+    // console.log('response');
+    // console.log(response);
 
     if (response.status >= 300) errorMsg = `Erro (${response.status})`;
     if (response.status >= 400) errorMsg = 'Usuário ou senha incorreto';

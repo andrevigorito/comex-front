@@ -66,14 +66,12 @@ class App extends Component {
       UserAuthenticated.isAuth = true;
       this.setState({
         username: name,
-        useruuid: uuid,
         photo,
       });
     } else {
       UserAuthenticated.isAuth = false;
       this.setState({
         username: '',
-        useruuid: '',
         photo: '',
       });
     }
@@ -150,7 +148,7 @@ class App extends Component {
   };
 
   render() {
-    const { username, useruuid, photo } = this.state;
+    const { username, photo } = this.state;
     const { isAuth } = UserAuthenticated;
 
     return (
@@ -179,7 +177,7 @@ class App extends Component {
               <Route
                 path="/alertas"
                 exact
-                render={props => <Alertas {...props} useruuid={useruuid} />}
+                render={props => <Alertas {...props} />}
               />
             )}
             {isAuth && <Route path="/usuarios" exact component={Usuarios} />}
@@ -204,7 +202,7 @@ class App extends Component {
               <Route
                 path="/operacional"
                 exact
-                render={props => <Operacional {...props} useruuid={useruuid} />}
+                render={props => <Operacional {...props} />}
               />
             )}
             {isAuth && (

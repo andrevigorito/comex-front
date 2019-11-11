@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react';
 // import PropTypes from 'prop-types';
 import { CSVLink } from 'react-csv';
 // import API from '../services/api';
+import { getTokenData } from '../helpers/authHelper';
 import * as API from '../helpers/apiHelper';
 import history from '../services/history';
 
@@ -13,7 +14,8 @@ import Loading from './components/Loading';
 import FilterAlert from './components/FilterAlert';
 import ExportExcel from './components/ExportExcel';
 
-export default function Alertas({ useruuid, location }) {
+export default function Alertas({ location }) {
+  const [useruuid, setUseruuid] = useState(getTokenData().user.uuid);
   const [alerts, setalerts] = useState([]);
   const [isLoading, setisLoading] = useState(false);
   const [contadorAlertas, setContadorAlertas] = useState(0);
@@ -50,6 +52,7 @@ export default function Alertas({ useruuid, location }) {
   // useEffect(() => {
   //   // getAlerts();
   //   console.log('passou no didmount effect');
+  //   // setUseruuid(getTokenData().user.uuid);
   // }, []);
 
   // favor, futuramente deixar de usar querySelector

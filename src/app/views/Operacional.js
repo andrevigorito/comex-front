@@ -8,6 +8,7 @@ import { toast } from 'react-toastify';
 import { format } from 'date-fns';
 import history from '../services/history';
 
+import { getTokenData } from '../helpers/authHelper';
 import * as API from '../helpers/apiHelper';
 import 'react-datepicker/dist/react-datepicker.css';
 
@@ -56,6 +57,7 @@ class Operacional extends Component {
     totalPages: 1,
     totalItems: 0,
     filtros: this.initialStateFilters,
+    useruuid: '',
   };
 
   // *********** inicio de salvamento de filtros *************
@@ -171,7 +173,7 @@ class Operacional extends Component {
   };
 
   handleFavorite = async poItemUuid => {
-    if (this.props.useruuid === favoriteUserUuid) {
+    if (this.state.useruuid === favoriteUserUuid) {
       this.setState({
         isLoading: true,
       });
@@ -179,7 +181,7 @@ class Operacional extends Component {
         `userPoItems`,
         {
           poItemUuid,
-          userUuid: this.props.useruuid,
+          userUuid: this.state.useruuid,
         },
         {
           headers: { 'Content-Type': 'application/json' },
@@ -193,7 +195,7 @@ class Operacional extends Component {
   };
 
   handleUnFavorite = async favoriteUuid => {
-    if (this.props.useruuid === favoriteUserUuid) {
+    if (this.state.useruuid === favoriteUserUuid) {
       this.setState({
         isLoading: true,
       });
@@ -221,6 +223,7 @@ class Operacional extends Component {
   async componentDidMount() {
     // this.getPoItems();
     // console.log('estado inicial:', this.initialStateFilters);
+    this.setState({ useruuid: getTokenData().user.uuid });
 
     await this.getQueryParam();
   }
@@ -266,7 +269,7 @@ class Operacional extends Component {
       dow,
       analista,
       item,
-      userUuid: this.props.userUuid,
+      userUuid: this.state.userUuid,
     };
 
     if (statusTimeLine && statusTimeLine.length !== 0) {
@@ -303,7 +306,7 @@ class Operacional extends Component {
 
     // console.log('params get poItems:', params);
     const response = await API.APIget(`poItems`, { params });
-    
+
     const { data: operacional, total: totalPages, count: totalItems } = response
       ? response.data
       : {};
@@ -911,61 +914,61 @@ class Operacional extends Component {
           {isLoading ? (
             <Loading />
           ) : (
-              operacional.map(ope => (
-                <div
-                  onClick={() => {
-                    history.push(`operacional/detalhe/${ope.uuid}`);
-                  }}
-                  className={` ${ope.alert ? 'item yes' : 'item'} ${
-                    ope.channel === 'Red' ? 'red' : ''
-                    } `}
-                  key={ope.uuid}
-                >
-                  <span className="critico" />
-                  <p className="po">{`${ope.po.order_reference}-${ope.item}`}</p>
-                  <p className="produto">{ope.po.product.product_id}</p>
-                  <p className="descricao">
-                    {ope.po.product.product_description}
-                  </p>
-                  <p className="qtd">{ope.qty}</p>
-                  <p className="pd">{ope.plant_id}</p>
-                  <p className="ata">
-                    {ope.ata_date
-                      ? new Date(ope.ata_date).toLocaleDateString()
-                      : '-'}
-                  </p>
-                  <p className="grp">
-                    {ope.gr_original
-                      ? new Date(ope.gr_original).toLocaleDateString()
-                      : '-'}
-                  </p>
-                  <p className="gre">
-                    {ope.gr_actual
-                      ? new Date(ope.gr_actual).toLocaleDateString()
-                      : '-'}
-                  </p>
-                  <div className="status alert">
-                    <img
-                      onClick={e => {
-                        e.stopPropagation();
-                        !ope.user_po_items[0]
-                          ? this.handleFavorite(ope.uuid)
-                          : this.handleUnFavorite(ope.user_po_items[0].uuid);
-                      }}
-                      src={star}
-                      className={`favorite ${ope.user_po_items[0] ? '' : 'not'}`}
-                      not
-                      alt="Favorito"
-                    />
-                    <p>{ope.status_time_line}</p>{' '}
-                    {/* <div
+            operacional.map(ope => (
+              <div
+                onClick={() => {
+                  history.push(`operacional/detalhe/${ope.uuid}`);
+                }}
+                className={` ${ope.alert ? 'item yes' : 'item'} ${
+                  ope.channel === 'Red' ? 'red' : ''
+                } `}
+                key={ope.uuid}
+              >
+                <span className="critico" />
+                <p className="po">{`${ope.po.order_reference}-${ope.item}`}</p>
+                <p className="produto">{ope.po.product.product_id}</p>
+                <p className="descricao">
+                  {ope.po.product.product_description}
+                </p>
+                <p className="qtd">{ope.qty}</p>
+                <p className="pd">{ope.plant_id}</p>
+                <p className="ata">
+                  {ope.ata_date
+                    ? new Date(ope.ata_date).toLocaleDateString()
+                    : '-'}
+                </p>
+                <p className="grp">
+                  {ope.gr_original
+                    ? new Date(ope.gr_original).toLocaleDateString()
+                    : '-'}
+                </p>
+                <p className="gre">
+                  {ope.gr_actual
+                    ? new Date(ope.gr_actual).toLocaleDateString()
+                    : '-'}
+                </p>
+                <div className="status alert">
+                  <img
+                    onClick={e => {
+                      e.stopPropagation();
+                      !ope.user_po_items[0]
+                        ? this.handleFavorite(ope.uuid)
+                        : this.handleUnFavorite(ope.user_po_items[0].uuid);
+                    }}
+                    src={star}
+                    className={`favorite ${ope.user_po_items[0] ? '' : 'not'}`}
+                    not
+                    alt="Favorito"
+                  />
+                  <p>{ope.status_time_line}</p>{' '}
+                  {/* <div
                     onClick={this.openPopupbox}
                     className="icon-justificativa"
                   /> */}
-                  </div>
                 </div>
-              ))
-            )}
+              </div>
+            ))
+          )}
 
           <Pagination
             page={page}

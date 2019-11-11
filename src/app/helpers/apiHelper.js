@@ -35,7 +35,7 @@ export async function loginUserAPI(username, password) {
   } catch (err) {
     const { data, status } = err.response;
     let response = { isAuth: false, status };
-    console.log(data);
+    // console.log(data);
 
     if (typeof data === 'object' && ['error'] in data)
       response = { ...response, error: data.error };
