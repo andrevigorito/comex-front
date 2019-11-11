@@ -408,6 +408,9 @@
         border: solid 1px #8B8D97;
       }
   }
+  &.removepadding{
+    padding: 0;
+  }
   &:hover{
     color: $verde;
     background: transparent;

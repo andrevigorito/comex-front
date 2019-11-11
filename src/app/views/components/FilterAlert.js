@@ -198,7 +198,7 @@ class Filter extends Component {
                         value="BOOK_ATRASO"
                         checked={!!types.includes('BOOK_ATRASO')}
                         onChange={this.handleTypes}
-                        // id="BOOK_ATRASO"
+                      // id="BOOK_ATRASO"
                       />
                       Booking em atraso
                     </label>
@@ -259,20 +259,10 @@ class Filter extends Component {
                   </div>
                 </div>
               </Col>
-              <Col xs={12} md={1}>
-                <label> &nbsp; </label>
-                <button
-                  type="button"
-                  className="btn"
-                  onClick={this.clearFilter}
-                >
-                  X
-                </button>
-              </Col>
             </Row>
 
             <Row>
-              <Col xs={12} md={4}>
+              <Col xs={12} md={3}>
                 <div className="item">
                   <label>Data do Alerta:</label>
                   <span>
@@ -344,6 +334,16 @@ class Filter extends Component {
                     Filtrar
                   </button>
                 </div>
+              </Col>
+              <Col xs={12} md={1}>
+                <label> &nbsp; </label>
+                <button
+                  type="button"
+                  className="btn cancel removepadding"
+                  onClick={this.clearFilter}
+                >
+                  Limpar
+                </button>
               </Col>
             </Row>
           </Grid>
