@@ -1,21 +1,17 @@
 import React, { Component } from 'react';
-import PropTypes from 'prop-types';
 
 // Images
 import logoLogin from '../img/logologin.png';
 
 // Css
 import '../css/Layout/login.scss';
+import UserAuthenticated from '../helpers/authHelper';
+import { loginUserAPI } from '../helpers/apiHelper';
 
 class Login extends Component {
-  static propTypes = {
-    handleLogin: PropTypes.func.isRequired,
-  };
-
   state = {
-    email: '',
-    passwd: '',
-    lembrar: true,
+    username: '',
+    password: '',
     errorMsg: '',
   };
 
@@ -25,30 +21,25 @@ class Login extends Component {
     });
   };
 
-  handleChangeLembrar = e => {
-    this.setState({
-      lembrar: e.target.checked,
-    });
-  };
+  handleLogin = async () => {
+    let errorMsg = '';
+    this.setState({ errorMsg });
+    const { username, password } = this.state;
 
-  login = async () => {
-    const { handleLogin } = this.props;
-    const { email, passwd, lembrar } = this.state;
-    const response = await handleLogin(email, passwd, lembrar);
-    // alert(response);
-    if (response !== true) {
-      this.setState({
-        errorMsg: 'Usuário ou senha incorreta!',
-      });
-    } else {
-      this.setState({
-        errorMsg: '',
-      });
-    }
+    const response = await loginUserAPI(username, password);
+    UserAuthenticated.userLogged = response.isAuth;
+    // console.log('response');
+    // console.log(response);
+
+    if (response.status >= 300) errorMsg = `Erro (${response.status})`;
+    if (response.status >= 400) errorMsg = 'Usuário ou senha incorreto';
+    if (response.status >= 500) errorMsg = `Erro interno (${response.status})`;
+
+    this.setState({ errorMsg });
   };
 
   render() {
-    const { errorMsg, lembrar } = this.state;
+    const { errorMsg } = this.state;
     return (
       <section className="login">
         <div className="content-login">
@@ -60,19 +51,19 @@ class Login extends Component {
               <input
                 type="text"
                 name="username"
-                onChange={this.handleChange('email')}
+                onChange={this.handleChange('username')}
                 className="first"
                 placeholder="E-mail"
               />
               <input
                 type="password"
                 name="password"
-                onChange={this.handleChange('passwd')}
+                onChange={this.handleChange('password')}
                 placeholder="Senha de Acesso"
               />
 
               <div className="row">
-                <label htmlFor="lembrame">
+                {/* <label htmlFor="lembrame">
                   <input
                     type="checkbox"
                     id="lembrame"
@@ -80,13 +71,13 @@ class Login extends Component {
                     onChange={this.handleChangeLembrar}
                   />
                   Lembrar-me
-                </label>
+                </label> */}
                 <div className="esqueciminhasenha">Esqueci minha senha</div>
               </div>
               <div className="row">
                 <p className="redText">{errorMsg}</p>
               </div>
-              <button type="button" onClick={this.login}>
+              <button type="button" onClick={this.handleLogin}>
                 Entrar
               </button>
             </div>

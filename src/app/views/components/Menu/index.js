@@ -5,6 +5,8 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
 import { Route, Link } from 'react-router-dom';
+import UserAuthenticated from '../../../helpers/authHelper';
+
 // import imgUser from '../../../img/user-header.png';
 import iconLogout from '../../../img/icons/icon-logout.png';
 
@@ -12,7 +14,6 @@ import { UserImage } from './styles';
 
 class Menu extends Component {
   static propTypes = {
-    onLogout: PropTypes.func.isRequired,
     username: PropTypes.string.isRequired,
     empresa: PropTypes.string.isRequired,
     photo: PropTypes.string.isRequired,
@@ -25,8 +26,12 @@ class Menu extends Component {
     menulink.classList.remove('ativo');
   };
 
+  handleLogout = () => {
+    UserAuthenticated.userLogged = false;
+  };
+
   render() {
-    const { onLogout, username, empresa, photo } = this.props;
+    const { username, empresa, photo } = this.props;
 
     return (
       <div className="main-menu">
@@ -75,7 +80,7 @@ class Menu extends Component {
                 </Link>
               </Route>
             </nav>
-            <div className="logout" onClick={onLogout}>
+            <div className="logout" onClick={this.handleLogout}>
               <p>Logout</p>
               <img src={iconLogout} alt="" />
             </div>

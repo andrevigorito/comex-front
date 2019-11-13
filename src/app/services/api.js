@@ -1,7 +1,6 @@
 import axios from 'axios';
-import Parameters from './parameters';
+import env from '../helpers/envConfig';
 
 export default axios.create({
-  baseURL: Parameters.URL_API,
-  // baseURL: `http://localhost:4000`,
+  baseURL: env.URL_API,
 });
