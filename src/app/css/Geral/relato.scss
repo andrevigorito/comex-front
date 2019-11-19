@@ -4,13 +4,12 @@
             display: flex;
             justify-content: space-between;
             margin-bottom: 20px;
+            padding: 0 40px 0 50px;
             p{
                 font-size: 14px;
             }
             .first{
                 display: flex;
-                padding-left: 40px;
-
                 p{
                     text-align: left;
                     &:first-child{
@@ -191,6 +190,126 @@
                         margin-bottom: 10px;
                     }
                 }
+            }
+        }
+    }
+
+    .list-alteracaogr{
+        .headerlist{
+            display: grid;
+            grid-template-columns: 240px 1.5fr 1.5fr 1.5fr 1.5fr 1fr;
+            margin-bottom: 20px;
+            padding: 0 40px 0 50px;
+            p{
+                font-size: 14px;
+            }
+        }
+        .item{
+            background: #fff;
+            border-radius: 6px;
+            padding: 20px 40px;
+            
+            margin-bottom: 20px;
+            border-left: solid 10px #1ABC9C;
+            display: grid;
+            grid-template-columns: 200px 7.5fr;
+            align-items: center;
+            .main-info{
+                text-align: left;
+                padding-right: 20px;
+                p{
+                    line-height: 18px;
+                    &.emp{
+                        font-size: 10px;
+                        color: #FBA633;
+                        text-transform: uppercase;
+                    }
+                    &.idpro{
+                        font-size: 14px;
+                        color: #4C5062;
+                    }
+                    &.namepro{
+                        font-size: 16px;
+                        font-weight: 700;
+                        color: #4C5062;
+                        word-break: break-all;
+                    }
+                }
+            }
+            .info{
+                display: grid;
+                grid-template-columns: 7fr 1fr;
+                align-items: center;
+                padding-left: 40px;
+                border-left: solid 1px #8B8D97;
+
+                .list-gra{
+                    display: flex;
+                    align-items: center;
+                    flex-wrap: wrap;
+                }
+                .item-gra{
+                    display: grid;
+                    grid-template-columns: 1fr 1fr 1fr 1fr;
+                    width: 100%;
+                    margin-bottom: 20px;
+                    &:last-child{
+                        margin-bottom: 0;
+                    }
+
+                    p{
+                        display: flex;
+                        align-items: center;
+                        color: #4C5062;
+                        img{
+                            margin-right: 10px;
+                        }
+                    }
+                    &.alert{
+                        border-left: solid 4px #d25b5b;
+                        padding-left: 10px;
+                        padding: 10px;
+                        background: #f7e9e9;
+                        border-radius: 10px;
+                    }
+                }
+                p{
+                    font-size: 14px;
+                }
+
+              .item-total{
+                width: 100px;
+                  display: flex;
+                  flex-direction: column;
+                  justify-content: space-between;
+                  margin: 10px 30px 10px 0;
+
+                  &:last-child{
+                      margin-right: 0;
+                  }
+                  p{
+                      margin-bottom: 15px;
+                      display: flex;
+                      align-items: center;
+                      color: #4C5062;
+                      img{
+                          margin-right: 10px;
+                      }
+                      &:last-child{
+                          margin-bottom: 0;
+                      }
+                  }
+                  &.alert{
+                      border-left: solid 4px #d25b5b;
+                      padding-left: 10px;
+                      padding: 10px;
+                      background: #f7e9e9;
+                      border-radius: 10px;
+                  }
+              }
+            }
+            &.urgente{
+                border-left: solid 10px #E99898;
             }
         }
     }
