@@ -19,7 +19,7 @@ class List extends Component {
   };
 
   state = {
-    title: 'Gerencial',
+    title: 'Painel Gerencial',
     dupont: false,
     dow: false,
     produto: '',
@@ -128,7 +128,7 @@ class List extends Component {
           <div className="page-header">
             <h1>
               <img src={iconTitle} alt="" />
-              Gerencial
+              {this.state.title}
             </h1>
 
             <div className="last-wrap">
