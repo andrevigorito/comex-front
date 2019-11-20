@@ -158,7 +158,14 @@ export default function Alertas({ location }) {
             <p className="responsible">{alerta.po.csr_name}</p>
             <p className="po">
               {alerta.message}{' '}
-              {alerta.po_item && alerta.po_item.alert_count > 0 ? (
+              {alerta.type === 'GR Atual com alteração' &&
+                ' - Produto: ' +
+                  alerta.po.product.product_description +
+                  ' - Quantidade: ' +
+                  alerta.po_item.qty}
+              {alerta.po_item &&
+              alerta.po_item.alert_count > 0 &&
+              alerta.type === 'Divergência SAP x ATL sem ação concluída' ? (
                 <div className="box-count">{alerta.po_item.alert_count}</div>
               ) : null}
             </p>

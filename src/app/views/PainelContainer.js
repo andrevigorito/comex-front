@@ -34,16 +34,16 @@ class PainelContainer extends Component {
     return (
       <div>
         <center>
-          <button onClick={() =>  this.handleGerencial()}>
+          {/*<button onClick={() =>  this.handleGerencial()}>
             Gerencial
           </button>
           <button onClick={() => this.handleAlteracaoGr()}>
             Alteração de GR
-          </button>
+          </button>*/}
         </center>
         <div>
-          {gerencial && <ProductContainer/>}
-          {alteracaoGr && <AlteracaoGrContainer/>}
+          {gerencial && <ProductContainer />}
+          {alteracaoGr && <AlteracaoGrContainer />}
         </div>
       </div>
     );
