@@ -14,7 +14,7 @@ import env from './helpers/envConfig';
 // Views
 import Detalhe from './views/Detalhe';
 import Login from './views/Login';
-import ProductContainer from './views/ProductContainer';
+import PainelContainer from './views/PainelContainer';
 import Dashboard from './views/Dashboard';
 import Import from './views/Import';
 import Alertas from './views/Alertas';
@@ -169,7 +169,7 @@ class App extends Component {
               <Route path="/gerencial/:uuid" exact component={Detalhe} />
             )}
             {isAuth && (
-              <Route path="/gerencial" exact component={ProductContainer} />
+              <Route path="/gerencial" exact component={PainelContainer} />
             )}
             {isAuth && <Route path="/dashboard" exact component={Dashboard} />}
             {isAuth && <Route path="/import" exact component={Import} />}
@@ -237,7 +237,7 @@ class App extends Component {
               />
             )}
 
-            {isAuth && <Route path="/" exact component={ProductContainer} />}
+            {isAuth && <Route path="/" exact component={PainelContainer} />}
           </Switch>
         </Router>
       </div>

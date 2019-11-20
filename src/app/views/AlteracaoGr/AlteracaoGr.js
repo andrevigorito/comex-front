@@ -4,12 +4,12 @@ import DatePicker from 'react-datepicker';
 import { format } from 'date-fns';
 
 // Images
-import iconTitle from '../img/icons/title-gerencial.png';
-import iconRgc from '../img/icons/rg-c.png';
-import iconRgp from '../img/icons/rg-p.png';
+import iconTitle from '../../img/icons/title-gerencial.png';
+import iconRgc from '../../img/icons/rg-c.png';
+import iconRgp from '../../img/icons/rg-p.png';
 
 // Components
-import Loading from './components/Loading';
+import Loading from '../components/Loading';
 
 class List extends Component {
   static propTypes = {
@@ -19,7 +19,7 @@ class List extends Component {
   };
 
   state = {
-    title: 'Painel Gerencial',
+    title: 'Alteração de GR',
     dupont: false,
     dow: false,
     produto: '',
@@ -258,7 +258,7 @@ class List extends Component {
                   startDate={this.state.startDate}
                   endDate={this.state.endDate}
                   dateFormat="dd/MM/yyyy"
-                // minDate={this.state.startDate}
+                  // minDate={this.state.startDate}
                 />
               </div>
               <div className="item">
@@ -284,65 +284,88 @@ class List extends Component {
 
         <div className="center">
           <div className="content-regerencial">
-            <div className="list-rege">
+            <div className="list-alteracaogr">
               <header className="headerlist">
-                <div className="first">
-                  <p>ID / Produto</p>
-                  <p>GR Atual</p>
-                </div>
+                <p>ID / Produto</p>
+                <p>GR Atual</p>
+                <p>GR Previsto</p>
+                <p>GR original</p>
+                <p>Quantidade</p>
               </header>
-
-              {isLoading && <Loading />}
-              {products.map(product => (
-                <div
-                  className={` ${product.product_id ? 'item urgent' : 'item'}`}
-                  key={product.uuid}
-                // onClick={() => onDetail(product.uuid)}
-                >
-                  <div className="main-info">
-                    <p className="emp">{product.consignee.split(' ')[0]}</p>
-                    <p className="idpro">{product.product_id}</p>
-                    <p className="namepro">
-                      {product.product_description.substring(0, 20)}
-                    </p>
-                    {/* <p className="namepro">{product.name}</p> */}
+              <div className="item">
+                <div className="main-info">
+                  <p className="emp">DOW</p>
+                  <p className="idpro">11024151</p>
+                  <p className="namepro">2,4DICHLOROPHE BAGPP</p>
+                </div>
+                <div className="info">
+                  <div className="list-gra">
+                    <div className="item-gra">
+                      <p>
+                        <img src={iconRgc} alt="" />
+                        <strong>07/11/2019</strong>
+                      </p>
+                      <p>
+                        <img src={iconRgc} alt="" />
+                        <strong>07/11/2019</strong>
+                      </p>
+                      <p>
+                        <img src={iconRgc} alt="" />
+                        <strong>07/11/2019</strong>
+                      </p>
+                      <p>
+                        <img src={iconRgc} alt="" />
+                        <strong>07/11/2019</strong>
+                      </p>
+                    </div>
+                    <div className="item-gra">
+                      <p>
+                        <img src={iconRgc} alt="" />
+                        <strong>07/11/2019</strong>
+                      </p>
+                      <p>
+                        <img src={iconRgc} alt="" />
+                        <strong>07/11/2019</strong>
+                      </p>
+                      <p>
+                        <img src={iconRgc} alt="" />
+                        <strong>07/11/2019</strong>
+                      </p>
+                      <p>
+                        <img src={iconRgc} alt="" />
+                        <strong>07/11/2019</strong>
+                      </p>
+                    </div>
+                    <div className="item-gra">
+                      <p>
+                        <img src={iconRgc} alt="" />
+                        <strong>07/11/2019</strong>
+                      </p>
+                      <p>
+                        <img src={iconRgc} alt="" />
+                        <strong>07/11/2019</strong>
+                      </p>
+                      <p>
+                        <img src={iconRgc} alt="" />
+                        <strong>07/11/2019</strong>
+                      </p>
+                      <p>
+                        <img src={iconRgc} alt="" />
+                        <strong>07/11/2019</strong>
+                      </p>
+                    </div>
                   </div>
-
-                  <div className="info">
-                    <div className="list-gra">
-                      {product.items.map(po => (
-                        <div
-                          className={po.alert ? 'item-gra alert' : 'item-gra'}
-                          key={po.uuid}
-                        >
-                          <p>
-                            <img src={iconRgc} alt="" />{' '}
-                            <strong>
-                              {new Date(po.gr_actual).toLocaleDateString()}
-                            </strong>
-                          </p>
-                          <p>
-                            <img src={iconRgp} alt="" />{' '}
-                            {po.total ? po.total.toLocaleString() : ''}
-                          </p>
-                        </div>
-                      ))}
-                    </div>
-                    <div className="item-total">
-                      <p>
-                        <strong>Total</strong>
-                      </p>
-                      <p>
-                        <img src={iconRgp} alt="" />
-                        {product.totalProduto
-                          ? product.totalProduto.toLocaleString()
-                          : ''}
-                      </p>
-                      {zeraTotal()}
-                    </div>
+                  <div className="item-total">
+                    <p>
+                      <strong>Total</strong>
+                    </p>
+                    <p>
+                      <img src={iconRgp} alt="" />
+                      290.400
+                    </p>
                   </div>
                 </div>
-              ))}
+              </div>
             </div>
           </div>
         </div>
