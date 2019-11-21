@@ -11,6 +11,8 @@ import iconRgp from '../../img/icons/rg-p.png';
 // Components
 import Loading from '../components/Loading';
 
+import history from '../../services/history';
+
 class List extends Component {
   static propTypes = {
     isLoading: PropTypes.bool.isRequired,
@@ -114,9 +116,9 @@ class List extends Component {
     const { types } = this.state;
     let total = 0;
 
-    // const adicionaTotal = valor => {
-    //   total += valor;
-    // };
+    const adicionaTotal = valor => {
+      total += valor;
+    };
 
     const zeraTotal = () => {
       total = 0;
@@ -287,85 +289,69 @@ class List extends Component {
             <div className="list-alteracaogr">
               <header className="headerlist">
                 <p>ID / Produto</p>
-                <p>GR Atual</p>
+                <p>GR Original</p>
                 <p>GR Previsto</p>
-                <p>GR original</p>
+                <p>GR Atual</p>
                 <p>Quantidade</p>
               </header>
-              <div className="item">
-                <div className="main-info">
-                  <p className="emp">DOW</p>
-                  <p className="idpro">11024151</p>
-                  <p className="namepro">2,4DICHLOROPHE BAGPP</p>
-                </div>
-                <div className="info">
-                  <div className="list-gra">
-                    <div className="item-gra">
-                      <p>
-                        <img src={iconRgc} alt="" />
-                        <strong>07/11/2019</strong>
-                      </p>
-                      <p>
-                        <img src={iconRgc} alt="" />
-                        <strong>07/11/2019</strong>
-                      </p>
-                      <p>
-                        <img src={iconRgc} alt="" />
-                        <strong>07/11/2019</strong>
-                      </p>
-                      <p>
-                        <img src={iconRgc} alt="" />
-                        <strong>07/11/2019</strong>
+
+              {isLoading ? 
+                (<Loading /> )
+                :
+                (products.map(product => (
+                  <div className="item">
+                    <div className="main-info">
+                      <p className="emp">{product.consignee.split(' ')[0]}</p>
+                      <p className="idpro">{product.product_id}</p>
+                      <p className="namepro">
+                        {product.product_description}
                       </p>
                     </div>
-                    <div className="item-gra">
-                      <p>
-                        <img src={iconRgc} alt="" />
-                        <strong>07/11/2019</strong>
-                      </p>
-                      <p>
-                        <img src={iconRgc} alt="" />
-                        <strong>07/11/2019</strong>
-                      </p>
-                      <p>
-                        <img src={iconRgc} alt="" />
-                        <strong>07/11/2019</strong>
-                      </p>
-                      <p>
-                        <img src={iconRgc} alt="" />
-                        <strong>07/11/2019</strong>
-                      </p>
-                    </div>
-                    <div className="item-gra">
-                      <p>
-                        <img src={iconRgc} alt="" />
-                        <strong>07/11/2019</strong>
-                      </p>
-                      <p>
-                        <img src={iconRgc} alt="" />
-                        <strong>07/11/2019</strong>
-                      </p>
-                      <p>
-                        <img src={iconRgc} alt="" />
-                        <strong>07/11/2019</strong>
-                      </p>
-                      <p>
-                        <img src={iconRgc} alt="" />
-                        <strong>07/11/2019</strong>
-                      </p>
+                    <div className="info">
+                      <div className="list-gra">
+                        {product.pos.map(po => (
+                          po.po_items.map(po_item => (
+                            <div
+                              className="item-gra"
+                              onClick={() => {
+                                history.push(`operacional/detalhe/${po_item.uuid}`);
+                              }}
+                            >
+                              <p>
+                                <img src={iconRgc} alt="" />
+                                <strong>{po_item.gr_original && new Date(po_item.gr_original).toLocaleDateString()}</strong>
+                              </p>
+                              <p>
+                                <img src={iconRgc} alt="" />
+                                <strong>{po_item.gr_expected && new Date(po_item.gr_expected).toLocaleDateString()}</strong>
+                              </p>
+                              <p>
+                                <img src={iconRgc} alt="" />
+                                <strong>{po_item.gr_actual && new Date(po_item.gr_actual).toLocaleDateString()}</strong>
+                              </p>
+                              <p>
+                                <img src={iconRgp} alt="" />
+                                <strong>{po_item.qty && po_item.qty.toLocaleString()}</strong>
+                                {adicionaTotal(po_item.qty)}
+                              </p>
+                            </div>
+                          ))
+                        ))}
+                      </div>
+                      <div className="item-total">
+                        <p>
+                          <strong>Total</strong>
+                        </p>
+                        <p>
+                          <img src={iconRgp} alt="" />
+                          {total.toLocaleString()}
+                          {zeraTotal()}
+                        </p>
+                      </div>
                     </div>
                   </div>
-                  <div className="item-total">
-                    <p>
-                      <strong>Total</strong>
-                    </p>
-                    <p>
-                      <img src={iconRgp} alt="" />
-                      290.400
-                    </p>
-                  </div>
-                </div>
-              </div>
+                )))
+              }
             </div>
           </div>
         </div>

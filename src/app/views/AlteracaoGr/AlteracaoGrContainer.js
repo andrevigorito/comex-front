@@ -22,7 +22,7 @@ class ProductContainer extends Component {
 
   async getProducts() {
     this.setState({ isLoading: true });
-    const { data: products } = await API.APIget(`products`);
+    const { data: products } = await API.APIget(`products/alteracaoGr`);
 
     if (products) this.setState({ products });
     this.setState({ isLoading: false });
@@ -44,9 +44,11 @@ class ProductContainer extends Component {
     // const params = {
     //   produto: 'D12768664',
     // };
-    const response = await API.APIget(`products`, { params });
+    const response = await API.APIget(`products/alteracaoGr`, { params });
 
     const products = response.data;
+
+    
 
     if (products) this.setState({ products });
     this.setState({ isLoading: false });
