@@ -15,13 +15,6 @@ class PainelContainer extends Component {
     });
   };
 
-  handleGerencial = () => {
-    this.setState({
-      gerencial: true,
-      alteracaoGr: false,
-    });
-  };
-
   handleAlteracaoGr = () => {
     this.setState({
       gerencial: false,
