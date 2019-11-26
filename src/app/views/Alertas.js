@@ -136,10 +136,10 @@ export default function Alertas({ location }) {
       <div className="list-alerts">
         <div className="header">
           <p>Data Alerta</p>
-          <p>Responsável</p>
+          <p>CSR</p>
+          <p>Planejador</p>
           <p>Mensagem</p>
           {/* <p>Lido</p> */}
-          <p>Data Leitura</p>
           <p>Marcar como lido</p>
         </div>
         {isLoading && <Loading />}
@@ -156,6 +156,9 @@ export default function Alertas({ location }) {
               {new Date(alerta.createdAt).toLocaleString()}
             </p>
             <p className="responsible">{alerta.po.csr_name}</p>
+            <p className="responsible">
+              {alerta.po.responsible_po && alerta.po.responsible_po}
+            </p>
             <p className="po">
               {alerta.message}{' '}
               {alerta.type === 'GR Atual com alteração' &&
@@ -176,13 +179,7 @@ export default function Alertas({ location }) {
                     : 'Não'
                   : ''}
               </p> */}
-            <p className="altered date">
-              {alerta.user_alerts[0]
-                ? alerta.user_alerts[0].read
-                  ? new Date(alerta.user_alerts[0].updatedAt).toLocaleString()
-                  : ''
-                : ''}
-            </p>
+            
             <p>
               {alerta.user_alerts[0] ? (
                 alerta.user_alerts[0].read ? (

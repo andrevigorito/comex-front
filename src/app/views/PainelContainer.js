@@ -1,3 +1,4 @@
+/* eslint-disable react/button-has-type */
 import React, { Component } from 'react';
 import ProductContainer from './ProductContainer';
 import AlteracaoGrContainer from './AlteracaoGr/AlteracaoGrContainer';
@@ -6,13 +7,6 @@ class PainelContainer extends Component {
   state = {
     gerencial: true,
     alteracaoGr: false,
-  };
-
-  handleGerencial = () => {
-    this.setState({
-      gerencial: true,
-      alteracaoGr: false,
-    });
   };
 
   handleGerencial = () => {
@@ -34,12 +28,22 @@ class PainelContainer extends Component {
     return (
       <div>
         <center>
-          {/*<button onClick={() =>  this.handleGerencial()}>
-            Gerencial
-          </button>
-          <button onClick={() => this.handleAlteracaoGr()}>
-            Alteração de GR
-          </button>*/}
+          {/*
+          <div className="navgerencial">
+            <button
+              className={gerencial ? 'active' : ''}
+              onClick={() => this.handleGerencial()}
+            >
+              Gerencial
+            </button>
+            <button
+              className={alteracaoGr ? 'active' : ''}
+              onClick={() => this.handleAlteracaoGr()}
+            >
+              Alteração de GR
+            </button>
+          </div>
+          */}
         </center>
         <div>
           {gerencial && <ProductContainer />}

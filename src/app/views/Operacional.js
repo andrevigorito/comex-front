@@ -318,6 +318,12 @@ class Operacional extends Component {
         totalPages,
         totalItems,
       });
+    }else{
+      this.setState({
+        operacional: [],
+        totalPages: 1,
+        totalItems: 0,
+      });
     }
 
     this.setState({ isLoading: false });

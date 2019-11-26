@@ -233,7 +233,7 @@ class Usuarios extends Component {
                 <p>Usuário</p>
                 <p>Acesso</p>
                 <p>Data Criação</p>
-                <p>Alterar</p>
+                {/* <p>Alterar</p> */}
               </div>
               {isLoading && <Loading />}
               {users.map(usuario => (
@@ -246,6 +246,7 @@ class Usuarios extends Component {
                   <p className="date">
                     {new Date(usuario.createdAt).toLocaleString()}
                   </p>
+                  {/* 
                   <p className="alertmsg">
                     <button
                       type="button"
@@ -255,6 +256,7 @@ class Usuarios extends Component {
                       Excluir
                     </button>
                   </p>
+                  */}
                 </div>
               ))}
             </UserList>
