@@ -305,7 +305,7 @@ class Filter extends Component {
               </Col>
               <Col xs={12} md={2}>
                 <div className="item">
-                  <label>Responsável ou CSR:</label>
+                  <label>CSR ou Planejador:</label>
                   <input
                     value={responsible}
                     type="text"

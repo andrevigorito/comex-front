@@ -137,7 +137,7 @@ export default function Alertas({ location }) {
         <div className="header">
           <p>Data Alerta</p>
           <p>CSR</p>
-          <p>Responsável</p>
+          <p>Planejador</p>
           <p>Mensagem</p>
           {/* <p>Lido</p> */}
           <p>Marcar como lido</p>
