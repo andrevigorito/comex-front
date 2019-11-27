@@ -256,6 +256,15 @@ class Filter extends Component {
                       />
                       Canal Vermelho.
                     </label>
+                    <label>
+                      <input
+                        type="checkbox"
+                        value="LI_ATRASADO"
+                        onChange={this.handleTypes}
+                        checked={!!types.includes('LI_ATRASADO')}
+                      />
+                      PO com LI atrasado.
+                    </label>
                   </div>
                 </div>
               </Col>
