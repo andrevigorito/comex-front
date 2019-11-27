@@ -5,8 +5,8 @@ import AlteracaoGrContainer from './AlteracaoGr/AlteracaoGrContainer';
 
 class PainelContainer extends Component {
   state = {
-    gerencial: true,
-    alteracaoGr: false,
+    gerencial: false,
+    alteracaoGr: true,
   };
 
   handleGerencial = () => {
@@ -28,7 +28,6 @@ class PainelContainer extends Component {
     return (
       <div>
         <center>
-          {/*
           <div className="navgerencial">
             <button
               className={gerencial ? 'active' : ''}
@@ -43,7 +42,6 @@ class PainelContainer extends Component {
               Alteração de GR
             </button>
           </div>
-          */}
         </center>
         <div>
           {gerencial && <ProductContainer />}
