@@ -188,10 +188,10 @@ class Filter extends Component {
                 </div>
               </Col>
 
-              <Col xs={12} md={9}>
+              <Col xs={12} md={10}>
                 <div className="item">
                   <label>Status:</label>
-                  <div className="boxstatus jcfs">
+                  <div className="boxstatus grid">
                     <label>
                       <input
                         type="checkbox"
