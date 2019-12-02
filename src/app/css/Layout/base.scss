@@ -233,17 +233,27 @@
       &.jcfs{
         justify-content: flex-start;
       }
+      &.grid{
+        display: grid;
+        grid-template-columns: repeat(2, 1.2fr) repeat(2, 1fr);
+        @media (max-width: 520px){
+          grid-template-columns: repeat(2, 1fr);
+          gap: 10px;
+        }
+      }
 			label{
 				margin-bottom: 0;
 				display: flex;
 				align-items: center;
         margin-right: 10px;
+        
         cursor: pointer;
         @media (max-width: 520px){
           width: 100%;
         }
 				input{
-					margin-right: 10px;
+          margin-right: 10px;
+          flex: none;
 				}
 			}
 		}

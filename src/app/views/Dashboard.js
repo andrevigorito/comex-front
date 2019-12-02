@@ -19,7 +19,7 @@ class Dashboard extends PureComponent {
           <iframe
             width="100%"
             height="700"
-            src="https://app.powerbi.com/view?r=eyJrIjoiZGQ2ODgyZmEtNjAwOC00MGYzLWFhYTAtM2VjNjRlYjhkZWYyIiwidCI6IjNhNTZkODhlLWUxNjgtNGNmZC1hMWM4LWVlOTVlMzVkZGI5ZiJ9"
+            src="https://app.powerbi.com/view?r=eyJrIjoiZmIwMmJhMmItNDIxZC00YWRlLWFiZGUtYThhNTVhMGE3ZGIwIiwidCI6IjNhNTZkODhlLWUxNjgtNGNmZC1hMWM4LWVlOTVlMzVkZGI5ZiJ9"
             frameBorder="0"
             allowFullScreen="true"
             title="Dashboard"

@@ -188,10 +188,10 @@ class Filter extends Component {
                 </div>
               </Col>
 
-              <Col xs={12} md={9}>
+              <Col xs={12} md={10}>
                 <div className="item">
                   <label>Status:</label>
-                  <div className="boxstatus jcfs">
+                  <div className="boxstatus grid">
                     <label>
                       <input
                         type="checkbox"
@@ -255,6 +255,15 @@ class Filter extends Component {
                         checked={!!types.includes('CANAL_VERMELHO')}
                       />
                       Canal Vermelho.
+                    </label>
+                    <label>
+                      <input
+                        type="checkbox"
+                        value="LI_ATRASADO"
+                        onChange={this.handleTypes}
+                        checked={!!types.includes('LI_ATRASADO')}
+                      />
+                      PO com LI atrasado.
                     </label>
                   </div>
                 </div>
