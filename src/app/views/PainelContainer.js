@@ -18,8 +18,8 @@ class PainelContainer extends Component {
 
   handleAlteracaoGr = () => {
     this.setState({
-      gerencial: true,
-      alteracaoGr: false,
+      gerencial: false,
+      alteracaoGr: true,
     });
   };
 
