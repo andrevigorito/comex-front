@@ -5,8 +5,8 @@ import AlteracaoGrContainer from './AlteracaoGr/AlteracaoGrContainer';
 
 class PainelContainer extends Component {
   state = {
-    gerencial: true,
-    alteracaoGr: false,
+    gerencial: false,
+    alteracaoGr: true,
   };
 
   handleGerencial = () => {
