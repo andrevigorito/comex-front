@@ -18,8 +18,8 @@ class PainelContainer extends Component {
 
   handleAlteracaoGr = () => {
     this.setState({
-      gerencial: false,
-      alteracaoGr: true,
+      gerencial: true,
+      alteracaoGr: false,
     });
   };
 
@@ -28,22 +28,20 @@ class PainelContainer extends Component {
     return (
       <div>
         <center>
-          {/*
-            <div className="navgerencial">
-              <button
-                className={gerencial ? 'active' : ''}
-                onClick={() => this.handleGerencial()}
-              >
-                Gerencial
-              </button>
-              <button
-                className={alteracaoGr ? 'active' : ''}
-                onClick={() => this.handleAlteracaoGr()}
-              >
-                Alteração de GR
-              </button>        
-            </div>
-          */}
+          <div className="navgerencial">
+            <button
+              className={gerencial ? 'active' : ''}
+              onClick={() => this.handleGerencial()}
+            >
+              Gerencial
+            </button>
+            <button
+              className={alteracaoGr ? 'active' : ''}
+              onClick={() => this.handleAlteracaoGr()}
+            >
+              Alteração de GR
+            </button>
+          </div>
         </center>
         <div>
           {gerencial && <ProductContainer />}
