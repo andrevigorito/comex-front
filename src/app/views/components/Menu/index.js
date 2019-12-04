@@ -61,7 +61,7 @@ class Menu extends Component {
                   Import
                 </Link> */}
                 <Link onClick={this.btnMenu} to="/gerencial">
-                  Gerencial{' '}
+                  Painéis{' '}
                 </Link>
                 <Link onClick={this.btnMenu} to="/operacional">
                   Operacional{' '}
