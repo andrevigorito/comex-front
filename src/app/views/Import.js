@@ -6,6 +6,7 @@ import { toast } from 'react-toastify';
 // import API from '../services/api';
 import * as API from '../helpers/apiHelper';
 import env from '../helpers/envConfig';
+import { getTokenData } from '../helpers/authHelper';
 
 // Images
 import iconTitleDash from '../img/icons/title-dash.png';
@@ -70,7 +71,7 @@ class Import extends Component {
 
   sendImportATL(data) {
     this.setState({ isSending: true });
-    API.APIpost(`products`, data, {
+    API.APIpost(`products/${getTokenData().user.uuid}`, data, {
       headers: { 'Content-Type': 'application/json' },
     })
       .then(res => {
@@ -85,7 +86,7 @@ class Import extends Component {
 
   sendImportSAPDow(data) {
     this.setState({ isSending: true });
-    API.APIpost(`products/importSapDow`, data, {
+    API.APIpost(`products/importSapDow/${getTokenData().user.uuid}`, data, {
       headers: { 'Content-Type': 'application/json' },
     })
       .then(res => {
@@ -100,7 +101,7 @@ class Import extends Component {
 
   sendImportSAPDupont(data) {
     this.setState({ isSending: true });
-    API.APIpost(`products/importSapDupont`, data, {
+    API.APIpost(`products/importSapDupont/${getTokenData().user.uuid}`, data, {
       headers: { 'Content-Type': 'application/json' },
     })
       .then(res => {

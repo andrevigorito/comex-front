@@ -614,7 +614,7 @@ class Operacional extends Component {
                     </div>
                   </div>
                 </Col>
-                <Col xs={12} md={4}>
+                <Col xs={12} md={2}>
                   <div className="item">
                     <label>POs arquivadas:</label>
                     <div className="boxstatus jcfs">
@@ -625,6 +625,23 @@ class Operacional extends Component {
                           id="sts-booking"
                           checked={todos}
                           onChange={e => this.handleCheckboxGeral(e, 'todos')}
+                        />
+                        Liberar
+                      </label>
+                    </div>
+                  </div>
+                </Col>
+                <Col xs={12} md={2}>
+                  <div className="item">
+                  <label>POs canceladas:</label>
+                    <div className="boxstatus jcfs">
+                      <label htmlFor="poscanceladas">
+                        <input
+                          type="checkbox"
+                          name="canceladas"
+                          id="poscanceladas"
+                          // checked={todos}
+                          // onChange={e => this.handleCheckboxGeral(e, 'todos')}
                         />
                         Liberar
                       </label>
