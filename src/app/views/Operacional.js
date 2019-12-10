@@ -631,7 +631,7 @@ class Operacional extends Component {
                     </div>
                   </div>
                 </Col>
-                <Col xs={12} md={2}>
+                {/*<Col xs={12} md={2}>
                   <div className="item">
                   <label>POs canceladas:</label>
                     <div className="boxstatus jcfs">
@@ -647,7 +647,7 @@ class Operacional extends Component {
                       </label>
                     </div>
                   </div>
-                </Col>
+                </Col>*/}
               </Row>
               <Row>
                 <Col xs={12}>
