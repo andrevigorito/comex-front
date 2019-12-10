@@ -41,6 +41,7 @@ class Operacional extends Component {
     naoCriticos: false,
     dupont: false,
     dow: false,
+    canceladas: false,
     po: '',
     produto: '',
     plantaDestino: '',
@@ -253,6 +254,7 @@ class Operacional extends Component {
       analista,
       item,
       statusTimeLine,
+      canceladas,
     } = filtroStateObj || filtros;
 
     const params = {
@@ -269,6 +271,7 @@ class Operacional extends Component {
       dow,
       analista,
       item,
+      canceladas,
       userUuid: this.state.userUuid,
     };
 
@@ -426,6 +429,7 @@ class Operacional extends Component {
       analista,
       item,
       statusTimeLine,
+      canceladas,
     } = filtros;
     // console.log('filtros->', filtros);
 
@@ -631,7 +635,7 @@ class Operacional extends Component {
                     </div>
                   </div>
                 </Col>
-                {/*<Col xs={12} md={2}>
+                <Col xs={12} md={2}>
                   <div className="item">
                   <label>POs canceladas:</label>
                     <div className="boxstatus jcfs">
@@ -640,14 +644,14 @@ class Operacional extends Component {
                           type="checkbox"
                           name="canceladas"
                           id="poscanceladas"
-                          // checked={todos}
-                          // onChange={e => this.handleCheckboxGeral(e, 'todos')}
+                          checked={canceladas}
+                          onChange={e => this.handleCheckboxGeral(e, 'canceladas')}
                         />
-                        Liberar
+                        Exibir
                       </label>
                     </div>
                   </div>
-                </Col>*/}
+                </Col>
               </Row>
               <Row>
                 <Col xs={12}>
