@@ -75,12 +75,18 @@ class Import extends Component {
       headers: { 'Content-Type': 'application/json' },
     })
       .then(res => {
-        this.setState({ isSending: false, isWaiting: true });
-        this.notifyWarn('IMPORTAÇÃO ATL ENVIADA! AGUARDANDO CONCLUSÃO!');
+        if (res.data.code === 0) {
+          this.setState({ isSending: false, isWaiting: true });
+          this.notifyWarn('IMPORTAÇÃO ATL ENVIADA! AGUARDANDO CONCLUSÃO!');
+        } else if (res.data.code === 1) {
+          //erro planilha atl ja importada
+          this.setState({ isSending: false, isWaiting: false, importType: '' });
+          this.notifyError(res.data.message);
+        }
       })
-      .catch(() => {
+      .catch(error => {
         this.setState({ isSending: false, isWaiting: false, importType: '' });
-        this.notifyError('Erro no envio da planilha, favor tentar novamente!');
+        this.notifyError('Erro no envio da planilha. Favor tentar novamente!');
       });
   }
 
@@ -90,12 +96,18 @@ class Import extends Component {
       headers: { 'Content-Type': 'application/json' },
     })
       .then(res => {
-        this.setState({ isSending: false, isWaiting: true });
-        this.notifyWarn('IMPORTAÇÃO SAP DOW ENVIADA! AGUARDANDO CONCLUSÃO!');
+        if (res.data.code === 0) {
+          this.setState({ isSending: false, isWaiting: true });
+          this.notifyWarn('IMPORTAÇÃO SAP DOW ENVIADA! AGUARDANDO CONCLUSÃO!');
+        } else if (res.data.code === 1) {
+          //erro planilha SAPDow ja importada
+          this.setState({ isSending: false, isWaiting: false, importType: '' });
+          this.notifyError(res.data.message);
+        }
       })
-      .catch(() => {
+      .catch(error => {
         this.setState({ isSending: false, isWaiting: false, importType: '' });
-        this.notifyError('Erro no envio da planilha, favor tentar novamente!');
+        this.notifyError('Erro no envio da planilha. Favor tentar novamente!');
       });
   }
 
@@ -104,14 +116,21 @@ class Import extends Component {
     API.APIpost(`products/importSapDupont/${getTokenData().user.uuid}`, data, {
       headers: { 'Content-Type': 'application/json' },
     })
-      .then(res => {
+    .then(res => {
+      console.log(res.data)
+      if (res.data.code === 0) {
         this.setState({ isSending: false, isWaiting: true });
         this.notifyWarn('IMPORTAÇÃO SAP DUPONT ENVIADA! AGUARDANDO CONCLUSÃO!');
-      })
-      .catch(() => {
+      } else if (res.data.code === 1) {
+        //erro planilha SAPDow ja importada
         this.setState({ isSending: false, isWaiting: false, importType: '' });
-        this.notifyError('Erro no envio da planilha, favor tentar novamente!');
-      });
+        this.notifyError(res.data.message);
+      }
+    })
+    .catch(error => {
+      this.setState({ isSending: false, isWaiting: false, importType: '' });
+      this.notifyError('Erro no envio da planilha. Favor tentar novamente!');
+    });
   }
 
   async getWorkbookFromFile(excelFile) {
