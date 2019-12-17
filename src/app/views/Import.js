@@ -75,6 +75,7 @@ class Import extends Component {
       headers: { 'Content-Type': 'application/json' },
     })
       .then(res => {
+        console.log(res.data)
         if (res.data.code === 0) {
           this.setState({ isSending: false, isWaiting: true });
           this.notifyWarn('IMPORTAÇÃO ATL ENVIADA! AGUARDANDO CONCLUSÃO!');
@@ -117,7 +118,7 @@ class Import extends Component {
       headers: { 'Content-Type': 'application/json' },
     })
     .then(res => {
-      console.log(res.data)
+      
       if (res.data.code === 0) {
         this.setState({ isSending: false, isWaiting: true });
         this.notifyWarn('IMPORTAÇÃO SAP DUPONT ENVIADA! AGUARDANDO CONCLUSÃO!');
