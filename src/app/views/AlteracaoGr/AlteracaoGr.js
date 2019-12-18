@@ -312,7 +312,7 @@ class List extends Component {
                         {product.pos.map(po => (
                           po.po_items.map(po_item => (
                             <div
-                              className="item-gra"
+                              className="item-gra link"
                               onClick={() => {
                                 history.push(`operacional/detalhe/${po_item.uuid}`);
                               }}

@@ -119,6 +119,7 @@
                         background: #f7e9e9;
                         border-radius: 10px;
                     }
+                    
                 }
                 p{
                     font-size: 14px;
@@ -272,6 +273,12 @@
                         background: #f7e9e9;
                         border-radius: 10px;
                     }
+                    &.link{
+                        cursor: pointer;
+                        &:hover{
+                            text-decoration: underline;
+                        }
+                    }
                 }
                 p{
                     font-size: 14px;
@@ -421,6 +428,9 @@
                     &:last-child{
                         margin-bottom: 0;
                     }
+                }
+                &.link{
+                    cursor: pointer;
                 }
             }
             .total{
