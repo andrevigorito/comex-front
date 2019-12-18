@@ -235,6 +235,14 @@ class List extends Component {
                 />
               </div>
               <div className="item">
+                <label>CSR ou Planejador:</label>
+                <input
+                  type="text"
+                  id="idproduto"
+                  // onChange={this.handleProduto}
+                />
+              </div>
+              <div className="item">
                 <label>Data início GR Efetivo:</label>
                 {/* <input type="text" className="datepicker-here date" data-language="pt-BR" id="data-inicio" /> */}
                 <DatePicker

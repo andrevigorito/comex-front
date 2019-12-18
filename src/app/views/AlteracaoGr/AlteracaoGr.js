@@ -237,6 +237,14 @@ class List extends Component {
                 />
               </div>
               <div className="item">
+                <label>CSR ou Planejador:</label>
+                <input
+                  type="text"
+                  id="idproduto"
+                  // onChange={this.handleProduto}
+                />
+              </div>
+              <div className="item">
                 <label>Data início GR Efetivo:</label>
                 {/* <input type="text" className="datepicker-here date" data-language="pt-BR" id="data-inicio" /> */}
                 <DatePicker
@@ -292,6 +300,7 @@ class List extends Component {
                 <p>GR Original</p>
                 <p>GR Previsto</p>
                 <p>GR Atual</p>
+                <p>GR Efetivo</p>
                 <p>Quantidade</p>
               </header>
 
@@ -326,6 +335,10 @@ class List extends Component {
                                 <strong>{po_item.gr_expected && new Date(po_item.gr_expected).toLocaleDateString()}</strong>
                               </p>
                               <p>
+                                <img src={iconRgc} alt="" />
+                                <strong>{po_item.gr_actual && new Date(po_item.gr_actual).toLocaleDateString()}</strong>
+                              </p>
+                              <p className="red">
                                 <img src={iconRgc} alt="" />
                                 <strong>{po_item.gr_actual && new Date(po_item.gr_actual).toLocaleDateString()}</strong>
                               </p>
