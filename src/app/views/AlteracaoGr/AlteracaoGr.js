@@ -28,6 +28,7 @@ class List extends Component {
     startDate: '',
     endDate: '',
     types: [],
+    responsible: '',
   };
 
   btnFilter = () => {
@@ -64,6 +65,10 @@ class List extends Component {
     this.setState({ produto: e.target.value });
   };
 
+  handleResponsible = e => {
+    this.setState({ responsible: e.target.value });
+  };
+
   handleTypes = async e => {
     // console.log(e.target.value);
 
@@ -80,12 +85,13 @@ class List extends Component {
 
   handleFormSubit = e => {
     e.preventDefault();
-    const { produto, dow, dupont, startDate, endDate, types } = this.state;
+    const { produto, dow, dupont, startDate, endDate, types, responsible } = this.state;
 
     const { onFilter } = this.props;
 
     const params = {
       produto,
+      responsible,
     };
 
     if (dow) {
@@ -241,7 +247,7 @@ class List extends Component {
                 <input
                   type="text"
                   id="idproduto"
-                  // onChange={this.handleProduto}
+                  onChange={this.handleResponsible}
                 />
               </div>
               <div className="item">
@@ -338,9 +344,9 @@ class List extends Component {
                                 <img src={iconRgc} alt="" />
                                 <strong>{po_item.gr_actual && new Date(po_item.gr_actual).toLocaleDateString()}</strong>
                               </p>
-                              <p className="red">
+                              <p className={po_item.gr_effective && new Date(po_item.gr_effective) > new Date(po_item.gr_actual) ? "red" : "blue"}>
                                 <img src={iconRgc} alt="" />
-                                <strong>{po_item.gr_actual && new Date(po_item.gr_actual).toLocaleDateString()}</strong>
+                                <strong>{po_item.gr_effective && new Date(po_item.gr_effective).toLocaleDateString()}</strong>
                               </p>
                               <p>
                                 <img src={iconRgp} alt="" />
