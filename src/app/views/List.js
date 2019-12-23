@@ -354,6 +354,18 @@ class List extends Component {
                       </p>
                       {zeraTotal()}
                     </div>
+                    <div className="item-total">
+                      <p>
+                        <strong>Total Recebido</strong>
+                      </p>
+                      <p>
+                        <img src={iconRgp} alt="" />
+                        {product.totalProduto
+                          ? product.totalProduto.toLocaleString()
+                          : ''}
+                      </p>
+                      {zeraTotal()}
+                    </div>
                   </div>
                 </div>
               ))}
