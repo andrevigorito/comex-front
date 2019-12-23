@@ -119,6 +119,7 @@
                         background: #f7e9e9;
                         border-radius: 10px;
                     }
+                    
                 }
                 p{
                     font-size: 14px;
@@ -197,7 +198,7 @@
     .list-alteracaogr{
         .headerlist{
             display: grid;
-            grid-template-columns: 240px 1.5fr 1.5fr 1.5fr 1.5fr 1fr;
+            grid-template-columns: 240px 1.5fr 1.5fr 1.5fr 1.5fr 1.5fr 1fr;
             margin-bottom: 20px;
             padding: 0 40px 0 50px;
             p{
@@ -250,7 +251,7 @@
                 }
                 .item-gra{
                     display: grid;
-                    grid-template-columns: 1fr 1fr 1fr 1fr;
+                    grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
                     width: 100%;
                     margin-bottom: 20px;
                     &:last-child{
@@ -264,6 +265,12 @@
                         img{
                             margin-right: 10px;
                         }
+                        &.blue{
+                            color: #055db0
+                        }
+                        &.red{
+                            color: #f44336;
+                        }
                     }
                     &.alert{
                         border-left: solid 4px #d25b5b;
@@ -271,6 +278,12 @@
                         padding: 10px;
                         background: #f7e9e9;
                         border-radius: 10px;
+                    }
+                    &.link{
+                        cursor: pointer;
+                        &:hover{
+                            text-decoration: underline;
+                        }
                     }
                 }
                 p{
@@ -421,6 +434,9 @@
                     &:last-child{
                         margin-bottom: 0;
                     }
+                }
+                &.link{
+                    cursor: pointer;
                 }
             }
             .total{

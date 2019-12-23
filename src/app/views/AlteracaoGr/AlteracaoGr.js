@@ -28,6 +28,7 @@ class List extends Component {
     startDate: '',
     endDate: '',
     types: [],
+    responsible: '',
   };
 
   btnFilter = () => {
@@ -64,6 +65,10 @@ class List extends Component {
     this.setState({ produto: e.target.value });
   };
 
+  handleResponsible = e => {
+    this.setState({ responsible: e.target.value });
+  };
+
   handleTypes = async e => {
     // console.log(e.target.value);
 
@@ -80,12 +85,13 @@ class List extends Component {
 
   handleFormSubit = e => {
     e.preventDefault();
-    const { produto, dow, dupont, startDate, endDate, types } = this.state;
+    const { produto, dow, dupont, startDate, endDate, types, responsible } = this.state;
 
     const { onFilter } = this.props;
 
     const params = {
       produto,
+      responsible,
     };
 
     if (dow) {
@@ -237,6 +243,14 @@ class List extends Component {
                 />
               </div>
               <div className="item">
+                <label>CSR ou Planejador:</label>
+                <input
+                  type="text"
+                  id="idproduto"
+                  onChange={this.handleResponsible}
+                />
+              </div>
+              <div className="item">
                 <label>Data início GR Efetivo:</label>
                 {/* <input type="text" className="datepicker-here date" data-language="pt-BR" id="data-inicio" /> */}
                 <DatePicker
@@ -292,6 +306,7 @@ class List extends Component {
                 <p>GR Original</p>
                 <p>GR Previsto</p>
                 <p>GR Atual</p>
+                <p>GR Efetivo</p>
                 <p>Quantidade</p>
               </header>
 
@@ -312,7 +327,7 @@ class List extends Component {
                         {product.pos.map(po => (
                           po.po_items.map(po_item => (
                             <div
-                              className="item-gra"
+                              className="item-gra link"
                               onClick={() => {
                                 history.push(`operacional/detalhe/${po_item.uuid}`);
                               }}
@@ -328,6 +343,10 @@ class List extends Component {
                               <p>
                                 <img src={iconRgc} alt="" />
                                 <strong>{po_item.gr_actual && new Date(po_item.gr_actual).toLocaleDateString()}</strong>
+                              </p>
+                              <p className={po_item.gr_effective && new Date(po_item.gr_effective) > new Date(po_item.gr_actual) ? "red" : "blue"}>
+                                <img src={iconRgc} alt="" />
+                                <strong>{po_item.gr_effective && new Date(po_item.gr_effective).toLocaleDateString()}</strong>
                               </p>
                               <p>
                                 <img src={iconRgp} alt="" />
