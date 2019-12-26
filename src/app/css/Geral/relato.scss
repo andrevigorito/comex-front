@@ -108,6 +108,12 @@
                         img{
                             margin-right: 10px;
                         }
+                        &.blue{
+                            color: #055db0
+                        }
+                        &.red{
+                            color: #f44336;
+                        }
                         &:last-child{
                             margin-bottom: 0;
                         }
