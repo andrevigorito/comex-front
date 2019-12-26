@@ -329,11 +329,10 @@ class List extends Component {
                           className={po.alert ? 'item-gra alert' : 'item-gra'}
                           key={po.uuid}
                         >
-                          <p>
+                          <p className="red">
                             <img src={iconRgc} alt="" />{' '}
-                            <strong>
-                              {new Date(po.gr_actual).toLocaleDateString()}
-                            </strong>
+                            {new Date(po.gr_actual).toLocaleDateString()}
+                            {po.gr_effective && ' - ' + new Date(po.gr_effective).toLocaleDateString()}
                           </p>
                           <p>
                             <img src={iconRgp} alt="" />{' '}
@@ -361,7 +360,7 @@ class List extends Component {
                       <p>
                         <img src={iconRgp} alt="" />
                         {product.totalProduto
-                          ? product.totalProduto.toLocaleString()
+                          ? product.totalRecebido.toLocaleString()
                           : ''}
                       </p>
                       {zeraTotal()}
