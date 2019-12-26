@@ -302,7 +302,7 @@ class List extends Component {
               <header className="headerlist">
                 <div className="first">
                   <p>ID / Produto</p>
-                  <p>GR Atual</p>
+                  <p>GR Atual - GR Efetivo</p>
                 </div>
               </header>
 
@@ -329,10 +329,12 @@ class List extends Component {
                           className={po.alert ? 'item-gra alert' : 'item-gra'}
                           key={po.uuid}
                         >
-                          <p className="red">
-                            <img src={iconRgc} alt="" />{' '}
-                            {new Date(po.gr_actual).toLocaleDateString()}
-                            {po.gr_effective && ' - ' + new Date(po.gr_effective).toLocaleDateString()}
+                          <p className={po.gr_effective ? "blue" : "red"}>
+                            <strong>
+                              <img src={iconRgc} alt="" />{' '}
+                              {new Date(po.gr_actual).toLocaleDateString()}
+                              {po.gr_effective && ' - ' + new Date(po.gr_effective).toLocaleDateString()}
+                            </strong>
                           </p>
                           <p>
                             <img src={iconRgp} alt="" />{' '}
