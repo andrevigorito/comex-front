@@ -361,9 +361,9 @@ class List extends Component {
                       </p>
                       <p>
                         <img src={iconRgp} alt="" />
-                        {product.totalProduto
+                        {product.totalRecebido
                           ? product.totalRecebido.toLocaleString()
-                          : ''}
+                          : '0'}
                       </p>
                       {zeraTotal()}
                     </div>
