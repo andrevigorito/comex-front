@@ -330,8 +330,8 @@ class List extends Component {
                           key={po.uuid}
                         >
                           <p>
-                            <img src={iconRgc} alt="" />{' '}
                             <strong>
+                              <img src={iconRgc} alt="" />{' '}
                               {new Date(po.gr_actual).toLocaleDateString()}
                             </strong>
                           </p>
@@ -351,6 +351,18 @@ class List extends Component {
                         {product.totalProduto
                           ? product.totalProduto.toLocaleString()
                           : ''}
+                      </p>
+                      {zeraTotal()}
+                    </div>
+                    <div className="item-total">
+                      <p>
+                        <strong>Total Recebido</strong>
+                      </p>
+                      <p>
+                        <img src={iconRgp} alt="" />
+                        {product.totalRecebido
+                          ? product.totalRecebido.toLocaleString()
+                          : '0'}
                       </p>
                       {zeraTotal()}
                     </div>
