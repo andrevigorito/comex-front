@@ -1,3 +1,4 @@
+/* eslint-disable react/button-has-type */
 import React, { PureComponent } from 'react';
 import { Tabs, useTabState, usePanelState } from "@bumaga/tabs";
 // Images
@@ -10,7 +11,7 @@ const Tab = ({ children }) => {
     <button className={isActive && 'active'} onClick={onClick}>
       {children}
     </button>
-  )
+  );
 };
 
 const Panel = ({ children }) => {
@@ -25,8 +26,8 @@ class Dashboard extends PureComponent {
         <div className="center">
           <Tabs>
             <div className="navgerencial">
-              <Tab>Performance de GR</Tab>
-              <Tab>Antecipação / Alteração de GR</Tab>
+              {/* <Tab>Performance de GR</Tab> */}
+              {/* <Tab>Antecipação / Alteração de GR</Tab> */}
             </div>
             <div className="page-header">
               <h1>
@@ -44,6 +45,7 @@ class Dashboard extends PureComponent {
                 title="Dashboard1"
               />
             </Panel>
+            {/*
             <Panel>
               <iframe
                 width="100%"
@@ -54,6 +56,7 @@ class Dashboard extends PureComponent {
                 title="Dashboard2"
               />
             </Panel>
+            */}
           </Tabs>
         </div>
       </div>
