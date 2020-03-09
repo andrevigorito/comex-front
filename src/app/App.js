@@ -28,6 +28,7 @@ import TransitTimeList from './views/TransitTimeList';
 import ListTipoJustificativa from './views/TipoJustificativa/ListTipoJustificativa';
 import AddTipoJustificativa from './views/TipoJustificativa/AddTipoJustificativa';
 import EditTipoJustificativa from './views/TipoJustificativa/EditTipoJustificativa';
+import GrAlteradoTokenList from './views/GrAlteradoTokenList/index';
 
 // Components
 import Menu from './views/components/Menu/index';
@@ -154,15 +155,19 @@ class App extends Component {
     return (
       <div className="App">
         <Router history={history}>
-          {!isAuth && <Route path="*" render={props => <Login {...props} />} />}
+          
+          <Switch>
+            <Route path="/GrAlterado/:userToken" render={props => <GrAlteradoTokenList {...props} />} />}
 
-          {isAuth ? (
-            <div>
-              <Menu username={username} empresa="" photo={photo} />
-              <Header />
-              <ToastContainer hideProgressBar autoClose={false} />
-            </div>
-          ) : null}
+            {!isAuth && <Route path="*" render={props => <Login {...props} />} />}
+            {isAuth ? (
+              <div>
+                <Menu username={username} empresa="" photo={photo} />
+                <Header />
+                <ToastContainer hideProgressBar autoClose={false} />
+              </div>
+            ) : null}
+          </Switch>
 
           <Switch>
             {isAuth && (
