@@ -3,13 +3,12 @@ import styled from 'styled-components';
 const columnsSize = '1.0fr 1.5fr 4.5fr';
 
 export const UserList = styled.div`
+  width: 90%;
+  max-width: 1200px;
+  margin: 0 auto 60px;
   p {
     font-size: 14px;
     line-height: 20px;
-  }
-
-  .btn.excluir {
-    background-color: #ff5757;
   }
   .header {
     padding: 10px 20px;
@@ -35,29 +34,28 @@ export const UserList = styled.div`
     @media (max-width: 620px) {
       grid-template-columns: 1fr;
     }
-    .date {
-      &.altered {
-        color: red;
-      }
-      &.current {
-        color: #666;
-      }
-    }
   }
-`;
-
-export const BtnCadastrar = styled.button`
-  border-radius: 6px;
-  background: #1abc9c;
-  border: solid 1px #1abc9c;
-  padding: 10px 20px;
+`
+export const Header = styled.div`
+  background: #292D41;
+  width: 100%;
+  height: 120px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  h1{
+    color: #fff;
+  }
+`
+export const Title = styled.h1`
+  font-size: 18px;
+  margin: 40px auto;
+  justify-content: center;
+`
+export const Erro = styled.p`
   font-size: 14px;
-  color: #fff;
-  transition: 0.2s;
-
-  &:hover {
-    background: transparent;
-    border: solid 1px #1abc9c;
-    color: #1abc9c;
-  }
-`;
+  color: red;
+  margin: 20px auto;
+  text-align: center;
+`
