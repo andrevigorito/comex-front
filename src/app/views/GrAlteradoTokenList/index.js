@@ -47,7 +47,13 @@ export default function TransitTimeList(props) {
                       {`${object.po_item.po.order_reference}-${object.po_item.item}`}
                     </p>
                     <p>{object.po_item.po.product.product_description}</p>
-                    <p>{object.message}</p>
+                    <p>
+                      {`GR ATUAL ALTERADO DE: ${new Date(
+                        object.po_item.gr_actual_old
+                      ).toLocaleDateString()} PARA ${new Date(
+                        object.po_item.gr_actual
+                      ).toLocaleDateString()}.`}
+                    </p>
                   </div>
                 ))}
               </>
