@@ -53,9 +53,14 @@ export const Title = styled.h1`
   margin: 40px auto;
   justify-content: center;
 `
-export const Erro = styled.p`
+export const Erro = styled.div`
   font-size: 14px;
-  color: red;
-  margin: 20px auto;
+  background: rgb(180,58,83);
+  background: linear-gradient(0deg, rgba(180,58,83,1) 0%, rgba(253,29,29,1) 100%);
+  color: #fff;
+  display: block;
+  padding: 15px;
+  width: 120px;
+  margin: 80px auto;
   text-align: center;
 `

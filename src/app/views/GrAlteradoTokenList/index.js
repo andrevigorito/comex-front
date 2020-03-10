@@ -3,7 +3,7 @@ import Loading from '../components/Loading';
 
 import api from '../../services/api';
 
-import logo from '../../img/logo.png'
+import logo from '../../img/logo.png';
 
 import * as S from './styles';
 
@@ -15,10 +15,11 @@ export default function TransitTimeList(props) {
     async function loadTrasitTime() {
       setIsLoading(true);
       const { userToken } = props.match.params;
-      const response = await api.post(`users/${userToken}/grAlterados`);
-      setTransiTimeList(response.data.rows);
-      setIsLoading(false);
-      console.log(response.data)
+
+      await api.post(`users/${userToken}/grAlterados`).then(result => {
+        setTransiTimeList(result.data);
+        setIsLoading(false);
+      });
     }
 
     loadTrasitTime();
@@ -31,30 +32,31 @@ export default function TransitTimeList(props) {
       </S.Header>
       <S.Title>Alertas de GR Alterado</S.Title>
       <S.UserList>
-        {!transitTimeList.tokenInvalido ? (
+        {!isLoading ? (
           <>
-            <div className="header">
-              <p>PO</p>
-              <p>PRODUTO</p>
-              <p>MENSAGEM</p>
-            </div>
-
-            {!isLoading ? (
-              transitTimeList.map(object => (
-                <div className="item" key={object.uuid}>
-                  <p>
-                    {`${object.po_item.po.order_reference}-${object.po_item.item}`}
-                  </p>
-                  <p>{object.po_item.po.product.product_description}</p>
-                  <p>{object.message}</p>
+            {transitTimeList.tokenInvalido === false ? (
+              <>
+                <div className="header">
+                  <p>PO</p>
+                  <p>PRODUTO</p>
+                  <p>MENSAGEM</p>
                 </div>
-              ))
+                {transitTimeList.rows.map(object => (
+                  <div className="item" key={object.uuid}>
+                    <p>
+                      {`${object.po_item.po.order_reference}-${object.po_item.item}`}
+                    </p>
+                    <p>{object.po_item.po.product.product_description}</p>
+                    <p>{object.message}</p>
+                  </div>
+                ))}
+              </>
             ) : (
-              <Loading />
+              <S.Erro>Token Inválido</S.Erro>
             )}
           </>
         ) : (
-          <S.Erro>Token invalido.</S.Erro>
+          <Loading />
         )}
       </S.UserList>
     </>
